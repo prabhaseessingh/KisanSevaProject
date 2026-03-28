@@ -1,4 +1,4 @@
-# 🌾 KisanSeva - Empowering Modern Agriculture with Innovation
+# 🌾 KisanSeva — Empowering Modern Agriculture with Innovation
 
 > Bridging traditional farming wisdom with cutting-edge technology to help Indian farmers reduce pesticide use, increase yields, and embrace sustainable practices.
 
@@ -6,7 +6,7 @@
 
 ## 🚀 What is KisanSeva?
 
-KisanSeva is a full-stack web platform built for Indian farmers that combines AI-powered pest diagnosis, smart crop planning, and eco-friendly pest control hardware - all in one place. It connects elder farmers' wisdom with youth innovation, and makes precision agriculture accessible to everyone.
+KisanSeva is a full-stack web platform built for Indian farmers that combines AI-powered pest diagnosis, smart crop planning, an agro marketplace, community knowledge exchange, and eco-friendly solar pest control hardware — all in one place.
 
 ---
 
@@ -14,13 +14,14 @@ KisanSeva is a full-stack web platform built for Indian farmers that combines AI
 
 | Feature | Description |
 |---|---|
-| 🔬 AI Pest Diagnosis | Upload a crop photo → instant pest/disease ID + treatment plan using TensorFlow.js MobileNet |
-| 📅 Smart Crop Calendar | Region & season-aware planting schedules with MSP-based financial projections |
-| 💰 ROI Calculator | Calculate savings from switching to solar-powered pest control vs. traditional pesticides |
-| 🛒 Marketplace | Farmers can list and browse agri-products and equipment |
-| 💬 Knowledge Exchange | Community forum connecting experienced farmers with newcomers |
-| 🌍 Multilingual UI | English, Hindi (हिंदी), Punjabi (ਪੰਜਾਬੀ) and other regional languages support |
-| ☀️ Solar Insect Trap | Our flagship hardware product - 100% chemical-free, solar-powered pest trap |
+| 🔬 AI Pest Diagnosis | Upload a crop photo → instant pest/disease ID + treatment plan using TensorFlow.js MobileNet (client-side inference) |
+| 📅 Smart Crop Calendar | Region & season-aware planting schedules with MSP-based financial projections for 20+ crops |
+| 💰 ROI Calculator | Calculate 5-year savings from switching to solar-powered pest control vs. traditional pesticides |
+| 🛒 Agro Marketplace | Buy/sell agri-products with cart, multi-step checkout, and Razorpay payment integration (UPI, Card, Net Banking, COD) |
+| 💬 Knowledge Exchange | Community forum with Elder's Wisdom cards, Q&A, and farming video tutorials |
+| 🌍 Multi-Language Support | English, Hindi (हिंदी), Punjabi (ਪੰਜਾਬੀ), Tamil (தமிழ்), Marathi (मराठी) + voice navigation |
+| ☀️ Solar Insect Trap | Flagship hardware product — 100% chemical-free, solar-powered pest trap |
+| 👤 Auth System | User registration/login with hashed passwords, session management, and personalized dashboard |
 
 ---
 
@@ -50,7 +51,7 @@ A one-time investment solar-powered trap that:
 
 | Metric | Projection |
 |---|---|
-| Farmers Benefited | 28,000,000+ |
+| Farmers Benefited | 10,000+ |
 | Pesticide Cost Savings | ₹5 Crore+ |
 | Crop Loss Reduction | Up to 85% |
 | Generations Connected | 3+ |
@@ -61,12 +62,13 @@ A one-time investment solar-powered trap that:
 
 | Layer | Technology |
 |---|---|
-| Backend | Python, Flask |
-| Database | SQLite (via SQLAlchemy) |
+| Backend | Python, Flask, SQLAlchemy |
+| Database | SQLite (local) / PostgreSQL (production via `DATABASE_URL`) |
 | Frontend | HTML5, CSS3, Vanilla JS |
-| AI/ML | TensorFlow.js, MobileNet (client-side inference) |
-| Auth | Flask-Login, Werkzeug password hashing |
-| Deployment | Flask dev server / any WSGI host |
+| AI/ML | TensorFlow.js + MobileNet (client-side, no server GPU needed) |
+| Payments | Razorpay SDK (UPI, Card, Net Banking, COD) |
+| Auth | Flask sessions, Werkzeug password hashing |
+| File Uploads | Werkzeug `secure_filename`, local `static/uploads/` |
 
 ---
 
@@ -74,20 +76,23 @@ A one-time investment solar-powered trap that:
 
 ```
 kisanseva/
-├── app.py                  # Flask app — routes, models, auth
+├── app.py                      # Flask app — routes, models, auth, API
 ├── instance/
-│   └── kisanseva.db        # SQLite database
+│   └── kisanseva.db            # SQLite database
 ├── static/
 │   ├── style.css
-│   ├── uploads/            # User-uploaded farm images
-│   └── *.jpg               # Product & demo images
+│   ├── uploads/                # User-uploaded crop images
+│   └── *.jpg                   # Product & demo images
 └── templates/
-    ├── login_landing.html      # Landing page + hero
-    ├── login_register.html     # Auth page
-    ├── ai_pest_diagnosis.html  # AI diagnosis tool
-    ├── crop_calendar.html      # Smart crop planner
-    ├── roi_calculator.html     # Savings calculator
-    └── product_details.html    # Solar trap product page
+    ├── login_landing.html          # Landing page + hero
+    ├── login_register.html         # Auth (login + register)
+    ├── ai_pest_diagnosis.html      # AI pest diagnosis tool
+    ├── crop_calendar.html          # Smart crop planner (20+ crops, MSP data)
+    ├── roi_calculator.html         # Savings calculator with visual breakdown
+    ├── marketplace.html            # Agro marketplace with cart & checkout
+    ├── knowledge_exchange.html     # Forum, elder wisdom, video tutorials
+    ├── language_support.html       # Multi-language + voice navigation
+    └── product_details.html        # Solar trap product page
 ```
 
 ---
@@ -106,25 +111,41 @@ pip install flask flask-sqlalchemy werkzeug
 python app.py
 ```
 
-Then open `http://localhost:5000` in your browser.
+Open `http://localhost:5000` in your browser.
+
+For production, set environment variables:
+```bash
+export DATABASE_URL=postgresql://...   # PostgreSQL connection string
+export SECRET_KEY=your-secret-key
+```
 
 ---
 
-## 🖼️ Screenshots
+## 🔑 Key Routes
 
-| Landing Page | AI Pest Diagnosis | ROI Calculator |
-|---|---|---|
-| ![Landing](static/trap_real.jpg) | Drag & drop crop photo → instant AI diagnosis | Enter farm size → see 5-year savings |
+| Route | Description |
+|---|---|
+| `GET /` | Landing page |
+| `GET/POST /login_register` | Auth page |
+| `GET/POST /ai-pest-diagnosis` | AI pest diagnosis (POST returns JSON) |
+| `GET /crop-calendar` | Crop calendar (filter by `?season=Rabi`) |
+| `GET/POST /roi-calculator` | ROI calculator |
+| `GET /marketplace` | Agro marketplace (filter by `?category=...`) |
+| `GET/POST /marketplace/add` | Add a new listing |
+| `GET/POST /knowledge-exchange` | Community forum |
+| `GET /language_support` | Multi-language page |
+| `GET /product_details` | Solar trap product page |
 
 ---
 
 ## 🌱 Roadmap
 
-- [ ] WhatsApp / SMS alerts for pest outbreak warnings
+- [ ] WhatsApp / SMS pest outbreak alerts
 - [ ] Weather API integration for smarter crop recommendations
 - [ ] Mobile app (React Native)
 - [ ] IoT integration with solar trap for real-time pest count data
 - [ ] Government scheme eligibility checker
+- [ ] Telugu, Kannada, Gujarati, Bengali language support
 
 ---
 
@@ -133,3 +154,7 @@ Then open `http://localhost:5000` in your browser.
 Built with ❤️ for farmers across India.
 
 ---
+
+## 📄 License
+
+MIT License — free to use, modify, and distribute.
