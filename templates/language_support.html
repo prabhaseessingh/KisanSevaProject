@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Language Support - KisanSeva</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-green: #2D5016;
+            --accent-green: #4A7C2C;
+            --light-green: #7FA650;
+            --golden-yellow: #F4A416;
+            --cream: #FAF9F6;
+            --text-dark: #1a1a1a;
+            --text-light: #666;
+            --border-light: #e0e0e0;
+            --bg-light: #f9f9f7;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', 'Roboto', sans-serif;
+            color: var(--text-dark);
+            line-height: 1.6;
+            background: var(--cream);
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary-green), var(--accent-green));
+            color: white;
+            padding: 2rem 5%;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .back-btn {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: 2px solid rgba(255,255,255,0.3);
+        }
+
+        .back-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+
+        .content {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 0 5%;
+        }
+
+        .intro-section {
+            text-align: center;
+            margin-bottom: 3rem;
+            background: white;
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+        }
+
+        .intro-section h2 {
+            color: var(--primary-green);
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .intro-section p {
+            color: var(--text-light);
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .language-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .language-card {
+            background: white;
+            border: 3px solid var(--border-light);
+            border-radius: 20px;
+            padding: 2.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            position: relative;
+        }
+
+        .language-card:hover {
+            border-color: var(--primary-green);
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(45,80,22,0.2);
+        }
+
+        .language-card.active {
+            border-color: var(--primary-green);
+            background: linear-gradient(135deg, var(--primary-green), var(--accent-green));
+            color: white;
+        }
+
+        .language-flag {
+            font-size: 3rem;        /* smaller */
+            font-weight: 800;       /* bold */
+            margin-bottom: 1rem;    /* tighter spacing */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 70px;           /* keeps alignment perfect */
+            color: var(--primary-green);
+
+        }
+        .language-card.active .language-flag {
+            color: white;
+        }
+
+        .language-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 0.8rem;
+            color: var(--text-dark);
+        }
+
+        .language-card.active h3 {
+            color: white;
+        }
+
+        .language-card p {
+            color: var(--text-light);
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .language-card.active p {
+            color: rgba(255,255,255,0.9);
+        }
+
+        .language-status {
+            display: inline-block;
+            padding: 0.6rem 1.5rem;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            background: var(--primary-green);
+            color: white;
+            transition: all 0.3s;
+        }
+
+        .language-card.active .language-status {
+            background: rgba(255,255,255,0.2);
+            color: white;
+        }
+
+        .language-status.inactive {
+            background: rgba(45,80,22,0.1);
+            color: var(--primary-green);
+        }
+
+        .voice-section {
+            background: white;
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+            margin: 3rem 0;
+        }
+
+        .voice-section h3 {
+            color: var(--primary-green);
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .voice-section p {
+            color: var(--text-dark);
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+
+        .voice-buttons {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .voice-btn {
+            flex: 1;
+            min-width: 180px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 1.5rem;
+            background: var(--bg-light);
+            border: 2px solid var(--border-light);
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            color: var(--text-dark);
+            text-align: center;
+        }
+
+        .voice-btn:hover {
+            border-color: var(--primary-green);
+            background: var(--primary-green);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .voice-btn .icon {
+            font-size: 2rem;
+        }
+
+        .features-section {
+            background: linear-gradient(135deg, var(--primary-green), var(--accent-green));
+            color: white;
+            padding: 3rem;
+            border-radius: 20px;
+            margin: 3rem 0;
+        }
+
+        .features-section h3 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .features-list {
+            list-style: none;
+            padding: 0;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+
+        .features-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+        }
+
+        .features-list .check {
+            color: var(--golden-yellow);
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .quote-section {
+            text-align: center;
+            padding: 3rem;
+            background: var(--bg-light);
+            border-radius: 20px;
+            margin: 3rem 0;
+        }
+
+        .quote-section blockquote {
+            font-size: 1.5rem;
+            font-style: italic;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+        }
+
+        .quote-section cite {
+            color: var(--text-light);
+            font-size: 1rem;
+        }
+
+        .stats-section {
+            background: white;
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+            margin: 3rem 0;
+            text-align: center;
+        }
+
+        .stats-section h3 {
+            color: var(--primary-green);
+            font-size: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, var(--primary-green), var(--accent-green));
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            transition: transform 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-number {
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: var(--golden-yellow);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 1.1rem;
+            line-height: 1.4;
+        }
+
+        .coming-soon-section {
+            background: white;
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+            margin: 3rem 0;
+        }
+
+        .coming-soon-section h3 {
+            color: var(--primary-green);
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .coming-soon-section > p {
+            text-align: center;
+            color: var(--text-light);
+            margin-bottom: 2rem;
+        }
+
+        .coming-soon-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .coming-soon-card {
+            background: var(--bg-light);
+            border: 1px solid rgba(0,0,0,0.08);
+            border-radius: 15px;
+            padding: 2rem 1rem;
+            text-align: center;
+            opacity: 0.7;
+            transition: all 0.3s;
+        }
+
+        .coming-soon-card:hover {
+            opacity: 1;
+            border-color: var(--light-green);
+        }
+
+        .coming-soon-card .language-flag {
+            font-size: 2.5rem;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .coming-soon-card h4 {
+            font-size: 1.5rem;
+            color: var(--text-dark);
+            margin-bottom: 0.3rem;
+        }
+
+        .coming-soon-card p {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .coming-badge {
+            display: inline-block;
+            background: var(--golden-yellow);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        @media (max-width: 968px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .coming-soon-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .language-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .features-list {
+                grid-template-columns: 1fr;
+            }
+
+            .voice-buttons {
+                flex-direction: column;
+            }
+
+            .voice-btn {
+                min-width: 100%;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .intro-section {
+                padding: 2rem;
+            }
+
+            .voice-section,
+            .features-section,
+            .quote-section {
+                padding: 2rem;
+            }
+
+            .intro-section h2 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <h1>Multi-Language Support</h1>
+            <a href="/" class="back-btn">← Back to Home</a>
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="intro-section">
+            <h2>KisanSeva speaks your language!</h2>
+            <p>Access all features in your preferred language for easier farming management. Breaking barriers to empower every farmer with technology.</p>
+        </div>
+
+        <!-- Impact Statistics -->
+        <div class="stats-section">
+            <h3><svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chart-spline-icon lucide-chart-spline"><path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="M7 16c.5-2 1.5-7 4-7 2 0 2 3 4 3 2.5 0 4.5-5 5-7"/></svg> Language Impact on Farmer Adoption</h3>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">78%</div>
+                    <div class="stat-label">Farmers prefer regional language interfaces</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">3x</div>
+                    <div class="stat-label">Higher engagement with voice navigation</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">92%</div>
+                    <div class="stat-label">Accessibility improvement for low-literacy users</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="language-grid">
+            <div class="language-card active" onclick="switchLanguage('en')">
+                <span class="language-flag">EN</span>
+                <h3>English</h3>
+                <p>Full platform access in English with comprehensive feature support</p>
+                <div class="language-status">Currently Active</div>
+            </div>
+
+            <div class="language-card" onclick="switchLanguage('hi')">
+                <span class="language-flag">हि</span>
+                <h3>हिंदी</h3>
+                <p>हिंदी में पूर्ण प्लेटफॉर्म एक्सेस और सभी सुविधाओं का समर्थन</p>
+                <div class="language-status inactive">Available</div>
+            </div>
+
+            <div class="language-card" onclick="switchLanguage('pa')">
+                <span class="language-flag">ਪੰ</span>
+                <h3>ਪੰਜਾਬੀ</h3>
+                <p>ਪੰਜਾਬੀ ਵਿੱਚ ਪੂਰਾ ਪਲੇਟਫਾਰਮ ਐਕਸੈਸ ਅਤੇ ਸਾਰੀਆਂ ਸੁਵਿਧਾਵਾਂ ਦਾ ਸਮਰਥਨ</p>
+                <div class="language-status inactive">Available</div>
+            </div>
+
+            <div class="language-card" onclick="switchLanguage('ta')">
+                <span class="language-flag">த</span>
+                <h3>தமிழ்</h3>
+                <p>முழு இயங்குதள அணுகல் மற்றும் அனைத்து அம்சங்களின் ஆதரவு</p>
+                <div class="language-status inactive">Available</div>
+            </div>
+
+            <div class="language-card" onclick="switchLanguage('mr')">
+                <span class="language-flag">म</span>
+                <h3>मराठी</h3>
+                <p>मराठीमध्ये संपूर्ण प्लॅटफॉर्म प्रवेश आणि सर्व वैशिष्ट्यांचे समर्थन</p>
+                <div class="language-status inactive">Available</div>
+            </div>
+        </div>
+
+        <!-- Coming Soon Languages -->
+        <div class="coming-soon-section">
+            <h3 class="coming-title">友 Expanding Language Support</h3>
+            <p class="coming-desc">Supporting 10+ Indian languages by 2026</p>
+            <div class="coming-soon-grid">
+                <div class="coming-soon-card">
+                    <span class="language-flag">తె</span>
+                    <h4>తెలుగు</h4>
+                    <p>Telugu</p>
+                    <span class="coming-badge">Coming Soon</span>
+                </div>
+                <div class="coming-soon-card">
+                    <span class="language-flag">ಕ</span>
+                    <h4>ಕನ್ನಡ</h4>
+                    <p>Kannada</p>
+                    <span class="coming-badge">Coming Soon</span>
+                </div>
+                <div class="coming-soon-card">
+                    <span class="language-flag">ગુ</span>
+                    <h4>ગુજરાતી</h4>
+                    <p>Gujarati</p>
+                    <span class="coming-badge">Coming Soon</span>
+                </div>
+                <div class="coming-soon-card">
+                    <span class="language-flag">বা</span>
+                    <h4>বাংলা</h4>
+                    <p>Bengali</p>
+                    <span class="coming-badge">Coming Soon</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="voice-section">
+            <h3><svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-mic-vocal-icon lucide-mic-vocal"><path d="m11 7.601-5.994 8.19a1 1 0 0 0 .1 1.298l.817.818a1 1 0 0 0 1.314.087L15.09 12"/><path d="M16.5 21.174C15.5 20.5 14.372 20 13 20c-2.058 0-3.928 2.356-6 2-2.072-.356-2.775-3.369-1.5-4.5"/><circle cx="16" cy="7" r="5"/></svg> Voice Navigation</h3>
+            <p class="voice-desc">For farmers with limited literacy, we offer voice-based navigation in all supported languages. Simply speak your commands and navigate through KisanSeva effortlessly.</p>
+
+            <div class="voice-buttons">
+                <button class="voice-btn" onclick="startVoiceDemo('en')">
+                    <span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-mic-icon lucide-mic"><path d="M12 19v3"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><rect x="9" y="2" width="6" height="13" rx="3"/></svg></span>
+                    <div>
+                        <div>English Voice</div>
+                        <div style="font-size: 0.9rem; color: var(--text-light);">Try voice commands</div>
+                    </div>
+                </button>
+
+                <button class="voice-btn" onclick="startVoiceDemo('hi')">
+                    <span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-mic-icon lucide-mic"><path d="M12 19v3"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><rect x="9" y="2" width="6" height="13" rx="3"/></svg></span>
+                    <div>
+                        <div>हिंदी Voice</div>
+                        <div style="font-size: 0.9rem; color: var(--text-light);">आवाज़ कमांड आज़माएं</div>
+                    </div>
+                </button>
+
+                <button class="voice-btn" onclick="startVoiceDemo('pa')">
+                    <span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-mic-icon lucide-mic"><path d="M12 19v3"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><rect x="9" y="2" width="6" height="13" rx="3"/></svg></span>
+                    <div>
+                        <div>ਪੰਜਾਬੀ Voice</div>
+                        <div style="font-size: 0.9rem; color: var(--text-light);">ਆਵਾਜ਼ ਕਮਾਂਡ ਅਜ਼ਮਾਓ</div>
+                    </div>
+                </button>
+            </div>
+        </div>
+
+        <div class="features-section">
+            <h3>✨ Key Features</h3>
+            <ul class="features-list">
+                <li>
+                    <span class="check">✓</span>
+                    <span class="feature-text" data-feature="0">Complete interface translation for all features and menus</span>
+                </li>
+                <li>
+                    <span class="check">✓</span>
+                    <span class="feature-text" data-feature="1">Voice commands and audio feedback in regional languages</span>
+                </li>
+                <li>
+                    <span class="check">✓</span>
+                    <span class="feature-text" data-feature="2">Automatic language detection based on your location</span>
+                </li>
+                <li>
+                    <span class="check">✓</span>
+                    <span class="feature-text" data-feature="3">Easy switching between languages anytime, anywhere</span>
+                </li>
+                <li>
+                    <span class="check">✓</span>
+                    <span class="feature-text" data-feature="4">Cultural context preserved in translations for accuracy</span>
+                </li>
+                <li>
+                    <span class="check">✓</span>
+                    <span class="feature-text" data-feature="5">Support for more regional languages coming soon</span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="quote-section">
+            <blockquote class="quote-text">
+                "Breaking language barriers to empower every farmer with technology"
+            </blockquote>
+            <cite class="quote-author">— Team KisanSeva</cite>
+        </div>
+    </div>
+
+    <script>
+        // Translation data for the page
+        const pageTranslations = {
+            en: {
+                pageTitle: "Multi-Language Support",
+                intro: "KisanSeva speaks your language!",
+                introDesc: "Access all features in your preferred language for easier farming management. Breaking barriers to empower every farmer with technology.",
+                voiceTitle: "Voice Navigation",
+                voiceDesc: "For farmers with limited literacy, we offer voice-based navigation in all supported languages. Simply speak your commands and navigate through KisanSeva effortlessly.",
+                featuresTitle: "Key Features",
+                features: [
+                    "Complete interface translation for all features and menus",
+                    "Voice commands and audio feedback in regional languages",
+                    "Automatic language detection based on your location",
+                    "Easy switching between languages anytime, anywhere",
+                    "Cultural context preserved in translations for accuracy",
+                    "Support for more regional languages coming soon"
+                ],
+                comingSoonTitle: "友    Expanding Language Support",
+                comingSoonDesc: "Supporting 10+ Indian languages by 2026",
+                comingSoonBadge: "Coming Soon",
+                quote: "Breaking language barriers to empower every farmer with technology",
+                quoteAuthor: "— Team KisanSeva"
+            },
+            hi: {
+                pageTitle: "बहु-भाषा समर्थन",
+                intro: "किसान सेवा आपकी भाषा बोलता है!",
+                introDesc: "आसान खेती प्रबंधन के लिए अपनी पसंदीदा भाषा में सभी सुविधाओं तक पहुँच। प्रत्येक किसान को प्रौद्योगिकी के साथ सशक्त बनाने के लिए बाधाओं को तोड़ना।",
+                voiceTitle: "आवाज़ नेविगेशन",
+                voiceDesc: "सीमित साक्षरता वाले किसानों के लिए, हम सभी समर्थित भाषाओं में आवाज़-आधारित नेविगेशन प्रदान करते हैं। बस अपने कमांड बोलें और आसानी से किसान सेवा नेविगेट करें।",
+                featuresTitle: "मुख्य विशेषताएं",
+                features: [
+                    "सभी सुविधाओं और मेनू के लिए पूर्ण इंटरफ़ेस अनुवाद",
+                    "क्षेत्रीय भाषाओं में आवाज़ कमांड और ऑडियो प्रतिक्रिया",
+                    "आपके स्थान के आधार पर स्वचालित भाषा का पता लगाना",
+                    "कभी भी, कहीं भी आसानी से भाषाओं के बीच स्विच करना",
+                    "सटीकता के लिए अनुवादों में सांस्कृतिक संदर्भ संरक्षित",
+                    "जल्द ही अधिक क्षेत्रीय भाषाओं का समर्थन आ रहा है"
+                ],
+                comingSoonTitle: "友    भाषा समर्थन का विस्तार",
+                comingSoonDesc: "2026 तक 10+ भारतीय भाषाओं का समर्थन",
+                comingSoonBadge: "जल्द आ रहा है",
+                quote: "प्रत्येक किसान को प्रौद्योगिकी के साथ सशक्त बनाने के लिए भाषा की बाधाओं को तोड़ना",
+                quoteAuthor: "— टीम किसान सेवा"
+            },
+            pa: {
+                pageTitle: "ਬਹੁ-ਭਾਸ਼ਾ ਸਹਾਇਤਾ",
+                intro: "ਕਿਸਾਨ ਸੇਵਾ ਤੁਹਾਡੀ ਭਾਸ਼ਾ ਬੋਲਦੀ ਹੈ!",
+                introDesc: "ਆਸਾਨ ਖੇਤੀ ਪ੍ਰਬੰਧਨ ਲਈ ਆਪਣੀ ਪਸੰਦੀਦਾ ਭਾਸ਼ਾ ਵਿੱਚ ਸਾਰੀਆਂ ਵਿਸ਼ੇਸ਼ਤਾਵਾਂ ਤੱਕ ਪਹੁੰਚ। ਹਰ ਕਿਸਾਨ ਨੂੰ ਤਕਨਾਲੋਜੀ ਨਾਲ ਸਸ਼ਕਤ ਬਣਾਉਣ ਲਈ ਰੁਕਾਵਟਾਂ ਤੋੜਨਾ।",
+                voiceTitle: "ਆਵਾਜ਼ ਨੈਵੀਗੇਸ਼ਨ",
+                voiceDesc: "ਸੀਮਤ ਸਾਖਰਤਾ ਵਾਲੇ ਕਿਸਾਨਾਂ ਲਈ, ਅਸੀਂ ਸਾਰੀਆਂ ਸਮਰਥਿਤ ਭਾਸ਼ਾਵਾਂ ਵਿੱਚ ਆਵਾਜ਼-ਅਧਾਰਤ ਨੈਵੀਗੇਸ਼ਨ ਪੇਸ਼ ਕਰਦੇ ਹਾਂ। ਬਸ ਆਪਣੇ ਕਮਾਂਡ ਬੋਲੋ ਅਤੇ ਆਸਾਨੀ ਨਾਲ ਕਿਸਾਨ ਸੇਵਾ ਨੂੰ ਨੈਵੀਗੇਟ ਕਰੋ।",
+                featuresTitle: "ਮੁੱਖ ਵਿਸ਼ੇਸ਼ਤਾਵਾਂ",
+                features: [
+                    "ਸਾਰੀਆਂ ਵਿਸ਼ੇਸ਼ਤਾਵਾਂ ਅਤੇ ਮੇਨੂ ਲਈ ਪੂਰਾ ਇੰਟਰਫੇਸ ਅਨੁਵਾਦ",
+                    "ਖੇਤਰੀ ਭਾਸ਼ਾਵਾਂ ਵਿੱਚ ਆਵਾਜ਼ ਕਮਾਂਡ ਅਤੇ ਆਡੀਓ ਫੀਡਬੈਕ",
+                    "ਤੁਹਾਡੇ ਸਥਾਨ ਦੇ ਆਧਾਰ 'ਤੇ ਆਟੋਮੈਟਿਕ ਭਾਸ਼ਾ ਖੋਜ",
+                    "ਕਦੇ ਵੀ, ਕਿਤੇ ਵੀ ਭਾਸ਼ਾਵਾਂ ਵਿਚਕਾਰ ਆਸਾਨੀ ਨਾਲ ਸਵਿਚਿੰਗ",
+                    "ਸਹੀਤਾ ਲਈ ਅਨੁਵਾਦਾਂ ਵਿੱਚ ਸੱਭਿਆਚਾਰਕ ਸੰਦਰਭ ਸੁਰੱਖਿਅਤ",
+                    "ਹੋਰ ਖੇਤਰੀ ਭਾਸ਼ਾਵਾਂ ਲਈ ਸਮਰਥਨ ਜਲਦੀ ਆ ਰਿਹਾ ਹੈ"
+                ],
+                comingSoonTitle: "友    ਭਾਸ਼ਾ ਸਹਾਇਤਾ ਦਾ ਵਿਸਤਾਰ",
+                comingSoonDesc: "2026 ਤੱਕ 10+ ਭਾਰਤੀ ਭਾਸ਼ਾਵਾਂ ਦਾ ਸਮਰਥਨ",
+                comingSoonBadge: "ਜਲਦੀ ਆ ਰਿਹਾ ਹੈ",
+                quote: "ਹਰ ਕਿਸਾਨ ਨੂੰ ਤਕਨਾਲੋਜੀ ਨਾਲ ਸਸ਼ਕਤ ਬਣਾਉਣ ਲਈ ਭਾਸ਼ਾ ਦੀਆਂ ਰੁਕਾਵਟਾਂ ਨੂੰ ਤੋੜਨਾ",
+                quoteAuthor: "— ਟੀਮ ਕਿਸਾਨ ਸੇਵਾ"
+            },
+            ta: {
+                pageTitle: "பல மொழி ஆதரவு",
+                intro: "கிசான்சேவா உங்கள் மொழியில் பேசுகிறது!",
+                introDesc: "எளிதான விவசாய நிர்வாகத்திற்காக உங்கள் விருப்பமான மொழியில் அனைத்து அம்சங்களையும் அணுகவும். ஒவ்வொரு விவசாயியையும் தொழில்நுட்பத்துடன் மேம்படுத்த தடைகளை உடைக்கவும்.",
+                voiceTitle: "குரல் வழிசெலுத்தல்",
+                voiceDesc: "குறைந்த எழுத்தறிவு உள்ள விவசாயிகளுக்கு, ஆதரிக்கப்படும் அனைத்து மொழிகளிலும் குரல் அடிப்படையிலான வழிசெலுத்தலை வழங்குகிறோம். உங்கள் கட்டளைகளைப் பேசி கிசான்சேவாவை எளிதாக வழிசெலுத்தவும்.",
+                featuresTitle: "முக்கிய அம்சங்கள்",
+                features: [
+                    "அனைத்து அம்சங்கள் மற்றும் மெனுக்களுக்கான முழுமையான இடைமுக மொழிபெயர்ப்பு",
+                    "பிராந்திய மொழிகளில் குரல் கட்டளைகள் மற்றும் ஆடியோ பின்னூட்டம்",
+                    "உங்கள் இருப்பிடத்தின் அடிப்படையில் தானியங்கி மொழி கண்டறிதல்",
+                    "எந்த நேரத்திலும், எங்கும் மொழிகளுக்கு இடையே எளிதாக மாறுதல்",
+                    "துல்லியத்திற்காக மொழிபெயர்ப்புகளில் கலாச்சார சூழல் பாதுகாக்கப்பட்டது",
+                    "மேலும் பிராந்திய மொழிகளுக்கான ஆதரவு விரைவில் வருகிறது"
+                ],
+                comingSoonTitle: "友    மொழி ஆதரவு விரிவாக்கம்",
+                comingSoonDesc: "2026 க்குள் 10+ இந்திய மொழிகள் ஆதரவு",
+                comingSoonBadge: "விரைவில்",
+                quote: "ஒவ்வொரு விவசாயியையும் தொழில்நுட்பத்துடன் மேம்படுத்த மொழி தடைகளை உடைத்தல்",
+                quoteAuthor: "— குழு கிசான்சேவா"
+            },
+            mr: {
+                pageTitle: "बहु-भाषा समर्थन",
+                intro: "किसानसेवा तुमची भाषा बोलते!",
+                introDesc: "सुलभ शेती व्यवस्थापनासाठी तुमच्या पसंतीच्या भाषेत सर्व वैशिष्ट्यांमध्ये प्रवेश करा। प्रत्येक शेतकऱ्याला तंत्रज्ञानासह सशक्त करण्यासाठी अडथळे तोडणे।",
+                voiceTitle: "आवाज नेव्हिगेशन",
+                voiceDesc: "मर्यादित साक्षरता असलेल्या शेतकऱ्यांसाठी, आम्ही सर्व समर्थित भाषांमध्ये आवाज-आधारित नेव्हिगेशन ऑफर करतो। फक्त तुमचे कमांड बोला आणि सहजपणे किसानसेवा नेव्हिगेट करा।",
+                featuresTitle: "मुख्य वैशिष्ट्ये",
+                features: [
+                    "सर्व वैशिष्ट्ये आणि मेनूसाठी संपूर्ण इंटरफेस भाषांतर",
+                    "प्रादेशिक भाषांमध्ये आवाज आदेश आणि ऑडिओ अभिप्राय",
+                    "तुमच्या स्थानावर आधारित स्वयंचलित भाषा शोध",
+                    "कधीही, कुठेही भाषांमध्ये सहज स्विचिंग",
+                    "अचूकतेसाठी भाषांतरांमध्ये सांस्कृतिक संदर्भ जतन केला",
+                    "अधिक प्रादेशिक भाषांसाठी समर्थन लवकरच येत आहे"
+                ],
+                comingSoonTitle: "友    भाषा समर्थनाचा विस्तार",
+                comingSoonDesc: "2026 पर्यंत 10+ भारतीय भाषांचे समर्थन",
+                comingSoonBadge: "लवकरच येत आहे",
+                quote: "प्रत्येक शेतकऱ्याला तंत्रज्ञानासह सशक्त करण्यासाठी भाषा अडथळे तोडणे",
+                quoteAuthor: "— टीम किसानसेवा"
+            }
+        };
+
+        function updatePageContent(lang) {
+            const translations = pageTranslations[lang] || pageTranslations['en'];
+
+            // Update header
+            document.querySelector('.header h1').innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-earth-icon lucide-earth"><path d="M21.54 15H17a2 2 0 0 0-2 2v4.54"/><path d="M7 3.34V5a3 3 0 0 0 3 3a2 2 0 0 1 2 2c0 1.1.9 2 2 2a2 2 0 0 0 2-2c0-1.1.9-2 2-2h3.17"/><path d="M11 21.95V18a2 2 0 0 0-2-2a2 2 0 0 1-2-2v-1a2 2 0 0 0-2-2H2.05"/><circle cx="12" cy="12" r="10"/></svg> ${translations.pageTitle}`;
+
+            // Update intro section
+            document.querySelector('.intro-section h2').textContent = translations.intro;
+            document.querySelector('.intro-section p').textContent = translations.introDesc;
+
+            // Update voice section
+            document.querySelector('.voice-section h3').innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-mic-vocal-icon lucide-mic-vocal"><path d="m11 7.601-5.994 8.19a1 1 0 0 0 .1 1.298l.817.818a1 1 0 0 0 1.314.087L15.09 12"/><path d="M16.5 21.174C15.5 20.5 14.372 20 13 20c-2.058 0-3.928 2.356-6 2-2.072-.356-2.775-3.369-1.5-4.5"/><circle cx="16" cy="7" r="5"/></svg> ${translations.voiceTitle}`;
+            document.querySelector('.voice-desc').textContent = translations.voiceDesc;
+
+            // Update features section
+            document.querySelector('.features-section h3').innerHTML = `✨ ${translations.featuresTitle}`;
+
+            // Update feature list items
+            const featureTexts = document.querySelectorAll('.feature-text');
+            featureTexts.forEach((text, index) => {
+                if (translations.features && translations.features[index]) {
+                    text.textContent = translations.features[index];
+                }
+            });
+
+            // Update coming soon section
+            document.querySelector('.coming-title').textContent = translations.comingSoonTitle;
+            document.querySelector('.coming-desc').textContent = translations.comingSoonDesc;
+            document.querySelectorAll('.coming-badge').forEach(badge => {
+                badge.textContent = translations.comingSoonBadge;
+            });
+
+            // Update quote section
+            document.querySelector('.quote-text').textContent = `"${translations.quote}"`;
+            document.querySelector('.quote-author').textContent = translations.quoteAuthor;
+        }
+
+        function switchLanguage(lang) {
+            // Update visual state
+            document.querySelectorAll('.language-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            event.target.closest('.language-card').classList.add('active');
+
+            // Update status badges
+            document.querySelectorAll('.language-status').forEach(status => {
+                status.classList.add('inactive');
+                status.textContent = 'Available';
+            });
+            event.target.closest('.language-card').querySelector('.language-status').classList.remove('inactive');
+            event.target.closest('.language-card').querySelector('.language-status').textContent = 'Currently Active';
+
+            // Update page content in selected language
+            updatePageContent(lang);
+
+            const langNames = {
+                'en': 'English',
+                'hi': 'हिंदी (Hindi)',
+                'pa': 'ਪੰਜਾਬੀ (Punjabi)',
+                'ta': 'தமிழ் (Tamil)',
+                'mr': 'मराठी (Marathi)'
+            };
+
+            const messages = {
+                'en': `✅ Language Changed to ${langNames[lang]}!\n\nKisanSeva is now available in ${langNames[lang]}.\n\nAll features, menus, and content will be displayed in your selected language.\n\n🌾 Happy Farming!`,
+                'hi': `✅ भाषा ${langNames[lang]} में बदल गई!\n\nकिसान सेवा अब ${langNames[lang]} में उपलब्ध है।\n\nसभी सुविधाएं, मेन्यू और सामग्री आपकी चुनी गई भाषा में प्रदर्शित होंगी।\n\n🌾 खुशहाल खेती!`,
+                'pa': `✅ ਭਾਸ਼ਾ ${langNames[lang]} ਵਿੱਚ ਬਦਲ ਗਈ!\n\nਕਿਸਾਨ ਸੇਵਾ ਹੁਣ ${langNames[lang]} ਵਿੱਚ ਉਪਲਬਧ ਹੈ।\n\nਸਾਰੀਆਂ ਸੁਵਿਧਾਵਾਂ, ਮੇਨੂ ਅਤੇ ਸਮੱਗਰੀ ਤੁਹਾਡੀ ਚੁਣੀ ਗਈ ਭਾਸ਼ਾ ਵਿੱਚ ਪ੍ਰਦਰਸ਼ਿਤ ਹੋਵੇਗੀ।\n\n🌾 ਖੁਸ਼ਹਾਲ ਖੇਤੀ!`,
+                'ta': `✅ மொழி ${langNames[lang]}-க்கு மாற்றப்பட்டது!\n\nகிசான்சேவா இப்போது ${langNames[lang]}-இல் கிடைக்கிறது।\n\nஅனைத்து அம்சங்கள், மெனுக்கள் மற்றும் உள்ளடக்கம் உங்கள் தேர்ந்தெடுக்கப்பட்ட மொழியில் காட்டப்படும்।\n\n🌾 மகிழ்ச்சியான விவசாயம்!`,
+                'mr': `✅ भाषा ${langNames[lang]} मध्ये बदलली!\n\nकिसानसेवा आता ${langNames[lang]} मध्ये उपलब्ध आहे।\n\nसर्व वैशिष्ट्ये, मेनू आणि सामग्री तुमच्या निवडलेल्या भाषेत प्रदर्शित केली जाईल।\n\n🌾 आनंदी शेती!`
+            };
+
+            alert(messages[lang] || messages['en']);
+
+            // Simulate saving preference
+            localStorage.setItem('kisansevaLanguage', lang);
+        }
+
+        function startVoiceDemo(lang) {
+            const messages = {
+                'en': 'Voice Navigation Activated!\n\n"Welcome to KisanSeva voice assistance. You can now use voice commands to navigate."\n\nTry saying:\n• "Show pest diagnosis"\n• "Open marketplace"\n• "Check weather"\n• "Find farming tips"\n\nSpeak clearly for best results!',
+                'hi': 'आवाज़ नेविगेशन सक्रिय!\n\n"किसान सेवा वॉइस असिस्टेंट में आपका स्वागत है। अब आप वॉइस कमांड का उपयोग कर सकते हैं।"\n\nकहकर देखें:\n• "कीट निदान दिखाएं"\n• "बाज़ार खोलें"\n• "मौसम देखें"\n• "खेती के टिप्स खोजें"\n\nस्पष्ट बोलें!',
+                'pa': 'ਆਵਾਜ਼ ਨੈਵੀਗੇਸ਼ਨ ਸਰਗਰਮ!\n\n"ਕਿਸਾਨ ਸੇਵਾ ਵਾਇਸ ਸਹਾਇਕ ਵਿੱਚ ਤੁਹਾਡਾ ਸਵਾਗਤ ਹੈ। ਹੁਣ ਤੁਸੀਂ ਆਵਾਜ਼ ਕਮਾਂਡ ਦੀ ਵਰਤੋਂ ਕਰ ਸਕਦੇ ਹੋ।"\n\nਕਹਿ ਕੇ ਦੇਖੋ:\n• "ਕੀਟ ਨਿਦਾਨ ਵਿਖਾਓ"\n• "ਬਾਜ਼ਾਰ ਖੋਲ੍ਹੋ"\n• "ਮੌਸਮ ਵੇਖੋ"\n• "ਖੇਤੀ ਦੇ ਗੁਰ ਲੱਭੋ"\n\nਸਾਫ਼ ਬੋਲੋ!'
+            };
+
+            alert(messages[lang]);
+
+            // Simulate voice recognition start
+            setTimeout(() => {
+                const followUpMessages = {
+                    'en': 'Listening... (Demo Mode)\n\nIn the full version, you would now be able to speak your commands and KisanSeva would respond accordingly.',
+                    'hi': 'सुन रहा है... (डेमो मोड)\n\nपूर्ण संस्करण में, आप अब अपने कमांड बोल सकेंगे और किसान सेवा तदनुसार प्रतिक्रिया देगा।',
+                    'pa': 'ਸੁਣ ਰਿਹਾ ਹੈ... (ਡੈਮੋ ਮੋਡ)\n\nਪੂਰੇ ਸੰਸਕਰਣ ਵਿੱਚ, ਤੁਸੀਂ ਹੁਣ ਆਪਣੇ ਕਮਾਂਡ ਬੋਲ ਸਕੋਗੇ ਅਤੇ ਕਿਸਾਨ ਸੇਵਾ ਉਸ ਅਨੁਸਾਰ ਜਵਾਬ ਦੇਵੇਗੀ।'
+                };
+                alert(followUpMessages[lang]);
+            }, 1500);
+        }
+
+        // Load saved language preference on page load
+        window.addEventListener('load', function() {
+            const savedLang = localStorage.getItem('kisansevaLanguage');
+            if (savedLang) {
+                // Find and activate the saved language card
+                const langCards = document.querySelectorAll('.language-card');
+                langCards.forEach(card => {
+                    if (card.onclick.toString().includes(`'${savedLang}'`)) {
+                        card.classList.add('active');
+                        card.querySelector('.language-status').classList.remove('inactive');
+                        card.querySelector('.language-status').textContent = 'Currently Active';
+                        updatePageContent(savedLang);
+                    } else {
+                        card.classList.remove('active');
+                        card.querySelector('.language-status').classList.add('inactive');
+                        card.querySelector('.language-status').textContent = 'Available';
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
