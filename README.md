@@ -1,4 +1,4 @@
-# 🌾 KisanSeva — Empowering Modern Agriculture with Innovation
+# 🌾 KisanSeva - Empowering Modern Agriculture with Innovation
 
 > Bridging traditional farming wisdom with cutting-edge technology to help Indian farmers reduce pesticide use, increase yields, and embrace sustainable practices.
 
@@ -6,7 +6,7 @@
 
 ## 🚀 What is KisanSeva?
 
-KisanSeva is a full-stack web platform built for Indian farmers that combines AI-powered pest diagnosis, smart crop planning, and eco-friendly pest control hardware — all in one place. It connects elder farmers' wisdom with youth innovation, and makes precision agriculture accessible to everyone.
+KisanSeva is a full-stack web platform built for Indian farmers that combines AI-powered pest diagnosis, smart crop planning, and eco-friendly pest control hardware - all in one place. It connects elder farmers' wisdom with youth innovation, and makes precision agriculture accessible to everyone.
 
 ---
 
@@ -19,8 +19,8 @@ KisanSeva is a full-stack web platform built for Indian farmers that combines AI
 | 💰 ROI Calculator | Calculate savings from switching to solar-powered pest control vs. traditional pesticides |
 | 🛒 Marketplace | Farmers can list and browse agri-products and equipment |
 | 💬 Knowledge Exchange | Community forum connecting experienced farmers with newcomers |
-| 🌍 Multilingual UI | English, Hindi (हिंदी), and Punjabi (ਪੰਜਾਬੀ) support |
-| ☀️ Solar Insect Trap | Our flagship hardware product — 100% chemical-free, solar-powered pest trap |
+| 🌍 Multilingual UI | English, Hindi (हिंदी), Punjabi (ਪੰਜਾਬੀ) and other regional languages support |
+| ☀️ Solar Insect Trap | Our flagship hardware product - 100% chemical-free, solar-powered pest trap |
 
 ---
 
@@ -50,7 +50,7 @@ A one-time investment solar-powered trap that:
 
 | Metric | Projection |
 |---|---|
-| Farmers Benefited | 10,000+ |
+| Farmers Benefited | 28,000,000+ |
 | Pesticide Cost Savings | ₹5 Crore+ |
 | Crop Loss Reduction | Up to 85% |
 | Generations Connected | 3+ |
@@ -133,7 +133,3 @@ Then open `http://localhost:5000` in your browser.
 Built with ❤️ for farmers across India.
 
 ---
-
-## 📄 License
-
-MIT License — free to use, modify, and distribute.
