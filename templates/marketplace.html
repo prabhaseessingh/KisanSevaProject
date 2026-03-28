@@ -1,0 +1,2274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agro Marketplace - KisanSeva</title>
+    <!-- Razorpay SDK -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-green: #2D5016;
+            --accent-green: #4A7C2C;
+            --light-green: #7FA650;
+            --golden-yellow: #F4A416;
+            --cream: #FAF9F6;
+            --text-dark: #1a1a1a;
+            --text-light: #666;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', 'Roboto', sans-serif;
+            color: var(--text-dark);
+            line-height: 1.6;
+            background: var(--cream);
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary-green), var(--accent-green));
+            color: white;
+            padding: 2rem 5%;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .back-btn {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: 2px solid rgba(255,255,255,0.3);
+        }
+
+        .back-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+
+        .tabs {
+            background: white;
+            padding: 1.5rem 5%;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .tab-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            gap: 1rem;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            padding: 1rem 2rem;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-light);
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .tab-btn:hover {
+            color: var(--accent-green);
+        }
+
+        .tab-btn.active {
+            color: var(--primary-green);
+            border-bottom-color: var(--primary-green);
+        }
+
+        .content {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 0 5%;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .filter-btn {
+            background: var(--cream);
+            border: 2px solid #e0e0e0;
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--text-dark);
+            transition: all 0.3s;
+        }
+
+        .filter-btn.active {
+            background: var(--primary-green);
+            color: white;
+            border-color: var(--primary-green);
+        }
+
+        /* Cart Modal Styles */
+        .cart-box {
+            position: fixed;
+            top: 38px;
+            right: 40px;
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 5px 26px #2d501652;
+            padding: 2em 2.2em 1em 2.2em;
+            min-width: 320px;
+            min-height: 80px;
+            z-index: 1010;
+            display: none;
+            font-size: 1em;
+        }
+        .cart-title {
+            font-weight: 700;
+            color: #2d5016;
+            font-size: 1.16em; margin-bottom: 0.84em;
+        }
+        .cart-close {
+            position: absolute;
+            top: 0.8em;
+            right: 1.2em;
+            font-size: 1.2em;
+            cursor: pointer;
+            color: #4A7C2C;
+        }
+        .cart-items {
+            list-style: none;
+            padding: 0; margin: 0 0 0.9em 0;
+        }
+        .cart-items li {
+            display: flex;
+            align-items: center;
+            gap: 0.7em;
+            border-bottom: 1px solid #ececec;
+            padding: 0.8em 0;
+        }
+        .cart-item-controls {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 0.5em;
+        }
+
+        .cart-qty-btn {
+            background: var(--primary-green);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            width: 24px;
+            height: 24px;
+            font-size: 0.9em;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .cart-qty-btn:hover {
+            background: var(--accent-green);
+        }
+
+        .cart-delete-btn {
+            background: #ffe7e7;
+            color: #d02424;
+            border: none;
+            border-radius: 4px;
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .cart-delete-btn:hover {
+            background: #ffcccc;
+        }
+
+        .cart-qty-display {
+            font-weight: 600;
+            min-width: 20px;
+            text-align: center;
+        }
+        .cart-footer {
+            text-align: right; margin-top: 1.1em;
+        }
+        .cart-footer button {
+            background: linear-gradient(135deg, #2D5016, #4A7C2C);
+            color: white;
+            border: none;
+            border-radius: 7px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            padding: 0.5em 1.2em;
+        }
+        .cart-footer .clear-btn {
+            background: #e2e1e1;
+            color: #2D5016;
+            margin-right: 0.99em;
+        }
+
+        /* Checkout Modal Styles */
+        .checkout-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .checkout-content {
+            background: white;
+            border-radius: 15px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .checkout-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 2rem;
+            border-bottom: 2px solid #e0e0e0;
+            background: var(--cream);
+        }
+
+        .checkout-header h2 {
+            color: var(--primary-green);
+            margin: 0;
+        }
+
+        .checkout-close {
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-light);
+            font-weight: bold;
+        }
+
+        .checkout-step {
+            padding: 2rem;
+        }
+
+        .checkout-items {
+            margin: 1rem 0;
+        }
+
+        .checkout-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .checkout-item:last-child {
+            border-bottom: none;
+        }
+
+        .checkout-total {
+            text-align: right;
+            font-size: 1.2rem;
+            margin: 1rem 0;
+            padding: 1rem;
+            background: var(--cream);
+            border-radius: 8px;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            margin-top: 1rem;
+            padding: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .payment-methods {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .payment-option {
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .payment-option:hover {
+            border-color: var(--primary-green);
+            background: var(--cream);
+        }
+
+        .payment-option.selected {
+            border-color: var(--primary-green);
+            background: rgba(45, 80, 22, 0.1);
+        }
+
+        .payment-option label {
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            flex: 1;
+        }
+
+        .payment-icons {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        .payment-total {
+            background: var(--cream);
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+
+        .payment-total div {
+            display: flex;
+            justify-content: space-between;
+            margin: 0.5rem 0;
+        }
+
+        .final-total {
+            font-weight: bold;
+            font-size: 1.2rem;
+            border-top: 2px solid var(--primary-green);
+            padding-top: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .order-success {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .success-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .order-details {
+            background: var(--cream);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 1.5rem 0;
+            text-align: left;
+        }
+
+        .success-total {
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: var(--primary-green);
+            margin-top: 1rem;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .product-card {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            border-color: var(--primary-green);
+        }
+
+        .product-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .product-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--primary-green);
+            color: white;
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .product-badge.organic {
+            background: var(--accent-green);
+        }
+
+        .product-info {
+            padding: 1.2rem;
+        }
+
+        .product-info h4 {
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .product-info p {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .product-price {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-price .price {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary-green);
+        }
+
+        .product-price .old-price {
+            font-size: 1rem;
+            color: var(--text-light);
+            text-decoration: line-through;
+        }
+
+        .product-rating {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            margin-bottom: 1rem;
+        }
+
+        .add-to-cart-btn {
+            width: 100%;
+            background: var(--primary-green);
+            color: white;
+            padding: 0.8rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .add-to-cart-btn:hover {
+            background: var(--accent-green);
+        }
+
+        .sell-form {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-green);
+        }
+
+        .upload-images-zone {
+            border: 2px dashed #e0e0e0;
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            background: var(--cream);
+        }
+
+        .btn {
+            background: linear-gradient(135deg, var(--primary-green), var(--accent-green));
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(45,80,22,0.3);
+        }
+
+        .orders-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .order-card {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem;
+            background: var(--cream);
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .status-badge {
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .status-badge.shipped {
+            background: rgba(244, 164, 22, 0.15);
+            color: #c58200;
+        }
+
+        .status-badge.delivered {
+            background: rgba(45, 80, 22, 0.15);
+            color: var(--primary-green);
+        }
+
+        .status-badge.order-confirmed {
+            background: rgba(74, 124, 44, 0.15);
+            color: var(--accent-green);
+        }
+
+        .status-badge.preparing-for-dispatch {
+            background: rgba(244, 164, 22, 0.15);
+            color: #c58200;
+        }
+
+        .status-badge.out-for-delivery {
+            background: rgba(244, 164, 22, 0.15);
+            color: #c58200;
+        }
+
+        .order-items {
+            padding: 1.5rem;
+        }
+
+        .order-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .order-item img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .order-item-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .order-item-info strong {
+            color: var(--text-dark);
+            margin-bottom: 0.3rem;
+        }
+
+        .order-item-info span {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .order-item-price {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary-green);
+        }
+
+        .order-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem;
+            border-top: 1px solid #e0e0e0;
+            background: var(--cream);
+        }
+
+        .order-footer span {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .track-btn, .review-btn {
+            background: var(--primary-green);
+            color: white;
+            padding: 0.6rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .track-btn:hover, .review-btn:hover {
+            background: var(--accent-green);
+        }
+
+        @media (max-width: 968px) {
+            .products-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .tab-btn {
+                padding: 0.8rem 1rem;
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+    <div class="header">
+        <div class="header-content">
+            <h1><svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-van-icon lucide-van"><path d="M13 6v5a1 1 0 0 0 1 1h6.102a1 1 0 0 1 .712.298l.898.91a1 1 0 0 1 .288.702V17a1 1 0 0 1-1 1h-3"/><path d="M5 18H3a1 1 0 0 1-1-1V8a2 2 0 0 1 2-2h12c1.1 0 2.1.8 2.4 1.8l1.176 4.2"/><path d="M9 18h5"/><circle cx="16" cy="18" r="2"/><circle cx="7" cy="18" r="2"/></svg>Agro Marketplace</h1>
+            <button onclick="toggleCart()" class="btn" style="margin-left:25em;font-size:1.05em;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shopping-cart-icon lucide-shopping-cart"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg> Cart (<span id="cartCount">0</span>)
+            </button>
+            <a href="/" class="back-btn">← Back to Home</a>
+        </div>
+    </div>
+    <div id="cartBox" class="cart-box">
+        <section>
+            <span class="cart-title">Your Cart</span>
+            <span class="cart-close" onclick="toggleCart()">&times;</span>
+        </section>
+        <ul id="cartItems" class="cart-items"></ul>
+        <div class="cart-footer">
+            <button class="clear-btn" onclick="clearCart()">Clear Cart</button>
+            <button onclick="proceedToCheckout()">Checkout</button>
+        </div>
+    </div>
+
+    <!-- Checkout Modal -->
+    <div id="checkoutModal" class="checkout-modal" style="display: none;">
+        <div class="checkout-content">
+            <div class="checkout-header">
+                <h2><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shopping-cart-icon lucide-shopping-cart"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg> Checkout</h2>
+                <span class="checkout-close" onclick="closeCheckout()">&times;</span>
+            </div>
+
+            <div id="checkoutStep1" class="checkout-step">
+                <h3>Order Summary</h3>
+                <div id="checkoutItems" class="checkout-items"></div>
+                <div class="checkout-total">
+                    <strong>Total: ₹<span id="checkoutTotal">0</span></strong>
+                </div>
+                <button class="btn checkout-btn" onclick="proceedToAddress()">Proceed to Pay</button>
+            </div>
+
+            <div id="checkoutStep2" class="checkout-step" style="display: none;">
+                <h3>Delivery Details</h3>
+                <div class="form-group">
+                    <label>Contact Number *</label>
+                    <input type="tel" id="customerPhone" placeholder="Enter your mobile number" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>Full Name *</label>
+                    <input type="text" id="customerName" placeholder="Enter your full name" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>Delivery Address *</label>
+                    <textarea id="customerAddress" rows="3" placeholder="House No, Street, Area, City, State, PIN Code" class="form-control" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Landmark (Optional)</label>
+                    <input type="text" id="customerLandmark" placeholder="Near temple, school, etc." class="form-control">
+                </div>
+                <button class="btn checkout-btn" onclick="proceedToPayment()">Continue to Payment</button>
+            </div>
+
+            <div id="checkoutStep3" class="checkout-step" style="display: none;">
+                <h3>💳 Payment Method</h3>
+                <div class="payment-methods">
+                    <div class="payment-option" onclick="selectPayment('upi')">
+                        <input type="radio" name="payment" value="upi" id="upi">
+                        <label for="upi">📱 UPI Payment</label>
+                        <div class="payment-icons">GPay, PhonePe, Paytm</div>
+                    </div>
+                    <div class="payment-option" onclick="selectPayment('card')">
+                        <input type="radio" name="payment" value="card" id="card">
+                        <label for="card">💳 Credit/Debit Card</label>
+                        <div class="payment-icons">Visa, Mastercard, RuPay</div>
+                    </div>
+                    <div class="payment-option" onclick="selectPayment('netbanking')">
+                        <input type="radio" name="payment" value="netbanking" id="netbanking">
+                        <label for="netbanking">🏦 Net Banking</label>
+                        <div class="payment-icons">All major banks</div>
+                    </div>
+                    <div class="payment-option" onclick="selectPayment('cod')">
+                        <input type="radio" name="payment" value="cod" id="cod">
+                        <label for="cod">💰 Cash on Delivery</label>
+                        <div class="payment-icons">Pay when delivered</div>
+                    </div>
+                </div>
+                <div class="payment-total">
+                    <div>Order Total: ₹<span id="paymentTotal">0</span></div>
+                    <div>Delivery Charges: ₹50</div>
+                    <div class="final-total">Final Total: ₹<span id="finalTotal">0</span></div>
+                </div>
+                <button class="btn checkout-btn" onclick="processPayment()" id="payButton" disabled>Select Payment Method</button>
+            </div>
+
+            <div id="checkoutStep4" class="checkout-step" style="display: none;">
+                <div class="order-success">
+                    <div class="success-icon">✅</div>
+                    <h3>Order Placed Successfully!</h3>
+                    <p>Thank you for your order. Your order ID is: <strong id="orderIdDisplay"></strong></p>
+                    <p>You will receive a confirmation SMS on your registered mobile number.</p>
+                    <div class="order-details">
+                        <h4>Order Details:</h4>
+                        <div id="successOrderItems"></div>
+                        <div class="success-total">Total Paid: ₹<span id="successTotal">0</span></div>
+                    </div>
+                    <button class="btn" onclick="closeCheckout()">Continue Shopping</button>
+                </div>
+            </div>
+
+            <!-- UPI Payment Step -->
+            <div id="upiPaymentStep" class="checkout-step" style="display: none;">
+                <h3>💳 UPI Payment</h3>
+                <div style="text-align: center; margin: 2rem 0;">
+                    <div style="background: var(--cream); padding: 2rem; border-radius: 12px; margin-bottom: 2rem;">
+                        <h4>Scan QR Code to Pay</h4>
+                        <div style="margin: 1.5rem 0;">
+                            <div style="width: 200px; height: 200px; background: white; border: 2px solid #ddd; margin: 0 auto; display: flex; align-items: center; justify-content: center; border-radius: 8px;">
+                                <div style="text-align: center; color: var(--text-light);">
+                                    <div style="font-size: 3rem;">📱</div>
+                                    <div>QR Code</div>
+                                    <div style="font-size: 0.8rem;">Scan with any UPI app</div>
+                                </div>
+                            </div>
+                        </div>
+                        <p><strong>Amount: ₹<span id="upiAmount">0</span></strong></p>
+                        <p style="color: var(--text-light); margin-top: 0.5rem;">Use GPay, PhonePe, Paytm, or any UPI app</p>
+                    </div>
+
+                    <div style="margin: 2rem 0;">
+                        <h4>Or Enter UPI ID</h4>
+                        <input type="text" id="upiId" placeholder="yourname@paytm" class="form-control" style="margin: 1rem 0; text-align: center;">
+                        <button class="btn" onclick="processUPIPayment()" style="width: 100%;">Pay ₹<span id="upiPayAmount">0</span></button>
+                    </div>
+
+                    <button class="btn" onclick="goBackToPaymentMethods()" style="background: #e0e0e0; color: var(--text-dark); margin-top: 1rem;">← Back to Payment Methods</button>
+                </div>
+            </div>
+
+            <!-- Card Payment Step -->
+            <div id="cardPaymentStep" class="checkout-step" style="display: none;">
+                <h3>💳 Card Payment</h3>
+                <div style="max-width: 400px; margin: 0 auto;">
+                    <div class="form-group">
+                        <label>Card Number *</label>
+                        <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456" class="form-control" maxlength="19" oninput="formatCardNumber(this)">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Expiry Date *</label>
+                            <input type="text" id="cardExpiry" placeholder="MM/YY" class="form-control" maxlength="5" oninput="formatExpiry(this)">
+                        </div>
+                        <div class="form-group">
+                            <label>CVV *</label>
+                            <input type="password" id="cardCvv" placeholder="123" class="form-control" maxlength="4">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Cardholder Name *</label>
+                        <input type="text" id="cardholderName" placeholder="Name as on card" class="form-control">
+                    </div>
+
+                    <div style="background: var(--cream); padding: 1rem; border-radius: 8px; margin: 1.5rem 0;">
+                        <div style="display: flex; justify-content: space-between;">
+                            <span>Amount to Pay:</span>
+                            <strong>₹<span id="cardAmount">0</span></strong>
+                        </div>
+                    </div>
+
+                    <button class="btn checkout-btn" onclick="processCardPayment()">Pay ₹<span id="cardPayAmount">0</span></button>
+                    <button class="btn" onclick="goBackToPaymentMethods()" style="background: #e0e0e0; color: var(--text-dark); margin-top: 1rem; width: 100%;">← Back to Payment Methods</button>
+                </div>
+            </div>
+
+            <!-- Net Banking Step -->
+            <div id="netbankingStep" class="checkout-step" style="display: none;">
+                <h3>🏦 Net Banking</h3>
+                <div style="max-width: 400px; margin: 0 auto;">
+                    <div class="form-group">
+                        <label>Select Your Bank *</label>
+                        <select id="bankSelect" class="form-control">
+                            <option value="">Choose your bank</option>
+                            <option value="sbi">State Bank of India</option>
+                            <option value="hdfc">HDFC Bank</option>
+                            <option value="icici">ICICI Bank</option>
+                            <option value="axis">Axis Bank</option>
+                            <option value="pnb">Punjab National Bank</option>
+                            <option value="bob">Bank of Baroda</option>
+                            <option value="canara">Canara Bank</option>
+                            <option value="union">Union Bank</option>
+                            <option value="kotak">Kotak Mahindra Bank</option>
+                            <option value="yes">Yes Bank</option>
+                        </select>
+                    </div>
+
+                    <div style="background: var(--cream); padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0;">
+                        <h4>Payment Details</h4>
+                        <div style="display: flex; justify-content: space-between; margin: 0.5rem 0;">
+                            <span>Order Total:</span>
+                            <span>₹<span id="netbankingAmount">0</span></span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin: 0.5rem 0; font-weight: bold; border-top: 1px solid #ddd; padding-top: 0.5rem;">
+                            <span>Amount to Pay:</span>
+                            <span>₹<span id="netbankingPayAmount">0</span></span>
+                        </div>
+                    </div>
+
+                    <div style="background: #fff3cd; border: 1px solid #ffeaa7; padding: 1rem; border-radius: 8px; margin: 1rem 0;">
+                        <small>⚠️ You will be redirected to your bank's secure website to complete the payment.</small>
+                    </div>
+
+                    <button class="btn checkout-btn" onclick="processNetBankingPayment()">Proceed to Bank Website</button>
+                    <button class="btn" onclick="goBackToPaymentMethods()" style="background: #e0e0e0; color: var(--text-dark); margin-top: 1rem; width: 100%;">← Back to Payment Methods</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="tabs">
+        <div class="tab-container">
+            <button class="tab-btn active" onclick="switchTab('buy')">Buy Products</button>
+            <button class="tab-btn" onclick="switchTab('sell')">Sell Produce</button>
+            <button class="tab-btn" onclick="switchTab('orders')">My Orders</button>
+        </div>
+    </div>
+
+    <div class="content">
+        <!-- Buy Products Tab -->
+        <div id="buyTab" class="tab-content active">
+            <div style="display: flex; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap;">
+                <button class="filter-btn active" onclick="filterProducts('all')">All Products</button>
+                <button class="filter-btn" onclick="filterProducts('traps')">Solar Traps</button>
+                <button class="filter-btn" onclick="filterProducts('lure')">Lure</button>
+                <button class="filter-btn" onclick="filterProducts('addon')">Add-On</button>
+                <button class="filter-btn" onclick="filterProducts('fertilizer')">Fertilizers</button>
+            </div>
+
+                <!-- Main Trap Product -->
+            <div class="products-grid" id="productsGrid">
+                <div class="product-card" data-category="traps">
+                    <img src="/static/trap_realV2.jpg" alt="Solar insect trap" style="height: 280px; width: 100%; object-fit: contain; background: #f6f5ed;">
+                    <div class="product-badge">Featured</div>
+                    <div class="product-info">
+                        <h4>Solar-Powered Insect Trap</h4>
+                        <p>10W panel, UV LED, 0.5 acre coverage</p>
+                        <div class="product-price">
+                            <span class="price">₹2,999</span>
+                            <span class="old-price">₹3,500</span>
+                        </div>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button class="add-to-cart-btn" onclick="addToCart('Solar Insect Trap Pro', 2999)" style="flex: 1;">Add to Cart</button>
+                            <button class="buy-now-btn" onclick="buyNow('Solar Insect Trap Pro', 2999)" style="flex: 1; background: var(--golden-yellow); color: white; border: none; padding: 0.8rem; border-radius: 8px; font-weight: 600; cursor: pointer;">Buy Now</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Wind Add-On -->
+        <div class="product-card" data-category="addon">
+            <img src="https://www.windustry.com/image/vertical-axis-wind-turbines.jpg" alt="Wind power add-on">
+            <div class="product-badge addon">Add-On</div>
+            <div class="product-info">
+              <h4>Wind Power Add-On</h4>
+              <p>Vertical Axis Wind Turbine, mounts beside trap for extra cloudy/windy days.</p>
+              <div class="product-price">
+                 <span class="price">₹2,900</span>
+             </div>
+             <div style="display: flex; gap: 0.5rem;">
+                 <button class="add-to-cart-btn" onclick="addToCart('Wind Power Add-On', 2900)" style="flex: 1;">Add to Cart</button>
+                 <button class="buy-now-btn" onclick="buyNow('Wind Power Add-On', 2900)" style="flex: 1; background: var(--golden-yellow); color: white; border: none; padding: 0.8rem; border-radius: 8px; font-weight: 600; cursor: pointer;">Buy Now</button>
+             </div>
+            <div style="color: #4A7C2C; font-size: 0.98rem; margin-top: 0.7rem;">For: Solar Trap Owners<br>Use: All crops, plug & play</div>
+            </div>
+        </div>
+
+                <!-- AC Charger Add-On -->
+    <div class="product-card" data-category="addon">
+        <img src="https://5.imimg.com/data5/SELLER/Default/2023/2/XG/IQ/LO/1364322/uniteh-black-power-cords.JPG" alt="AC Charger Add-On">
+        <div class="product-badge addon">Add-On</div>
+        <div class="product-info">
+            <h4>AC Charging Cord Add-On</h4>
+            <p>12V smart charger to recharge battery from household socket during rain/clouds.</p>
+            <div class="product-price">
+                <span class="price">₹250</span>
+            </div>
+            <div style="display: flex; gap: 0.5rem;">
+                <button class="add-to-cart-btn" onclick="addToCart('AC Charger Add-On', 650)" style="flex: 1;">Add to Cart</button>
+                <button class="buy-now-btn" onclick="buyNow('AC Charger Add-On', 650)" style="flex: 1; background: var(--golden-yellow); color: white; border: none; padding: 0.8rem; border-radius: 8px; font-weight: 600; cursor: pointer;">Buy Now</button>
+            </div>
+            <div style="color: #4A7C2C; font-size: 0.98rem; margin-top: 0.7rem;">For: Solar Trap Owners<br>Use: All crops, easy plug-in</div>
+        </div>
+    </div>
+
+                <div class="product-card" data-category="fertilizer">
+                    <img src="https://5.imimg.com/data5/SELLER/Default/2023/10/354303715/VX/ST/GV/4815803/neem-powder-organic-fertilizer-1000x1000.jpeg" alt="Organic fertilizer">
+                    <div class="product-badge organic">Organic</div>
+                    <div class="product-info">
+                        <h4>Neem Organic Fertilizer</h4>
+                        <p>100% natural, 25kg bag</p>
+                        <div class="product-price">
+                            <span class="price">₹650</span>
+                        </div>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button class="add-to-cart-btn" onclick="addToCart('Neem Organic Fertilizer', 650)" style="flex: 1;">Add to Cart</button>
+                            <button class="buy-now-btn" onclick="buyNow('Neem Organic Fertilizer', 650)" style="flex: 1; background: var(--golden-yellow); color: white; border: none; padding: 0.8rem; border-radius: 8px; font-weight: 600; cursor: pointer;">Buy Now</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card" data-category="traps">
+                    <img src="https://5.imimg.com/data5/PJ/VP/XL/SELLER-55273776/fruit-fly-trap.jpg" alt="Pheromone trap">
+                    <div class="product-info">
+                        <h4>Pheromone Trap Set</h4>
+                        <p>Pack of 10 traps with lures</p>
+                        <div class="product-price">
+                            <span class="price">₹1,200</span>
+                        </div>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button class="add-to-cart-btn" onclick="addToCart('Pheromone Trap Set', 1200)" style="flex: 1;">Add to Cart</button>
+                            <button class="buy-now-btn" onclick="buyNow('Pheromone Trap Set', 1200)" style="flex: 1; background: var(--golden-yellow); color: white; border: none; padding: 0.8rem; border-radius: 8px; font-weight: 600; cursor: pointer;">Buy Now</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lure: Neem Oil for Wheat -->
+    <div class="product-card" data-category="lure">
+        <img src="https://dujjhct8zer0r.cloudfront.net/media/prod_image/6165543251748071521.jpeg" alt="Neem Lure">
+        <div class="product-badge lure">Lure</div>
+        <div class="product-info">
+            <h4>Neem Oil Lure</h4>
+            <p>Specially for: Wheat</p>
+            <div class="product-price">
+                <span class="price">₹250</span>
+                <span class="old-price">₹350</span>
+            </div>
+            <div style="display: flex; gap: 0.5rem;">
+                <button class="add-to-cart-btn" onclick="addToCart('Neem Oil Lure', 250)" style="flex: 1;">Add to Cart</button>
+                <button class="buy-now-btn" onclick="buyNow('Neem Oil Lure', 250)" style="flex: 1; background: var(--golden-yellow); color: white; border: none; padding: 0.8rem; border-radius: 8px; font-weight: 600; cursor: pointer;">Buy Now</button>
+            </div>
+            <div style="color: #4A7C2C; font-size: 0.98rem; margin-top: 0.7rem;">
+                Use: ½–1 L / acre<br>
+                Refill: every 14 days
+            </div>
+        </div>
+    </div>
+
+    <!-- Lure: Lemongrass/Citronella for Rice -->
+    <div class="product-card" data-category="lure">
+        <img src="https://www.lmching.com/cdn/shop/files/NewProject-659_fd20831d-0dfc-4844-a531-e1dbfea8e2a7_540x.jpg?v=1751507942" alt="Lemongrass Lure">
+        <div class="product-badge lure">Lure</div>
+        <div class="product-info">
+            <h4>Lemongrass & Citronella Lure</h4>
+            <p>Specially for: Rice</p>
+            <div class="product-price">
+                <span class="price">₹240</span>
+            </div>
+            <div style="display: flex; gap: 0.5rem;">
+                <button class="add-to-cart-btn" onclick="addToCart('Lemongrass & Citronella Lure', 240)" style="flex: 1;">Add to Cart</button>
+                <button class="buy-now-btn" onclick="buyNow('Lemongrass & Citronella Lure', 240)" style="flex: 1; background: var(--golden-yellow); color: white; border: none; padding: 0.8rem; border-radius: 8px; font-weight: 600; cursor: pointer;">Buy Now</button>
+            </div>
+            <div style="color: #4A7C2C; font-size: 0.98rem; margin-top: 0.7rem;">
+                Use: ½ L / acre<br>
+                Refill: every 10 days
+            </div>
+        </div>
+    </div>
+
+    <!-- Lure: Garlic/Basil/Marigold for Cotton -->
+    <div class="product-card" data-category="lure">
+        <img src="https://m.media-amazon.com/images/I/71yT+W99VWL._AC_UF1000,1000_QL80_.jpg" alt="Basil Lure">
+        <div class="product-badge lure">Lure</div>
+        <div class="product-info">
+            <h4>Garlic-Basil-Marigold Lure</h4>
+            <p>Specially for: Cotton</p>
+            <div class="product-price">
+                <span class="price">₹300</span>
+            </div>
+            <div style="display: flex; gap: 0.5rem;">
+                <button class="add-to-cart-btn" onclick="addToCart('Garlic-Basil-Marigold Lure', 300)" style="flex: 1;">Add to Cart</button>
+                <button class="buy-now-btn" onclick="buyNow('Garlic-Basil-Marigold Lure', 300)" style="flex: 1; background: var(--golden-yellow); color: white; border: none; padding: 0.8rem; border-radius: 8px; font-weight: 600; cursor: pointer;">Buy Now</button>
+            </div>
+            <div style="color: #4A7C2C; font-size: 0.98rem; margin-top: 0.7rem;">
+                Use: 1 L / acre<br>
+                Refill: every 14 days
+            </div>
+        </div>
+    </div>
+
+    <!-- Lure: Peppermint/Camphor for Maize -->
+    <div class="product-card" data-category="lure">
+        <img src="https://tiimg.tistatic.com/fp/2/008/921/fall-army-worm-pheromone-lure-105.jpg" alt="Peppermint Lure">
+        <div class="product-badge lure">Lure</div>
+        <div class="product-info">
+            <h4>Peppermint & Camphor Lure</h4>
+            <p>Specially for: Maize</p>
+            <div class="product-price">
+                <span class="price">₹245</span>
+            </div>
+            <div style="display: flex; gap: 0.5rem;">
+                <button class="add-to-cart-btn" onclick="addToCart('Peppermint & Camphor Lure', 245)" style="flex: 1;">Add to Cart</button>
+                <button class="buy-now-btn" onclick="buyNow('Peppermint & Camphor Lure', 245)" style="flex: 1; background: var(--golden-yellow); color: white; border: none; padding: 0.8rem; border-radius: 8px; font-weight: 600; cursor: pointer;">Buy Now</button>
+            </div>
+            <div style="color: #4A7C2C; font-size: 0.98rem; margin-top: 0.7rem;">
+                Use: ½ L / acre<br>
+                Refill: every 10 days
+            </div>
+        </div>
+    </div>
+
+
+                <!-- Lure: Clove/Rosemary for Sugarcane -->
+    <div class="product-card" data-category="lure">
+        <img src="https://greenrevolution.blob.core.windows.net/images/65366b2b-69a9-4520-9cfe-268c4cd61cc4.jpg" alt="Clove-Rosemary Lure">
+        <div class="product-badge lure">Lure</div>
+        <div class="product-info">
+            <h4>Clove & Rosemary Lure</h4>
+            <p>Specially for: Sugarcane</p>
+            <div class="product-price">
+                <span class="price">₹320</span>
+            </div>
+            <div style="display: flex; gap: 0.5rem;">
+                <button class="add-to-cart-btn" onclick="addToCart('Clove & Rosemary Lure', 320)" style="flex: 1;">Add to Cart</button>
+                <button class="buy-now-btn" onclick="buyNow('Clove & Rosemary Lure', 320)" style="flex: 1; background: var(--golden-yellow); color: white; border: none; padding: 0.8rem; border-radius: 8px; font-weight: 600; cursor: pointer;">Buy Now</button>
+            </div>
+            <div style="color: #4A7C2C; font-size: 0.98rem; margin-top: 0.7rem;">
+                Use: 1 L / acre<br>
+                Refill: every 10–15 days
+            </div>
+        </div>
+    </div>
+
+    <!-- Lure: Mint/Tulsi/Ginger Oil for Vegetables -->
+    <div class="product-card" data-category="lure">
+        <img src="https://5.imimg.com/data5/SELLER/Default/2023/6/316228982/QK/BM/AE/143814374/barric-catch-vegetable-fly-lure-500x500.JPG" alt="Clove-Rosemary Lure">
+        <div class="product-badge lure">Lure</div>
+        <div class="product-info">
+            <h4>Mint-Tulsi-Ginger Oil Lure</h4>
+            <p>Specially for: Vegetables</p>
+            <div class="product-price">
+                <span class="price">₹245</span>
+            </div>
+            <div style="display: flex; gap: 0.5rem;">
+                <button class="add-to-cart-btn" onclick="addToCart('Mint-Tulsi-Ginger Oil Lure', 245)" style="flex: 1;">Add to Cart</button>
+                <button class="buy-now-btn" onclick="buyNow('Mint-Tulsi-Ginger Oil Lure', 245)" style="flex: 1; background: var(--golden-yellow); color: white; border: none; padding: 0.8rem; border-radius: 8px; font-weight: 600; cursor: pointer;">Buy Now</button>
+            </div>
+            <div style="color: #4A7C2C; font-size: 0.98rem; margin-top: 0.7rem;">
+                Use: 1 L / acre<br>
+                Refill: every 10 days
+            </div>
+        </div>
+    </div>
+
+
+            </div>
+        </div>
+
+        <!-- Sell Produce Tab -->
+        <div id="sellTab" class="tab-content">
+            <h2 style="margin-bottom: 1rem; color: var(--primary-green);">List Your Farm Produce</h2>
+            <p style="color: var(--text-light); font-size: 1.1rem; margin-bottom: 2rem;">Sell directly to buyers with fair pricing and no middlemen.</p>
+
+            <div class="sell-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Product Name *</label>
+                        <input type="text" id="productName" placeholder="e.g., Organic Wheat" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Category *</label>
+                        <select id="productCategory" class="form-control">
+                            <option>Select Category</option>
+                            <option>Grains & Cereals</option>
+                            <option>Vegetables</option>
+                            <option>Fruits</option>
+                            <option>Pulses</option>
+                            <option>Organic Produce</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Quantity Available (kg) *</label>
+                        <input type="number" id="productQuantity" placeholder="1000" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Price per kg (₹) *</label>
+                        <input type="number" id="productPrice" placeholder="25" class="form-control">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Product Description *</label>
+                    <textarea id="productDescription" rows="4" placeholder="Describe your produce quality, farming method, etc." class="form-control"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Upload Product Images</label>
+                    <div class="upload-images-zone">
+                        <input type="file" multiple accept="image/*" style="display: none;" id="produceImages">
+                        <button class="btn" onclick="document.getElementById('produceImages').click()">📷 Choose Images</button>
+                        <p style="margin-top: 0.5rem; font-size: 0.9rem; color: var(--text-light);">Upload up to 5 images</p>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                        <input type="checkbox" id="isOrganic">
+                        <span>This is organically grown produce</span>
+                    </label>
+                </div>
+
+                <button class="btn" onclick="submitProduce()" style="width: 100%; padding: 1.2rem; font-size: 1.1rem;">List Product for Sale</button>
+            </div>
+
+            <div style="margin-top: 3rem; padding: 1.5rem; background: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+                <h4 style="color: var(--primary-green); margin-bottom: 1rem;">💡 Seller Benefits</h4>
+                <ul style="list-style: none; padding: 0;">
+                    <li style="padding: 0.5rem 0;">✓ Direct connection with buyers - No middlemen</li>
+                    <li style="padding: 0.5rem 0;">✓ Get fair market prices for your produce</li>
+                    <li style="padding: 0.5rem 0;">✓ Free listing for the first 3 months</li>
+                    <li style="padding: 0.5rem 0;">✓ Secure payment directly to your bank</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- My Orders Tab -->
+        <div id="ordersTab" class="tab-content">
+            <h2 style="margin-bottom: 1rem; color: var(--primary-green);">Your Orders</h2>
+            <p style="color: var(--text-light); font-size: 1.1rem; margin-bottom: 2rem;">Track and manage all your marketplace orders.</p>
+
+            <div class="orders-list">
+                <!-- Orders will be loaded dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- CART LOGIC ---
+        function getCart() {
+            return JSON.parse(localStorage.getItem('kisanCart') || '[]');
+        }
+        function setCart(cart) {
+            localStorage.setItem('kisanCart', JSON.stringify(cart));
+            updateCartCount();
+        }
+        function updateCartCount() {
+            document.getElementById('cartCount').textContent = getCart().reduce((a, c) => a + c.qty, 0);
+        }
+        function addToCart(name, price) {
+            let cart = getCart();
+            let idx = cart.findIndex(item => item.name === name && item.price === price);
+            if (idx > -1) {
+                cart[idx].qty += 1;
+            } else {
+                cart.push({name, price, qty: 1});
+            }
+            setCart(cart);
+
+            // Check if cart is currently open and update it in real-time
+            const cartBox = document.getElementById('cartBox');
+            if (cartBox.style.display === "block") {
+                updateCartDisplay(); // Update the display without closing/opening
+            }
+
+            alert('✅ ' + name + ' added to cart!\n\nPrice: ₹' + price + '\n\nYou can proceed to checkout from the cart.');
+        }
+
+        function increaseQty(idx) {
+            let cart = getCart();
+            cart[idx].qty += 1;
+            setCart(cart);
+            updateCartDisplay();
+        }
+
+        function decreaseQty(idx) {
+            let cart = getCart();
+            if (cart[idx].qty > 1) {
+                cart[idx].qty -= 1;
+                setCart(cart);
+                updateCartDisplay();
+            }
+        }
+
+        function removeFromCart(idx) {
+            let cart = getCart();
+            cart.splice(idx, 1);
+            setCart(cart);
+            updateCartDisplay();
+        }
+        function clearCart() {
+            localStorage.removeItem('kisanCart');
+            updateCartDisplay();
+        }
+        function updateCartDisplay() {
+            let cart = getCart();
+            let itemsList = document.getElementById('cartItems');
+            itemsList.innerHTML = '';
+            if (cart.length === 0) {
+                itemsList.innerHTML = "<li style='color:#888;'>Your cart is empty.</li>";
+            } else {
+                cart.forEach((item, idx) => {
+                    itemsList.innerHTML += `
+                        <li>
+                            <div style="flex: 1;">
+                                <span style="font-weight:600;">${item.name}</span><br>
+                                <span style="color:#347a18;">₹${item.price} each</span>
+                            </div>
+                            <div class="cart-item-controls">
+                                <button class="cart-qty-btn" onclick="decreaseQty(${idx})">-</button>
+                                <span class="cart-qty-display">${item.qty}</span>
+                                <button class="cart-qty-btn" onclick="increaseQty(${idx})">+</button>
+                                <button class="cart-delete-btn" onclick="removeFromCart(${idx})" title="Remove item">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </li>
+                    `;
+                });
+            }
+            updateCartCount();
+        }
+
+        function showCart() {
+            updateCartDisplay();
+            document.getElementById('cartBox').style.display = "block";
+        }
+        function toggleCart() {
+            let cartBox = document.getElementById('cartBox');
+            if (cartBox.style.display === "block") {
+                cartBox.style.display = "none";
+            } else {
+                showCart();
+            }
+        }
+
+        // --- BUY NOW FUNCTIONALITY ---
+        function buyNow(name, price) {
+            // Create temporary cart with single item
+            let tempCart = [{name, price, qty: 1}];
+            localStorage.setItem('tempCheckoutCart', JSON.stringify(tempCart));
+            openCheckout(tempCart);
+        }
+
+        // --- CHECKOUT FUNCTIONALITY ---
+        function proceedToCheckout() {
+            let cart = getCart();
+            if (cart.length === 0) {
+                alert("Your cart is empty!");
+                return;
+            }
+            localStorage.setItem('tempCheckoutCart', JSON.stringify(cart));
+            toggleCart(); // Close cart
+            openCheckout(cart);
+        }
+
+        function openCheckout(cart) {
+            // Show checkout modal
+            document.getElementById('checkoutModal').style.display = 'flex';
+
+            // Reset to step 1
+            document.querySelectorAll('.checkout-step').forEach(step => step.style.display = 'none');
+            document.getElementById('checkoutStep1').style.display = 'block';
+
+            // Populate order summary
+            let itemsHtml = '';
+            let total = 0;
+            cart.forEach(item => {
+                let itemTotal = item.price * item.qty;
+                total += itemTotal;
+                itemsHtml += `
+                    <div class="checkout-item">
+                        <div>
+                            <strong>${item.name}</strong><br>
+                            <span style="color: #666;">Qty: ${item.qty}</span>
+                        </div>
+                        <div style="font-weight: bold;">₹${itemTotal}</div>
+                    </div>
+                `;
+            });
+
+            document.getElementById('checkoutItems').innerHTML = itemsHtml;
+            document.getElementById('checkoutTotal').textContent = total;
+        }
+
+        function proceedToAddress() {
+            document.getElementById('checkoutStep1').style.display = 'none';
+            document.getElementById('checkoutStep2').style.display = 'block';
+        }
+
+        function proceedToPayment() {
+            // Validate address form
+            const phone = document.getElementById('customerPhone').value.trim();
+            const name = document.getElementById('customerName').value.trim();
+            const address = document.getElementById('customerAddress').value.trim();
+
+            if (!phone || !name || !address) {
+                alert('Please fill in all required fields');
+                return;
+            }
+
+            if (phone.length !== 10 || !/^\d+$/.test(phone)) {
+                alert('Please enter a valid 10-digit mobile number');
+                return;
+            }
+
+            // Calculate totals
+            let cart = JSON.parse(localStorage.getItem('tempCheckoutCart'));
+            let orderTotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            let finalTotal = orderTotal + 50; // Add delivery charges
+
+            document.getElementById('paymentTotal').textContent = orderTotal;
+            document.getElementById('finalTotal').textContent = finalTotal;
+
+            document.getElementById('checkoutStep2').style.display = 'none';
+            document.getElementById('checkoutStep3').style.display = 'block';
+        }
+
+        function selectPayment(method) {
+            // Clear previous selections
+            document.querySelectorAll('.payment-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+
+            // Select current option
+            event.currentTarget.classList.add('selected');
+            document.getElementById(method).checked = true;
+
+            // Enable pay button and handle specific payment methods
+            const payButton = document.getElementById('payButton');
+            payButton.disabled = false;
+
+            // Reset onclick handler to default processPayment function
+            payButton.onclick = function() { processPayment(); };
+
+            if (method === 'cod') {
+                payButton.textContent = 'Place Order (Cash on Delivery)';
+            } else if (method === 'upi') {
+                payButton.textContent = 'Pay with UPI';
+                payButton.onclick = function() { showUPIPayment(); };
+            } else if (method === 'card') {
+                payButton.textContent = 'Pay with Card';
+                payButton.onclick = function() { showCardPayment(); };
+            } else if (method === 'netbanking') {
+                payButton.textContent = 'Pay with Net Banking';
+                payButton.onclick = function() { showNetBankingPayment(); };
+            } else {
+                payButton.textContent = 'Pay ₹' + document.getElementById('finalTotal').textContent;
+            }
+        }
+
+        // Payment step navigation functions
+        function showUPIPayment() {
+            // Update amounts in UPI step
+            let finalTotal = parseInt(document.getElementById('finalTotal').textContent);
+            document.getElementById('upiAmount').textContent = finalTotal;
+            document.getElementById('upiPayAmount').textContent = finalTotal;
+
+            // Hide payment methods step and show UPI step
+            document.getElementById('checkoutStep3').style.display = 'none';
+            document.getElementById('upiPaymentStep').style.display = 'block';
+        }
+
+        function showCardPayment() {
+            // Update amounts in card step
+            let finalTotal = parseInt(document.getElementById('finalTotal').textContent);
+            document.getElementById('cardAmount').textContent = finalTotal;
+            document.getElementById('cardPayAmount').textContent = finalTotal;
+
+            // Hide payment methods step and show card step
+            document.getElementById('checkoutStep3').style.display = 'none';
+            document.getElementById('cardPaymentStep').style.display = 'block';
+        }
+
+        function showNetBankingPayment() {
+            // Update amounts in netbanking step
+            let finalTotal = parseInt(document.getElementById('finalTotal').textContent);
+            document.getElementById('netbankingAmount').textContent = finalTotal;
+            document.getElementById('netbankingPayAmount').textContent = finalTotal;
+
+            // Hide payment methods step and show netbanking step
+            document.getElementById('checkoutStep3').style.display = 'none';
+            document.getElementById('netbankingStep').style.display = 'block';
+        }
+
+        function goBackToPaymentMethods() {
+            // Hide all payment specific steps
+            document.getElementById('upiPaymentStep').style.display = 'none';
+            document.getElementById('cardPaymentStep').style.display = 'none';
+            document.getElementById('netbankingStep').style.display = 'none';
+
+            // Show payment methods step
+            document.getElementById('checkoutStep3').style.display = 'block';
+
+            // Reset payment button to default state
+            const payButton = document.getElementById('payButton');
+            payButton.onclick = function() { processPayment(); };
+            payButton.disabled = true;
+            payButton.textContent = 'Select Payment Method';
+
+            // Clear any previous payment selections
+            document.querySelectorAll('.payment-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            document.querySelectorAll('input[name="payment"]').forEach(radio => {
+                radio.checked = false;
+            });
+        }
+
+        function processPayment() {
+            const selectedPayment = document.querySelector('input[name="payment"]:checked');
+            if (!selectedPayment) {
+                alert('Please select a payment method');
+                return;
+            }
+
+            // Generate order ID
+            const orderId = 'KS-' + new Date().getFullYear() + '-' + String(Date.now()).slice(-6);
+
+            // Get order details
+            let cart = JSON.parse(localStorage.getItem('tempCheckoutCart'));
+            let finalTotal = parseInt(document.getElementById('finalTotal').textContent);
+
+            // Get customer details
+            const customerDetails = {
+                name: document.getElementById('customerName').value,
+                phone: document.getElementById('customerPhone').value,
+                address: document.getElementById('customerAddress').value,
+                landmark: document.getElementById('customerLandmark').value
+            };
+
+            if (selectedPayment.value === 'cod') {
+                completeOrder(orderId, cart, finalTotal, 'Cash on Delivery');
+            } else {
+                // Initialize Razorpay payment
+                initiateRazorpayPayment(orderId, cart, finalTotal, selectedPayment.value, customerDetails);
+            }
+        }
+
+        function initiateRazorpayPayment(orderId, cart, finalTotal, paymentMethod, customerDetails) {
+            // Razorpay configuration
+            const options = {
+                key: 'rzp_test_1234567890', // Replace with your actual Razorpay key
+                amount: finalTotal * 100, // Amount in paise
+                currency: 'INR',
+                name: 'KisanSeva Marketplace',
+                description: 'Agricultural Products Purchase',
+                order_id: orderId, // This should be generated from your backend
+                image: 'https://via.placeholder.com/100x100?text=KS', // Your logo
+                prefill: {
+                    name: customerDetails.name,
+                    email: '', // Add email if available
+                    contact: customerDetails.phone
+                },
+                notes: {
+                    address: customerDetails.address,
+                    landmark: customerDetails.landmark
+                },
+                theme: {
+                    color: '#2D5016'
+                },
+                method: {
+                    upi: paymentMethod === 'upi',
+                    card: paymentMethod === 'card',
+                    netbanking: paymentMethod === 'netbanking',
+                    wallet: false
+                },
+                handler: function (response) {
+                    // Payment successful
+                    handlePaymentSuccess(response, orderId, cart, finalTotal, paymentMethod);
+                },
+                modal: {
+                    ondismiss: function() {
+                        // Payment cancelled
+                        handlePaymentFailure('Payment cancelled by user');
+                    }
+                }
+            };
+
+            // Show processing message
+            document.getElementById('payButton').textContent = 'Opening Payment Gateway...';
+            document.getElementById('payButton').disabled = true;
+
+            // Open Razorpay checkout
+            const rzp = new Razorpay(options);
+
+            rzp.on('payment.failed', function (response) {
+                handlePaymentFailure(response.error.description);
+            });
+
+            rzp.open();
+        }
+
+        function handlePaymentSuccess(response, orderId, cart, finalTotal, paymentMethod) {
+            // Payment successful - complete the order
+            console.log('Payment Success:', response);
+
+            // You can verify payment on backend here using response.razorpay_payment_id
+
+            // Show success message
+            alert('✅ Payment Successful!\n\nPayment ID: ' + response.razorpay_payment_id + '\n\nYour order is being processed.');
+
+            // Complete the order
+            completeOrder(orderId, cart, finalTotal, paymentMethod.toUpperCase() + ' - ' + response.razorpay_payment_id);
+        }
+
+        function handlePaymentFailure(errorMessage) {
+            // Payment failed
+            console.log('Payment Failed:', errorMessage);
+
+            // Re-enable pay button
+            const payButton = document.getElementById('payButton');
+            payButton.disabled = false;
+            payButton.textContent = 'Pay ₹' + document.getElementById('finalTotal').textContent;
+
+            // Show error message
+            alert('❌ Payment Failed\n\n' + errorMessage + '\n\nPlease try again or choose a different payment method.');
+        }
+
+        // Enhanced UPI Payment Function
+        function processUPIPayment() {
+            const upiId = document.getElementById('upiId').value.trim();
+            let cart = JSON.parse(localStorage.getItem('tempCheckoutCart'));
+            let finalTotal = parseInt(document.getElementById('finalTotal').textContent);
+            const orderId = 'KS-' + new Date().getFullYear() + '-' + String(Date.now()).slice(-6);
+
+            const customerDetails = {
+                name: document.getElementById('customerName').value,
+                phone: document.getElementById('customerPhone').value,
+                address: document.getElementById('customerAddress').value,
+                landmark: document.getElementById('customerLandmark').value
+            };
+
+            if (upiId && !isValidUPIId(upiId)) {
+                alert('Please enter a valid UPI ID (e.g., yourname@paytm)');
+                return;
+            }
+
+            // Configure Razorpay for UPI
+            const options = {
+                key: 'rzp_test_1234567890', // Replace with your actual key
+                amount: finalTotal * 100,
+                currency: 'INR',
+                name: 'KisanSeva Marketplace',
+                description: 'Agricultural Products Purchase',
+                order_id: orderId,
+                image: 'https://via.placeholder.com/100x100?text=KS',
+                prefill: {
+                    name: customerDetails.name,
+                    contact: customerDetails.phone,
+                    vpa: upiId // Pre-fill UPI ID if provided
+                },
+                method: {
+                    upi: true,
+                    card: false,
+                    netbanking: false,
+                    wallet: false
+                },
+                theme: {
+                    color: '#2D5016'
+                },
+                handler: function (response) {
+                    handlePaymentSuccess(response, orderId, cart, finalTotal, 'UPI');
+                },
+                modal: {
+                    ondismiss: function() {
+                        handlePaymentFailure('UPI payment cancelled');
+                    }
+                }
+            };
+
+            const rzp = new Razorpay(options);
+            rzp.on('payment.failed', function (response) {
+                handlePaymentFailure(response.error.description);
+            });
+            rzp.open();
+        }
+
+        // Enhanced Card Payment Function
+        function processCardPayment() {
+            const cardNumber = document.getElementById('cardNumber').value.trim();
+            const cardExpiry = document.getElementById('cardExpiry').value.trim();
+            const cardCvv = document.getElementById('cardCvv').value.trim();
+            const cardholderName = document.getElementById('cardholderName').value.trim();
+
+            if (!cardNumber || !cardExpiry || !cardCvv || !cardholderName) {
+                alert('Please fill in all card details');
+                return;
+            }
+
+            if (!isValidCardNumber(cardNumber.replace(/\s/g, ''))) {
+                alert('Please enter a valid card number');
+                return;
+            }
+
+            if (!isValidExpiry(cardExpiry)) {
+                alert('Please enter a valid expiry date (MM/YY)');
+                return;
+            }
+
+            if (cardCvv.length < 3) {
+                alert('Please enter a valid CVV');
+                return;
+            }
+
+            let cart = JSON.parse(localStorage.getItem('tempCheckoutCart'));
+            let finalTotal = parseInt(document.getElementById('finalTotal').textContent);
+            const orderId = 'KS-' + new Date().getFullYear() + '-' + String(Date.now()).slice(-6);
+
+            const customerDetails = {
+                name: document.getElementById('customerName').value,
+                phone: document.getElementById('customerPhone').value,
+                address: document.getElementById('customerAddress').value,
+                landmark: document.getElementById('customerLandmark').value
+            };
+
+            // Configure Razorpay for Card Payment
+            const options = {
+                key: 'rzp_test_1234567890', // Replace with your actual key
+                amount: finalTotal * 100,
+                currency: 'INR',
+                name: 'KisanSeva Marketplace',
+                description: 'Agricultural Products Purchase',
+                order_id: orderId,
+                image: 'https://via.placeholder.com/100x100?text=KS',
+                prefill: {
+                    name: customerDetails.name,
+                    contact: customerDetails.phone
+                },
+                method: {
+                    card: true,
+                    upi: false,
+                    netbanking: false,
+                    wallet: false
+                },
+                theme: {
+                    color: '#2D5016'
+                },
+                handler: function (response) {
+                    handlePaymentSuccess(response, orderId, cart, finalTotal, 'Card');
+                },
+                modal: {
+                    ondismiss: function() {
+                        handlePaymentFailure('Card payment cancelled');
+                    }
+                }
+            };
+
+            const rzp = new Razorpay(options);
+            rzp.on('payment.failed', function (response) {
+                handlePaymentFailure(response.error.description);
+            });
+            rzp.open();
+        }
+
+        // Enhanced Net Banking Function
+        function processNetBankingPayment() {
+            const selectedBank = document.getElementById('bankSelect').value;
+
+            if (!selectedBank) {
+                alert('Please select your bank');
+                return;
+            }
+
+            let cart = JSON.parse(localStorage.getItem('tempCheckoutCart'));
+            let finalTotal = parseInt(document.getElementById('finalTotal').textContent);
+            const orderId = 'KS-' + new Date().getFullYear() + '-' + String(Date.now()).slice(-6);
+
+            const customerDetails = {
+                name: document.getElementById('customerName').value,
+                phone: document.getElementById('customerPhone').value,
+                address: document.getElementById('customerAddress').value,
+                landmark: document.getElementById('customerLandmark').value
+            };
+
+            // Configure Razorpay for Net Banking
+            const options = {
+                key: 'rzp_test_1234567890', // Replace with your actual key
+                amount: finalTotal * 100,
+                currency: 'INR',
+                name: 'KisanSeva Marketplace',
+                description: 'Agricultural Products Purchase',
+                order_id: orderId,
+                image: 'https://via.placeholder.com/100x100?text=KS',
+                prefill: {
+                    name: customerDetails.name,
+                    contact: customerDetails.phone
+                },
+                method: {
+                    netbanking: true,
+                    card: false,
+                    upi: false,
+                    wallet: false
+                },
+                theme: {
+                    color: '#2D5016'
+                },
+                handler: function (response) {
+                    handlePaymentSuccess(response, orderId, cart, finalTotal, 'Net Banking');
+                },
+                modal: {
+                    ondismiss: function() {
+                        handlePaymentFailure('Net banking payment cancelled');
+                    }
+                }
+            };
+
+            const rzp = new Razorpay(options);
+            rzp.on('payment.failed', function (response) {
+                handlePaymentFailure(response.error.description);
+            });
+            rzp.open();
+        }
+
+        // Validation helper functions
+        function isValidUPIId(upiId) {
+            const upiRegex = /^[a-zA-Z0-9.\-_]{2,256}@[a-zA-Z]{2,64}$/;
+            return upiRegex.test(upiId);
+        }
+
+        function isValidCardNumber(cardNumber) {
+            // Basic Luhn algorithm check
+            if (!/^\d{13,19}$/.test(cardNumber)) return false;
+
+            let sum = 0;
+            let isEven = false;
+
+            for (let i = cardNumber.length - 1; i >= 0; i--) {
+                let digit = parseInt(cardNumber[i]);
+
+                if (isEven) {
+                    digit *= 2;
+                    if (digit > 9) digit -= 9;
+                }
+
+                sum += digit;
+                isEven = !isEven;
+            }
+
+            return sum % 10 === 0;
+        }
+
+        function isValidExpiry(expiry) {
+            if (!/^\d{2}\/\d{2}$/.test(expiry)) return false;
+
+            const [month, year] = expiry.split('/').map(Number);
+            if (month < 1 || month > 12) return false;
+
+            const currentDate = new Date();
+            const currentYear = currentDate.getFullYear() % 100;
+            const currentMonth = currentDate.getMonth() + 1;
+
+            if (year < currentYear || (year === currentYear && month < currentMonth)) {
+                return false;
+            }
+
+            return true;
+        }
+
+        // Card number formatting
+        function formatCardNumber(input) {
+            let value = input.value.replace(/\s/g, '').replace(/[^0-9]/gi, '');
+            let formattedValue = value.match(/.{1,4}/g)?.join(' ') || value;
+            input.value = formattedValue;
+        }
+
+        // Expiry date formatting
+        function formatExpiry(input) {
+            let value = input.value.replace(/\D/g, '');
+            if (value.length >= 2) {
+                value = value.substring(0, 2) + '/' + value.substring(2, 4);
+            }
+            input.value = value;
+        }
+
+        function completeOrder(orderId, cart, total, paymentMethod) {
+            // Show success step
+            document.getElementById('checkoutStep3').style.display = 'none';
+            document.getElementById('checkoutStep4').style.display = 'block';
+
+            // Populate success details
+            document.getElementById('orderIdDisplay').textContent = orderId;
+            document.getElementById('successTotal').textContent = total;
+
+            let successItemsHtml = '';
+            cart.forEach(item => {
+                successItemsHtml += `
+                    <div style="display: flex; justify-content: space-between; margin: 0.5rem 0;">
+                        <span>${item.name} (x${item.qty})</span>
+                        <span>₹${item.price * item.qty}</span>
+                    </div>
+                `;
+            });
+            document.getElementById('successOrderItems').innerHTML = successItemsHtml;
+
+            // Clear cart if it was a cart checkout (not buy now)
+            let originalCart = getCart();
+            if (originalCart.length > 0 && JSON.stringify(originalCart) === JSON.stringify(cart)) {
+                clearCart();
+            }
+
+            // Clear temp cart
+            localStorage.removeItem('tempCheckoutCart');
+
+            // Save order to localStorage for order history
+            let orders = JSON.parse(localStorage.getItem('kisanOrders') || '[]');
+            const customerDetails = {
+                name: document.getElementById('customerName').value,
+                phone: document.getElementById('customerPhone').value,
+                address: document.getElementById('customerAddress').value,
+                landmark: document.getElementById('customerLandmark').value
+            };
+
+            orders.unshift({
+                id: orderId,
+                items: cart,
+                total: total,
+                paymentMethod: paymentMethod,
+                date: new Date().toLocaleDateString(),
+                orderDate: new Date().toISOString(),
+                status: 'Order Confirmed',
+                trackingSteps: [
+                    { status: 'Order Placed', date: new Date().toLocaleDateString(), completed: true },
+                    { status: 'Order Confirmed', date: new Date().toLocaleDateString(), completed: true },
+                    { status: 'Preparing for Dispatch', date: '', completed: false },
+                    { status: 'Shipped', date: '', completed: false },
+                    { status: 'Out for Delivery', date: '', completed: false },
+                    { status: 'Delivered', date: '', completed: false }
+                ],
+                customerDetails: customerDetails,
+                estimatedDelivery: getEstimatedDelivery()
+            });
+            localStorage.setItem('kisanOrders', JSON.stringify(orders));
+
+            // Refresh orders tab if it exists
+            refreshOrdersTab();
+        }
+
+        function getEstimatedDelivery() {
+            const today = new Date();
+            const deliveryDate = new Date(today.getTime() + (5 * 24 * 60 * 60 * 1000)); // 5 days from now
+            return deliveryDate.toLocaleDateString();
+        }
+
+        function refreshOrdersTab() {
+            // This will refresh the orders display when user switches to orders tab
+            const ordersContainer = document.querySelector('#ordersTab .orders-list');
+            if (ordersContainer) {
+                loadUserOrders();
+            }
+        }
+
+        function loadUserOrders() {
+            const orders = JSON.parse(localStorage.getItem('kisanOrders') || '[]');
+            const ordersContainer = document.querySelector('#ordersTab .orders-list');
+
+            if (orders.length === 0) {
+                ordersContainer.innerHTML = `
+                    <div style="text-align: center; padding: 3rem; color: var(--text-light);">
+                        <div style="font-size: 4rem; margin-bottom: 1rem;">📦</div>
+                        <h3 style="color: var(--primary-green); margin-bottom: 1rem;">No Orders Yet</h3>
+                        <p style="margin-bottom: 2rem; font-size: 1.1rem;">Your orders will appear here once you make a purchase.</p>
+                        <button class="btn" onclick="goToShop()" style="padding: 1rem 2rem; font-size: 1.1rem;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shopping-cart-icon lucide-shopping-cart"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg> Shop Now
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+
+            let ordersHtml = '';
+            orders.forEach(order => {
+                const statusClass = order.status.toLowerCase().replace(/\s+/g, '-');
+                let itemsHtml = '';
+                order.items.forEach(item => {
+                    const productImage = getProductImage(item.name);
+                    itemsHtml += `
+                        <div class="order-item">
+                            <img src="${productImage}" alt="${item.name}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px; margin-right: 1rem;">
+                            <div class="order-item-info">
+                                <strong>${item.name}</strong>
+                                <span>Quantity: ${item.qty}</span>
+                            </div>
+                            <div class="order-item-price">₹${item.price * item.qty}</div>
+                        </div>
+                    `;
+                });
+
+                ordersHtml += `
+                    <div class="order-card">
+                        <div class="order-header">
+                            <div>
+                                <strong>Order #${order.id}</strong>
+                                <span style="color: var(--text-light); font-size: 0.9rem; margin-left: 1rem;">Placed on ${order.date}</span>
+                            </div>
+                            <span class="status-badge ${statusClass}">${order.status}</span>
+                        </div>
+                        <div class="order-items">
+                            ${itemsHtml}
+                        </div>
+                        <div class="order-footer">
+                            <span>Total: ₹${order.total}</span>
+                            <button class="track-btn" onclick="trackUserOrder('${order.id}')">Track Order</button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            ordersContainer.innerHTML = ordersHtml;
+        }
+
+        function goToShop() {
+            // Switch to Buy Products tab
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+            // Activate Buy Products tab
+            document.querySelector('.tab-btn[onclick="switchTab(\'buy\')"]').classList.add('active');
+            document.getElementById('buyTab').classList.add('active');
+
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Reset database function - clears all stored data
+        function resetDatabase() {
+            localStorage.removeItem('kisanCart');
+            localStorage.removeItem('kisanOrders');
+            localStorage.removeItem('tempCheckoutCart');
+            updateCartCount();
+
+            // Refresh orders tab if currently active
+            const ordersTab = document.getElementById('ordersTab');
+            if (ordersTab.classList.contains('active')) {
+                loadUserOrders();
+            }
+
+            console.log('Database reset to 0 - All data cleared');
+        }
+
+        // Auto-reset database on page load
+        resetDatabase();
+
+        function getProductImage(productName) {
+            // Map product names to their images
+            const productImages = {
+                'Solar Insect Trap Pro': '/static/trap_realV2.jpg',
+                'Solar-Powered Insect Trap': '/static/trap_realV2.jpg',
+                'Wind Power Add-On': 'https://www.windustry.com/image/vertical-axis-wind-turbines.jpg',
+                'AC Charger Add-On': 'https://5.imimg.com/data5/SELLER/Default/2023/2/XG/IQ/LO/1364322/uniteh-black-power-cords.JPG',
+                'Neem Organic Fertilizer': 'https://5.imimg.com/data5/SELLER/Default/2023/10/354303715/VX/ST/GV/4815803/neem-powder-organic-fertilizer-1000x1000.jpeg',
+                'Pheromone Trap Set': 'https://5.imimg.com/data5/PJ/VP/XL/SELLER-55273776/fruit-fly-trap.jpg',
+                'Neem Oil Lure': 'https://dujjhct8zer0r.cloudfront.net/media/prod_image/6165543251748071521.jpeg',
+                'Lemongrass & Citronella Lure': 'https://www.lmching.com/cdn/shop/files/NewProject-659_fd20831d-0dfc-4844-a531-e1dbfea8e2a7_540x.jpg?v=1751507942',
+                'Garlic-Basil-Marigold Lure': 'https://m.media-amazon.com/images/I/71yT+W99VWL._AC_UF1000,1000_QL80_.jpg',
+                'Peppermint & Camphor Lure': 'https://tiimg.tistatic.com/fp/2/008/921/fall-army-worm-pheromone-lure-105.jpg',
+                'Clove & Rosemary Lure': 'https://greenrevolution.blob.core.windows.net/images/65366b2b-69a9-4520-9cfe-268c4cd61cc4.jpg',
+                'Mint-Tulsi-Ginger Oil Lure': 'https://5.imimg.com/data5/SELLER/Default/2023/6/316228982/QK/BM/AE/143814374/barric-catch-vegetable-fly-lure-500x500.JPG'
+            };
+
+            return productImages[productName] || 'https://via.placeholder.com/60x60?text=Product';
+        }
+
+        function trackUserOrder(orderId) {
+            const orders = JSON.parse(localStorage.getItem('kisanOrders') || '[]');
+            const order = orders.find(o => o.id === orderId);
+
+            if (!order) {
+                alert('Order not found!');
+                return;
+            }
+
+            // Create tracking modal
+            let trackingHtml = `
+                <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 3000; display: flex; align-items: center; justify-content: center;" onclick="closeTrackingModal()">
+                    <div style="background: white; border-radius: 15px; max-width: 500px; width: 90%; max-height: 80vh; overflow-y: auto;" onclick="event.stopPropagation()">
+                        <div style="padding: 1.5rem 2rem; border-bottom: 2px solid #e0e0e0; background: var(--cream);">
+                            <h2 style="color: var(--primary-green); margin: 0;">📦 Track Order #${orderId}</h2>
+                            <span style="position: absolute; top: 1rem; right: 1.5rem; font-size: 1.5rem; cursor: pointer;" onclick="closeTrackingModal()">&times;</span>
+                        </div>
+                        <div style="padding: 2rem;">
+                            <div style="margin-bottom: 1.5rem; padding: 1rem; background: var(--cream); border-radius: 8px;">
+                                <h4 style="color: var(--primary-green); margin-bottom: 0.5rem;">📍 Delivering to</h4>
+                                <div style="font-weight: 600; margin-bottom: 0.3rem;">${order.customerDetails.name}</div>
+                                <div style="color: var(--text-light); line-height: 1.4;">
+                                    ${order.customerDetails.address}
+                                    ${order.customerDetails.landmark ? '<br>' + order.customerDetails.landmark : ''}
+                                </div>
+                                <div style="color: var(--text-light); margin-top: 0.3rem;">📞 ${order.customerDetails.phone}</div>
+                            </div>
+                            <div style="margin-bottom: 1.5rem;">
+                                <strong>Estimated Delivery:</strong> ${order.estimatedDelivery}<br>
+                                <strong>Payment Method:</strong> ${order.paymentMethod}
+                            </div>
+                            <div style="margin-bottom: 1.5rem;">
+                                <h4>Order Items:</h4>
+            `;
+
+            order.items.forEach(item => {
+                const productImage = getProductImage(item.name);
+                trackingHtml += `<div style="display: flex; align-items: center; justify-content: space-between; margin: 0.5rem 0; padding: 0.8rem; background: var(--cream); border-radius: 8px;">
+                    <div style="display: flex; align-items: center; gap: 0.8rem;">
+                        <img src="${productImage}" alt="${item.name}" style="width: 40px; height: 40px; object-fit: cover; border-radius: 6px;">
+                        <div>
+                            <div style="font-weight: 600;">${item.name}</div>
+                            <div style="color: var(--text-light); font-size: 0.9rem;">Qty: ${item.qty}</div>
+                        </div>
+                    </div>
+                    <span style="font-weight: 600;">₹${item.price * item.qty}</span>
+                </div>`;
+            });
+
+            trackingHtml += `
+                            </div>
+                            <div>
+                                <h4>Tracking Status:</h4>
+                                <div style="margin-top: 1rem;">
+            `;
+
+            order.trackingSteps.forEach((step, index) => {
+                const isCompleted = step.completed;
+                const stepStyle = isCompleted ?
+                    'color: var(--primary-green); font-weight: bold;' :
+                    'color: var(--text-light);';
+                const iconStyle = isCompleted ? '✅' : '⏳';
+
+                trackingHtml += `
+                    <div style="display: flex; align-items: center; margin: 1rem 0; padding: 0.8rem; border-left: 3px solid ${isCompleted ? 'var(--primary-green)' : '#e0e0e0'}; background: ${isCompleted ? 'rgba(45, 80, 22, 0.1)' : 'var(--cream)'};">
+                        <span style="margin-right: 1rem; font-size: 1.2rem;">${iconStyle}</span>
+                        <div style="flex: 1;">
+                            <div style="${stepStyle}">${step.status}</div>
+                            ${step.date ? `<div style="font-size: 0.9rem; color: var(--text-light);">${step.date}</div>` : ''}
+                        </div>
+                    </div>
+                `;
+            });
+
+            trackingHtml += `
+                                </div>
+                            </div>
+                            <div style="text-align: center; margin-top: 2rem;">
+                                <button class="btn" onclick="closeTrackingModal()">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            document.body.insertAdjacentHTML('beforeend', trackingHtml);
+        }
+
+        function closeTrackingModal() {
+            const modal = document.querySelector('[style*="position: fixed"][style*="z-index: 3000"]');
+            if (modal) {
+                modal.remove();
+            }
+        }
+
+        function closeCheckout() {
+            document.getElementById('checkoutModal').style.display = 'none';
+
+            // Clear form data
+            document.getElementById('customerPhone').value = '';
+            document.getElementById('customerName').value = '';
+            document.getElementById('customerAddress').value = '';
+            document.getElementById('customerLandmark').value = '';
+
+            // Clear payment selection
+            document.querySelectorAll('.payment-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            document.querySelectorAll('input[name="payment"]').forEach(radio => {
+                radio.checked = false;
+            });
+
+            // Reset pay button
+            document.getElementById('payButton').disabled = true;
+            document.getElementById('payButton').textContent = 'Select Payment Method';
+        }
+
+        window.addEventListener('DOMContentLoaded', updateCartCount);
+
+        // ==== REST OF YOUR JS UNCHANGED =====
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            event.target.classList.add('active');
+            document.getElementById(tabName + 'Tab').classList.add('active');
+
+            // Load user orders when orders tab is selected
+            if (tabName === 'orders') {
+                loadUserOrders();
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        function filterProducts(category) {
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            const cards = document.querySelectorAll('.product-card');
+            cards.forEach(card => {
+                if (category === 'all' || card.dataset.category === category) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+        function submitProduce() {
+            const name = document.getElementById('productName').value.trim();
+            const category = document.getElementById('productCategory').value;
+            const quantity = document.getElementById('productQuantity').value.trim();
+            const price = document.getElementById('productPrice').value.trim();
+            const description = document.getElementById('productDescription').value.trim();
+            if (!name || category === 'Select Category' || !quantity || !price || !description) {
+                alert('❌ Please fill in all required fields');
+                return;
+            }
+            alert('✅ Product Listed Successfully!\n\n' +
+                  'Your produce "' + name + '" has been listed on KisanSeva Marketplace.\n\n' +
+                  'Buyers will be able to see and purchase it. You\'ll receive notifications when orders are placed.\n\n' +
+                  'Thank you for using KisanSeva! 🌾');
+            document.getElementById('productName').value = '';
+            document.getElementById('productCategory').value = 'Select Category';
+            document.getElementById('productQuantity').value = '';
+            document.getElementById('productPrice').value = '';
+            document.getElementById('productDescription').value = '';
+            document.getElementById('isOrganic').checked = false;
+        }
+        function trackOrder(orderId) {
+            alert('📦 Order Tracking - ' + orderId + '\n\n' +
+                  'Status: Shipped\n' +
+                  'Expected Delivery: Oct 24, 2025\n' +
+                  'Courier: BlueDart\n' +
+                  'Tracking ID: BD' + orderId + '\n\n' +
+                  'Your order is on the way!');
+        }
+        function writeReview(productName) {
+            alert('⭐ Write Review for:\n' + productName + '\n\n' +
+                  'This feature will let you rate and review products you\'ve purchased.\n\n' +
+                  'Your feedback helps other farmers make better choices!');
+        }
+    </script>
+
+</body>
+</html>
