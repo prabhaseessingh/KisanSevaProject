@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROI Calculator - KisanSeva</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --green-primary: #2F6B3D;
+            --green-light: #4A8F5A;
+            --green-dark: #1E4A2A;
+            --text-dark: #1a1a1a;
+            --text-light: #666;
+            --white: #ffffff;
+            --bg-light: #F8F9FA;
+            --border-light: #e0e0e0;
+            --golden: #F4A416;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 2rem;
+            color: var(--green-primary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+        }
+
+        .back-link:hover {
+            transform: translateX(-5px);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 3.5rem;
+            color: var(--green-primary);
+            margin-bottom: 1rem;
+            font-weight: 900;
+        }
+
+        .header p {
+            font-size: 1.3rem;
+            color: var(--text-light);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .calculator-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2.5rem;
+            margin-top: 3rem;
+        }
+
+        .input-card, .results-card {
+            background: white;
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+        }
+
+        .card-title {
+            font-size: 2rem;
+            color: var(--green);
+            margin-bottom: 2rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .input-group {
+            margin-bottom: 2rem;
+        }
+
+        .input-group label {
+            display: block;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.8rem;
+            font-size: 1.05rem;
+        }
+
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 1rem 1.2rem;
+            border: 2px solid var(--border-light);
+            border-radius: 10px;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            font-family: inherit;
+        }
+
+        .input-group input:focus, .input-group select:focus {
+            outline: none;
+            border-color: var(--green-primary);
+            box-shadow: 0 0 0 3px rgba(47,107,61,0.1);
+        }
+
+        .input-hint {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            margin-top: 0.5rem;
+        }
+
+        .toggle-advanced-btn {
+            width: 100%;
+            padding: 1rem 1.2rem;
+            background: var(--bg-light);
+            border: 2px dashed var(--border-light);
+            border-radius: 10px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--green-primary);
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: left;
+            font-family: inherit;
+        }
+
+        .toggle-advanced-btn:hover {
+            background: rgba(47,107,61,0.05);
+            border-color: var(--green-primary);
+        }
+
+        .toggle-advanced-btn #toggleIcon {
+            display: inline-block;
+            width: 20px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.3rem;
+        }
+
+        .advanced-section {
+            margin-top: 1.5rem;
+            padding: 1.5rem;
+            background: var(--bg-light);
+            border-radius: 10px;
+            border: 1px solid var(--border-light);
+        }
+
+        .calculate-btn {
+            width: 100%;
+            padding: 1.2rem;
+            background: linear-gradient(135deg, var(--green-primary), var(--green-light));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 1rem;
+        }
+
+        .calculate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(47,107,61,0.3);
+        }
+
+        .results-card {
+            background: linear-gradient(135deg, var(--green-primary), var(--green-light));
+            color: white;
+        }
+
+        .result-item {
+            background: rgba(255,255,255,0.15);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .result-label {
+            font-size: 0.95rem;
+            opacity: 0.9;
+            margin-bottom: 0.5rem;
+        }
+
+        .result-value {
+            font-size: 2.5rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .result-subtext {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-top: 0.5rem;
+        }
+
+        .savings-highlight {
+            background: var(--golden);
+            color: var(--text-dark);
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+
+        .savings-highlight h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .savings-highlight .big-number {
+            font-size: 3.5rem;
+            font-weight: 900;
+        }
+
+        .comparison-section {
+            background: white;
+            border-radius: 20px;
+            padding: 3rem;
+            margin-top: 3rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .comparison-card {
+            padding: 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-light);
+            transition: all 0.3s ease;
+        }
+
+        .comparison-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+        }
+
+        .comparison-card.traditional {
+            background: rgba(255,0,0,0.05);
+            border-color: rgba(255,0,0,0.2);
+        }
+
+        .comparison-card.solar {
+            background: rgba(47,107,61,0.05);
+            border-color: var(--green-light);
+        }
+
+        .comparison-card h4 {
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-dark);
+        }
+
+        .comparison-list {
+            list-style: none;
+        }
+
+        .comparison-list li {
+            padding: 0.8rem 0;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.8rem;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .comparison-list li:last-child {
+            border-bottom: none;
+        }
+
+        .comparison-list li::before {
+            content: '';
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%23ff0000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpath d='m15 9-6 6'/%3E%3Cpath d='m9 9 6 6'/%3E%3C/svg%3E");
+            background-size: contain;
+            background-repeat: no-repeat;
+            margin-top: 0.1rem;
+        }
+
+        .comparison-card.solar .comparison-list li::before {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%2300aa00' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpath d='m9 12 2 2 4-4'/%3E%3C/svg%3E");
+        }
+
+        .tips-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .tip-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            border-left: 4px solid var(--green-primary);
+            transition: all 0.3s ease;
+        }
+
+        .tip-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+        }
+
+        .tip-card h4 {
+            color: var(--green-primary);
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .tip-card p {
+            color: var(--text-light);
+            line-height: 1.7;
+        }
+
+        /* ROI Breakdown Section Styles */
+        .roi-breakdown-section {
+            background: white;
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin-top: 3rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+        }
+
+        .roi-breakdown-section .card-title {
+            margin-bottom: 1.2rem;
+        }
+
+        .breakdown-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-top: 0.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .breakdown-item {
+            text-align: center;
+            padding: 1.4rem 1rem;
+            background: var(--bg-light);
+            border-radius: 15px;
+            border: 2px solid var(--border-light);
+            transition: all 0.3s ease;
+        }
+
+        .breakdown-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+        }
+
+        .breakdown-label {
+            font-size: 0.95rem;
+            color: var(--text-light);
+            margin-bottom: 0.7rem;
+            font-weight: 600;
+        }
+
+        .breakdown-value {
+            font-size: 2.2rem;
+            font-weight: 900;
+            margin-bottom: 0.4rem;
+        }
+
+        .breakdown-subtext {
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        .investment-color {
+            color: #ff6b6b;
+        }
+
+        .savings-color {
+            color: var(--green-primary);
+        }
+
+        .profit-color {
+            color: var(--golden);
+        }
+
+        /* Visual Bar Comparison */
+        .visual-comparison {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: var(--bg-light);
+            border-radius: 15px;
+        }
+
+        .visual-comparison h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: var(--text-dark);
+        }
+
+        .bar-container {
+            margin-bottom: 1.2rem;
+        }
+
+        .bar-container:last-child {
+            margin-bottom: 0;
+        }
+
+        .bar-label {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.6rem;
+        }
+
+        .bar-wrapper {
+            background: #e9ecef;
+            border-radius: 10px;
+            height: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .bar {
+            height: 100%;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 1rem;
+            transition: width 0.8s ease;
+            position: relative;
+        }
+
+        .investment-bar {
+            background: linear-gradient(135deg, #ff6b6b, #ff8787);
+        }
+
+        .savings-bar {
+            background: linear-gradient(135deg, var(--green-primary), var(--green-light));
+        }
+
+        .bar-value {
+            color: white;
+            font-weight: 700;
+            font-size: 1.1rem;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+
+        /* Timeline Section */
+        .timeline-section {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: var(--bg-light);
+            border-radius: 15px;
+        }
+
+        .timeline-section h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: var(--text-dark);
+        }
+
+        .timeline {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 0.5rem;
+            position: relative;
+        }
+
+        .timeline-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 2;
+        }
+
+        .timeline-marker {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin-bottom: 0.8rem;
+            border: 3px solid white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+
+        .start-marker {
+            background: #ff6b6b;
+        }
+
+        .breakeven-marker {
+            background: var(--golden);
+        }
+
+        .end-marker {
+            background: var(--green-primary);
+        }
+
+        .timeline-label {
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--text-dark);
+            margin-bottom: 0.4rem;
+        }
+
+        .timeline-desc {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            text-align: center;
+        }
+
+        .timeline-line {
+            flex: 1;
+            height: 3px;
+            background: linear-gradient(to right, #ff6b6b, var(--golden), var(--green-primary));
+            margin: 0 1rem;
+            margin-bottom: 2.2rem;
+        }
+
+        .insight-header {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .insight-icon {
+            color: var(--green-primary);
+            flex-shrink: 0;
+        }
+
+        .insight-header h3 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--green-dark);
+            margin: 0;
+        }
+
+        .insight-message {
+            font-size: 1rem;
+            line-height: 1.7;
+            color: var(--text-dark);
+            margin: 0;
+        }
+
+        @media (max-width: 968px) {
+            .calculator-grid, .comparison-grid, .tips-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .breakdown-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .timeline {
+                flex-direction: column;
+            }
+
+            .timeline-line {
+                width: 3px;
+                height: 50px;
+                margin: 1rem 0;
+            }
+
+            .header h1 {
+                font-size: 2.5rem;
+            }
+
+            body {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/" class="back-link">← Back to Home</a>
+
+        <div class="header">
+            <h1>ROI Calculator</h1>
+            <p>Calculate your savings from switching to eco-friendly solar-powered pest control</p>
+        </div>
+
+        <div class="calculator-grid">
+            <!-- Input Section -->
+            <div class="input-card">
+                <h2 class="card-title"><svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-notepad-text-icon lucide-notepad-text"><path d="M8 2v4"/><path d="M12 2v4"/><path d="M16 2v4"/><rect width="16" height="18" x="4" y="4" rx="2"/><path d="M8 10h6"/><path d="M8 14h8"/><path d="M8 18h5"/></svg> Enter Your Farm Details</h2>
+
+                <div class="input-group">
+                    <label for="farmSize">Farm Size (in acres)</label>
+                    <input type="number" id="farmSize" min="0.5" max="100" step="0.5" value="2" oninput="calculateROI()">
+                    <p class="input-hint" id="farmSizeHint">Average wheat farm: 2-6 acres</p>
+                </div>
+
+                <div class="input-group">
+                    <label for="cropType">Crop Type</label>
+                    <select id="cropType" onchange="updateCropHints(); calculateROI()">
+                        <option value="wheat">Wheat (गेहूं)</option>
+                        <option value="rice">Rice (धान)</option>
+                        <option value="cotton">Cotton (कपास)</option>
+                        <option value="vegetables">Vegetables (सब्जियां)</option>
+                        <option value="sugarcane">Sugarcane (गन्ना)</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label for="pesticideCost">Annual Crop Protection Cost (₹)</label>
+                    <input type="number" id="pesticideCost" min="1000" max="100000" step="5 00" value="17000" oninput="calculateROI()">
+                    <p class="input-hint" id="costHint">Average: ₹8,000 - ₹15,000 per acre / year</p>
+                </div>
+
+                <div class="input-group">
+                    <label for="applications">Pesticide Applications per Year</label>
+                    <input type="number" id="applications" min="1" max="12" value="2" oninput="calculateROI()">
+                    <p class="input-hint" id="sprayHint">Average: 1-3 pesticide sprays annually</p>
+                </div>
+
+                <!-- Advanced Farm Conditions Toggle -->
+                <div class="input-group">
+                    <button type="button" class="toggle-advanced-btn" onclick="toggleAdvanced()">
+                        <span id="toggleIcon">+</span> Advanced Farm Conditions (Optional)
+                    </button>
+                </div>
+
+                <!-- Advanced Inputs Section (Hidden by default) -->
+                <div id="advancedSection" class="advanced-section" style="display: none;">
+                    <div class="input-group">
+                        <label for="soilType"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-map-plus-icon lucide-map-plus"><path d="m11 19-1.106-.552a2 2 0 0 0-1.788 0l-3.659 1.83A1 1 0 0 1 3 19.381V6.618a1 1 0 0 1 .553-.894l4.553-2.277a2 2 0 0 1 1.788 0l4.212 2.106a2 2 0 0 0 1.788 0l3.659-1.83A1 1 0 0 1 21 4.619V12"/><path d="M15 5.764V12"/><path d="M18 15v6"/><path d="M21 18h-6"/><path d="M9 3.236v15"/></svg> Soil Type</label>
+                        <select id="soilType" onchange="calculateROI()">
+                            <option value="not-sure">Not Sure</option>
+                            <option value="loamy">Loamy Soil</option>
+                            <option value="clay">Clay Soil</option>
+                            <option value="sandy">Sandy Soil</option>
+                            <option value="black-cotton">Black Cotton Soil</option>
+                            <option value="red">Red Soil</option>
+                        </select>
+                        <p class="input-hint">Soil type influences pest activity and pesticide usage.</p>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="waterSource"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-droplets-icon lucide-droplets"><path d="M7 16.3c2.2 0 4-1.83 4-4.05 0-1.16-.57-2.26-1.71-3.19S7.29 6.75 7 5.3c-.29 1.45-1.14 2.84-2.29 3.76S3 11.1 3 12.25c0 2.22 1.8 4.05 4 4.05z"/><path d="M12.56 6.6A10.97 10.97 0 0 0 14 3.02c.5 2.5 2 4.9 4 6.5s3 3.5 3 5.5a6.98 6.98 0 0 1-11.91 4.97"/></svg> Water Source </label>
+                        <select id="waterSource" onchange="calculateROI()">
+                            <option value="not-sure">Not Sure</option>
+                            <option value="canal">Canal Irrigation</option>
+                            <option value="tubewell">Tube Well / Borewell</option>
+                            <option value="rainfed">Rainfed Agriculture</option>
+                            <option value="drip">Drip Irrigation</option>
+                            <option value="sprinkler">Sprinkler Irrigation</option>
+                        </select>
+                        <p class="input-hint">Irrigation type can affect pest pressure and chemical usage.</p>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="pestPressure"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bug-off-icon lucide-bug-off"><path d="M12 20v-8"/><path d="M12.656 7H14a4 4 0 0 1 4 4v1.344"/><path d="M14.12 3.88 16 2"/><path d="M17.123 17.123A6 6 0 0 1 6 14v-3a4 4 0 0 1 1.72-3.287"/><path d="m2 2 20 20"/><path d="M21 5a4 4 0 0 1-3.55 3.97"/><path d="M22 13h-3.344"/><path d="M3 21a4 4 0 0 1 3.81-4"/><path d="M3 5a4 4 0 0 0 3.55 3.97"/><path d="M6 13H2"/><path d="m8 2 1.88 1.88"/><path d="M9.712 4.06A3 3 0 0 1 15 6v1.13"/></svg> Pest Pressure Level</label>
+                        <select id="pestPressure" onchange="calculateROI()">
+                            <option value="not-sure">Not Sure</option>
+                            <option value="low">Low Pest Pressure</option>
+                            <option value="moderate">Moderate Pest Pressure</option>
+                            <option value="high">High Pest Pressure</option>
+                        </select>
+                        <p class="input-hint">Pest levels depend on climate, humidity, and crop density. Higher pest pressure usually increases pesticide usage.</p>
+                    </div>
+                </div>
+                <button class="calculate-btn" onclick="calculateROI()">
+                    Calculate Savings ₹
+                </button>
+            </div>
+
+            <!-- Results Section -->
+            <div class="results-card">
+                <h2 class="card-title"><svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chart-no-axes-combined-icon lucide-chart-no-axes-combined"><path d="M12 16v5"/><path d="M16 14v7"/><path d="M20 10v11"/><path d="m22 3-8.646 8.646a.5.5 0 0 1-.708 0L9.354 8.354a.5.5 0 0 0-.707 0L2 15"/><path d="M4 18v3"/><path d="M8 14v7"/></svg> Your Potential Savings</h2>
+
+                <div class="result-item">
+                    <div class="result-label">Solar Trap Investment</div>
+                    <div class="result-value" id="investment">₹6,000</div>
+                    <div class="result-subtext">One-time cost for 2 traps</div>
+                </div>
+
+                <div class="result-item">
+                    <div class="result-label">Annual Savings</div>
+                    <div class="result-value" id="annualSavings">₹12,800</div>
+                    <div class="result-subtext">Reduction in pesticide costs</div>
+                </div>
+
+                <div class="result-item">
+                    <div class="result-label">Payback Period</div>
+                    <div class="result-value" id="paybackPeriod">5.6 months</div>
+                    <div class="result-subtext">Time to recover investment</div>
+                </div>
+
+                <div class="savings-highlight">
+                    <h3>5-Year Total Savings</h3>
+                    <div class="big-number" id="totalSavings">₹64,000</div>
+                    <p style="margin-top: 1rem; font-size: 0.95rem;">Plus: Healthier crops & soil!</p>
+                </div>
+
+                <!-- Farm Insights Section (Hidden by default) -->
+                <div id="farmInsights" style="display: none; margin-top: 2rem;">
+                    <div class="result-item">
+                        <div class="result-label"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#bbff00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-leaf-icon lucide-leaf"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg> Soil Impact</div>
+                        <p style="font-size: 0.9rem; line-height: 1.6;">
+                            Different soil types retain moisture differently. Clay and black soils can increase pest activity due to higher humidity, while sandy soils usually experience slightly lower pest pressure.
+                        </p>
+                    </div>
+
+                    <div class="result-item">
+                        <div class="result-label"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#00aaff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-droplet-icon lucide-droplet"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"/></svg> Irrigation Impact</div>
+                        <p style="font-size: 0.9rem; line-height: 1.6;">
+                            Irrigation methods influence pest populations. Canal and borewell irrigation create humid crop environments that may increase pest activity, while drip irrigation reduces leaf moisture and chemical use.
+                        </p>
+                    </div>
+
+                    <div class="result-item">
+                        <div class="result-label"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#00ffaa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-worm-icon lucide-worm"><path d="m19 12-1.5 3"/><path d="M19.63 18.81 22 20"/><path d="M6.47 8.23a1.68 1.68 0 0 1 2.44 1.93l-.64 2.08a6.76 6.76 0 0 0 10.16 7.67l.42-.27a1 1 0 1 0-2.73-4.21l-.42.27a1.76 1.76 0 0 1-2.63-1.99l.64-2.08A6.66 6.66 0 0 0 3.94 3.9l-.7.4a1 1 0 1 0 2.55 4.34z"/></svg> Pest Pressure</div>
+                        <p style="font-size: 0.9rem; line-height: 1.6;">
+                            Regions with warmer temperatures and higher humidity tend to have higher pest populations. Solar traps are more effective in such conditions because they continuously reduce pest breeding cycles.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Comparison Section -->
+        <div class="comparison-section">
+            <h2 class="card-title"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-git-compare-arrows-icon lucide-git-compare-arrows"><circle cx="5" cy="6" r="3"/><path d="M12 6h5a2 2 0 0 1 2 2v7"/><path d="m15 9-3-3 3-3"/><circle cx="19" cy="18" r="3"/><path d="M12 18H7a2 2 0 0 1-2-2V9"/><path d="m9 15 3 3-3 3"/></svg> Traditional vs Solar Pest Control</h2>
+            <div class="comparison-grid">
+                <div class="comparison-card traditional">
+                    <h4><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bug"><path d="m8 2 1.88 1.88"/><path d="M14.12 3.88 16 2"/><path d="M9 7.13v-1a3.003 3.003 0 1 1 6 0v1"/><path d="M12 20c-3.3 0-6-2.7-6-6v-3a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v3c0 3.3-2.7 6-6 6"/><path d="M12 20v-9"/><path d="M6.53 9C4.6 8.8 3 7.1 3 5"/><path d="M6 13H2"/><path d="M3 21c0-2.1 1.7-3.9 3.8-4"/><path d="M20.97 5c0 2.1-1.6 3.8-3.5 4"/><path d="M22 13h-4"/><path d="M17.2 17c2.1.1 3.8 1.9 3.8 4"/></svg> Traditional Pesticides</h4>
+                    <ul class="comparison-list">
+                        <li>Recurring monthly/quarterly costs</li>
+                        <li>Harmful chemicals affect soil health</li>
+                        <li>Kills beneficial insects too</li>
+                        <li>Health risks for farmers</li>
+                        <li>Environmental pollution</li>
+                        <li>Pest resistance develops over time</li>
+                    </ul>
+                </div>
+                <div class="comparison-card solar">
+                    <h4><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sun"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg> Solar-Powered Traps</h4>
+                    <ul class="comparison-list">
+                        <li>One-time investment, 5+ years lifespan</li>
+                        <li>100% chemical-free, safe for soil</li>
+                        <li>Targets harmful pests only</li>
+                        <li>Zero health risks</li>
+                        <li>Eco-friendly, zero emissions</li>
+                        <li>No electricity cost, solar-powered</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- ROI Breakdown Section -->
+        <div class="roi-breakdown-section">
+            <h2 class="card-title">
+                <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" x2="12" y1="20" y2="10"/><line x1="18" x2="18" y1="20" y2="4"/><line x1="6" x2="6" y1="20" y2="16"/></svg>
+                ROI Breakdown
+            </h2>
+
+            <div class="breakdown-grid">
+                <div class="breakdown-item">
+                    <div class="breakdown-label">Initial Investment</div>
+                    <div class="breakdown-value investment-color" id="breakdownInvestment">₹6,000</div>
+                    <div class="breakdown-subtext">One-time cost</div>
+                </div>
+
+                <div class="breakdown-item">
+                    <div class="breakdown-label">Annual Savings</div>
+                    <div class="breakdown-value savings-color" id="breakdownAnnualSavings">₹12,000</div>
+                    <div class="breakdown-subtext">Per year</div>
+                </div>
+
+                <div class="breakdown-item">
+                    <div class="breakdown-label">Net Profit (5 Years)</div>
+                    <div class="breakdown-value profit-color" id="breakdownNetProfit">₹54,000</div>
+                    <div class="breakdown-subtext">After investment recovery</div>
+                </div>
+            </div>
+
+            <!-- Visual Bar Comparison -->
+            <div class="visual-comparison">
+                <h3>Investment vs Returns</h3>
+                
+                <div class="bar-container">
+                    <div class="bar-label">Initial Investment</div>
+                    <div class="bar-wrapper">
+                        <div class="bar investment-bar" id="investmentBar" style="width: 20%;">
+                            <span class="bar-value" id="investmentBarValue">₹6,000</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bar-container">
+                    <div class="bar-label">Total 5-Year Savings</div>
+                    <div class="bar-wrapper">
+                        <div class="bar savings-bar" id="savingsBar" style="width: 100%;">
+                            <span class="bar-value" id="savingsBarValue">₹60,000</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Timeline Indicator -->
+            <div class="timeline-section">
+                <h3>ROI Timeline</h3>
+                
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-marker start-marker"></div>
+                        <div class="timeline-label">Month 0</div>
+                        <div class="timeline-desc">Initial Investment</div>
+                    </div>
+
+                    <div class="timeline-line"></div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-marker breakeven-marker"></div>
+                        <div class="timeline-label" id="breakevenMonth">Month 5.6</div>
+                        <div class="timeline-desc">Break-even Point</div>
+                    </div>
+
+                    <div class="timeline-line"></div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-marker end-marker"></div>
+                        <div class="timeline-label">Year 5</div>
+                        <div class="timeline-desc">Total Savings</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Additional Benefits -->
+        <div class="tips-grid">
+            <div class="tip-card">
+                <h4>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: inline-block; vertical-align: middle; margin-right: 0.5rem;"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"/><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/></svg>
+                    Cost Efficiency
+                </h4>
+                <p>Save 70-85% on pest control costs annually. Initial investment pays for itself in less than 6 months.</p>
+            </div>
+            <div class="tip-card">
+                <h4>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: inline-block; vertical-align: middle; margin-right: 0.5rem;"><path d="M7 20h10"/><path d="M10 20c5.5-2.5.8-6.4 3-10"/><path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z"/><path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z"/></svg>
+                    Better Yields
+                </h4>
+                <p>Chemical-free farming improves soil quality, leading to 10-15% higher yields over time.</p>
+            </div>
+            <div class="tip-card">
+                <h4>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: inline-block; vertical-align: middle; margin-right: 0.5rem;"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+                    Premium Pricing
+                </h4>
+                <p>Organic produce commands 20-30% higher market prices, increasing your profit margins.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Trap pricing based on farm size
+        const trapPricing = {
+            small: 3000,    // 1 trap for 0.5-1 acre
+            medium: 3200,   // per trap for bulk
+            large: 3100     // per trap for bulk
+        };
+
+        // Soil type multipliers
+        const soilFactors = {
+            'not-sure': 1.00,
+            'loamy': 1.00,
+            'clay': 1.05,
+            'sandy': 0.95,
+            'black-cotton': 1.10,
+            'red': 1.03
+        };
+
+        // Water source multipliers
+        const waterFactors = {
+            'not-sure': 1.00,
+            'canal': 1.08,
+            'tubewell': 1.05,
+            'rainfed': 0.85,
+            'drip': 0.80,
+            'sprinkler': 0.90
+        };
+
+        // Pest pressure multipliers
+        const pestFactors = {
+            'not-sure': 1.00,
+            'low': 0.75,
+            'moderate': 1.00,
+            'high': 1.30
+        };
+
+        // Crop type multipliers (based on pest intensity)
+        const cropFactors = {
+            'wheat': 0.90,      // Low-Moderate pest pressure
+            'rice': 1.00,       // Moderate pest pressure
+            'cotton': 1.30,     // Very High pest pressure
+            'vegetables': 1.40, // Very High pest pressure
+            'sugarcane': 1.20   // High pest pressure
+        };
+
+        // Baseline spray frequency per crop (Average sprays per season in Punjab agriculture)
+        const baselineSprays = {
+            'wheat': 2,
+            'rice': 4,
+            'cotton': 10,
+            'vegetables': 15,
+            'sugarcane': 6
+        };
+
+        // Crop-specific hints for dynamic UI updates
+        const cropHints = {
+            'wheat': {
+                farmSizeHint: 'Average wheat farm: 2-6 acres',
+                costHint: 'Average: ₹8,000 - ₹15,000 per acre / year',
+                sprayHint: 'Average: 1-3 pesticide sprays annually'
+            },
+            'rice': {
+                farmSizeHint: 'Average paddy farm: 2-6 acres',
+                costHint: 'Average: ₹12,000 - ₹20,000 per acre / year',
+                sprayHint: 'Average: 3-6 pesticide sprays annually'
+            },
+            'cotton': {
+                farmSizeHint: 'Cotton farms often range from 2-10 acres',
+                costHint: 'Average: ₹18,000 - ₹35,000 per acre / year',
+                sprayHint: 'Average: 6-12 pesticide sprays annually'
+            },
+            'vegetables': {
+                farmSizeHint: 'Vegetable farms are usually 0.5-3 acres',
+                costHint: 'Average: ₹25,000 - ₹60,000 per acre / year',
+                sprayHint: 'Average: 10-20 pesticide sprays annually'
+            },
+            'sugarcane': {
+                farmSizeHint: 'Sugarcane farms often range from 2-8 acres',
+                costHint: 'Average: ₹15,000 - ₹25,000 per acre / year',
+                sprayHint: 'Average: 5-8 pesticide sprays annually'
+            }
+        };
+
+        function toggleAdvanced() {
+            const section = document.getElementById('advancedSection');
+            const icon = document.getElementById('toggleIcon');
+            const insights = document.getElementById('farmInsights');
+            
+            if (section.style.display === 'none') {
+                section.style.display = 'block';
+                insights.style.display = 'block';
+                icon.textContent = '−';
+            } else {
+                section.style.display = 'none';
+                insights.style.display = 'none';
+                icon.textContent = '+';
+            }
+        }
+
+        function updateCropHints() {
+            const cropType = document.getElementById('cropType').value;
+            const hints = cropHints[cropType];
+
+            if (hints) {
+                document.getElementById('farmSizeHint').textContent = hints.farmSizeHint;
+                document.getElementById('costHint').textContent = hints.costHint;
+                document.getElementById('sprayHint').textContent = hints.sprayHint;
+            }
+        }
+
+        function generateSmartInsight(paybackMonths, cropType, pestPressure, annualSavings) {
+            let insight = '';
+            
+            // Crop type names for display
+            const cropNames = {
+                'wheat': 'Wheat',
+                'rice': 'Rice',
+                'cotton': 'Cotton',
+                'vegetables': 'Vegetables',
+                'sugarcane': 'Sugarcane'
+            };
+
+            // Base insight based on payback period
+            if (paybackMonths < 8) {
+                insight = `Excellent investment! With a payback period of just ${paybackMonths.toFixed(1)} months, you'll recover your investment quickly and enjoy strong annual savings of ₹${Math.round(annualSavings).toLocaleString('en-IN')}.`;
+            } else if (paybackMonths <= 14) {
+                insight = `Strong ROI potential! Your investment will pay back in ${paybackMonths.toFixed(1)} months, providing reliable long-term savings of ₹${Math.round(annualSavings).toLocaleString('en-IN')} annually.`;
+            } else {
+                insight = `Moderate ROI with ${paybackMonths.toFixed(1)} months payback. While the return period is longer, you'll benefit from improved soil health, reduced chemical exposure, and sustainable farming practices.`;
+            }
+
+            // Add crop-specific insights for high-pest crops
+            if (cropType === 'cotton' || cropType === 'vegetables') {
+                insight += ` ${cropNames[cropType]} crops experience high pest pressure, making solar traps particularly effective for your farm.`;
+            }
+
+            // Add pest pressure insight
+            if (pestPressure === 'high') {
+                insight += ` High pest pressure in your region increases the value of continuous pest control through solar traps.`;
+            } else if (pestPressure === 'low') {
+                insight += ` Even with lower pest pressure, solar traps provide consistent protection and reduce chemical dependency.`;
+            }
+
+            return insight;
+        }
+
+        function calculateROI() {
+            const farmSize = parseFloat(document.getElementById('farmSize').value) || 2;
+            const pesticideCost = parseFloat(document.getElementById('pesticideCost').value) || 15000;
+            const applications = parseInt(document.getElementById('applications').value) || 4;
+
+            // Get crop type
+            const cropType = document.getElementById('cropType').value;
+
+            // Get advanced farm conditions
+            const soilType = document.getElementById('soilType').value;
+            const waterSource = document.getElementById('waterSource').value;
+            const pestPressure = document.getElementById('pestPressure').value;
+
+            // Calculate spray factor based on crop baseline
+            const baseline = baselineSprays[cropType] || 4;
+            let sprayFactor = applications / baseline;
+            
+            // Clamp spray factor between 0.5 and 2.0 for stability
+            sprayFactor = Math.max(0.5, Math.min(2.0, sprayFactor));
+
+            // Get multipliers
+            const cropFactor = cropFactors[cropType] || 1.00;
+            const soilFactor = soilFactors[soilType] || 1.00;
+            const waterFactor = waterFactors[waterSource] || 1.00;
+            const pestFactor = pestFactors[pestPressure] || 1.00;
+
+            // Calculate number of traps needed (1 trap per acre)
+            const trapsNeeded = Math.ceil(farmSize);
+
+            // Calculate trap cost
+            let trapCost = trapPricing.small;
+            if (trapsNeeded >= 5) trapCost = trapPricing.large;
+            else if (trapsNeeded >= 3) trapCost = trapPricing.medium;
+
+            const totalInvestment = trapsNeeded * trapCost;
+
+            // Adjust pesticide cost based on spray frequency, crop type, and farm conditions
+            const adjustedPesticideCost = pesticideCost * sprayFactor * cropFactor * soilFactor * waterFactor * pestFactor;
+
+            // Solar traps reduce pesticide need by 75-85%
+            const reductionRate = 0.80;
+            const annualSavings = adjustedPesticideCost * reductionRate;
+
+            // Payback period in months
+            const paybackMonths = (totalInvestment / annualSavings) * 12;
+
+            // 5-year savings
+            const fiveYearSavings = (annualSavings * 5) - totalInvestment;
+
+            // Update UI
+            document.getElementById('investment').innerHTML = `₹${totalInvestment.toLocaleString('en-IN')}`;
+            document.getElementById('annualSavings').innerHTML = `₹${Math.round(annualSavings).toLocaleString('en-IN')}`;
+            document.getElementById('paybackPeriod').innerHTML = `${paybackMonths.toFixed(1)} months`;
+            document.getElementById('totalSavings').innerHTML = `₹${Math.round(fiveYearSavings).toLocaleString('en-IN')}`;
+
+            // Update breakdown section
+            document.getElementById('breakdownInvestment').innerHTML = `₹${totalInvestment.toLocaleString('en-IN')}`;
+            document.getElementById('breakdownAnnualSavings').innerHTML = `₹${Math.round(annualSavings).toLocaleString('en-IN')}`;
+            document.getElementById('breakdownNetProfit').innerHTML = `₹${Math.round(fiveYearSavings).toLocaleString('en-IN')}`;
+
+            // Update visual bars
+            const totalFiveYearSavings = annualSavings * 5;
+            const maxValue = Math.max(totalInvestment, totalFiveYearSavings);
+            const investmentWidth = (totalInvestment / maxValue) * 100;
+            const savingsWidth = 100;
+
+            document.getElementById('investmentBar').style.width = `${investmentWidth}%`;
+            document.getElementById('savingsBar').style.width = `${savingsWidth}%`;
+            document.getElementById('investmentBarValue').innerHTML = `₹${totalInvestment.toLocaleString('en-IN')}`;
+            document.getElementById('savingsBarValue').innerHTML = `₹${Math.round(totalFiveYearSavings).toLocaleString('en-IN')}`;
+
+            // Update timeline breakeven point
+            document.getElementById('breakevenMonth').innerHTML = `Month ${paybackMonths.toFixed(1)}`;
+
+            // Update smart insight
+            const smartInsight = generateSmartInsight(paybackMonths, cropType, pestPressure, annualSavings);
+            document.getElementById('smartInsight').innerHTML = smartInsight;
+        }
+
+        // Calculate on page load
+        calculateROI();
+        updateCropHints();
+    </script>
+</body>
+</html>

@@ -1,0 +1,1431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KisanSeva - Empowering Farmers with Innovation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-green: #2D5016;
+            --accent-green: #4A7C2C;
+            --light-green: #7FA650;
+            --golden-yellow: #F4A416;
+            --earth-brown: #6B4423;
+            --cream: #FAF9F6;
+            --text-dark: #1a1a1a;
+            --text-light: #666;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', 'Roboto', sans-serif;
+            color: var(--text-dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--primary-green);
+        }
+
+        .logo-icon {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, var(--primary-green), var(--accent-green));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 500;
+            transition: color 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-green);
+        }
+
+        .nav-cta {
+            background: linear-gradient(135deg, var(--primary-green), var(--accent-green));
+            color: white !important;
+            padding: 0.7rem 1.8rem;
+            border-radius: 25px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(45, 80, 22, 0.3);
+        }
+
+        .language-switcher {
+            display: flex;
+            gap: 0.5rem;
+            background: var(--cream);
+            padding: 0.4rem;
+            border-radius: 20px;
+            border: 1px solid rgba(45, 80, 22, 0.1);
+        }
+
+        .lang-btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            background: transparent;
+            border-radius: 15px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--text-dark);
+            transition: all 0.3s;
+        }
+
+        .lang-btn:hover {
+            background: rgba(45, 80, 22, 0.08);
+        }
+
+        .lang-btn.active {
+            background: var(--primary-green);
+            color: white;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 8rem 5% 4rem;
+            background: linear-gradient(135deg, #f0f4ed 0%, var(--cream) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -30%;
+            right: -10%;
+            width: 70%;
+            height: 120%;
+            background: radial-gradient(circle, rgba(74,124,44,0.08) 0%, transparent 70%);
+            animation: pulse 20s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.5; }
+            50% { transform: scale(1.1) rotate(5deg); opacity: 0.3; }
+        }
+
+        .hero-content {
+            max-width: 12000px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 5rem;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-text h1 {
+            font-size: 4.11rem;
+            font-weight: 900;
+            line-height: 1.28;
+            margin-bottom: 1.5rem;
+            color: var(--primary-green);
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .hero-text .highlight {
+            background: linear-gradient(135deg, var(--accent-green), var(--light-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: block;
+        }
+
+        .hero-text .tagline {
+            font-size: 1.5rem;
+            color: var(--golden-yellow);
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .hero-text p {
+            font-size: 1.2rem;
+            color: var(--text-light);
+            margin-bottom: 2.5rem;
+            line-height: 1.8;
+            animation: fadeInUp 1s ease-out 0.2s both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1.2rem;
+            flex-wrap: wrap;
+            animation: fadeInUp 1s ease-out 0.4s both;
+        }
+
+        .btn {
+            padding: 1.1rem 2.8rem;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-green), var(--accent-green));
+            color: white;
+            box-shadow: 0 12px 35px rgba(45, 80, 22, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 18px 45px rgba(45, 80, 22, 0.4);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--primary-green);
+            border: 2px solid var(--accent-green);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+        }
+
+        .btn-secondary:hover {
+            background: var(--accent-green);
+            color: white;
+        }
+
+        .hero-image {
+            position: relative;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-25px); }
+        }
+
+        .hero-image img {
+            width: 100%;
+            border-radius: 25px;
+            box-shadow: 0 35px 70px rgba(0,0,0,0.15);
+        }
+
+        .floating-badge {
+            position: absolute;
+            background: white;
+            padding: 1rem 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: float 5s ease-in-out infinite;
+        }
+
+        .badge-1 {
+            top: 15%;
+            left: -8%;
+        }
+
+        .badge-2 {
+            bottom: 20%;
+            right: -10%;
+            animation-delay: 1s;
+        }
+
+        .badge-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--golden-yellow);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+        }
+
+        /* Impact Stats */
+        .impact-stats {
+            background: var(--primary-green);
+            padding: 4rem 5%;
+            color: white;
+        }
+
+        .stats-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 3rem;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: var(--golden-yellow);
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 7rem 5%;
+            background: white;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 5rem;
+        }
+
+        .section-tag {
+            color: var(--accent-green);
+            font-weight: 600;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 1rem;
+        }
+
+        .section-header h2 {
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: var(--primary-green);
+            margin-bottom: 1.5rem;
+        }
+
+        .section-header p {
+            font-size: 1.3rem;
+            color: var(--text-light);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background: var(--cream);
+            padding: 3rem;
+            border-radius: 25px;
+            transition: all 0.4s;
+            border: 2px solid transparent;
+            cursor: pointer;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 25px 60px rgba(0,0,0,0.12);
+            border-color: var(--light-green);
+        }
+
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--accent-green), var(--light-green));
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: white;
+        }
+
+        .feature-card h3 {
+            font-size: 1.6rem;
+            margin-bottom: 1rem;
+            color: var(--primary-green);
+        }
+
+        .feature-card p {
+            color: var(--text-light);
+            line-height: 1.8;
+            font-size: 1.05rem;
+        }
+
+        /* Product Highlight */
+                /* Product Highlight - ENHANCED */
+        .product-highlight {
+            padding: 7rem 5%;
+            background: linear-gradient(135deg, #f7faf4 0%, #e8f0e3 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-highlight::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(74,124,44,0.05) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .product-content {
+    max-width: 1300px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: start;
+}
+
+.pest-showcase {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    width: 100%;
+}
+
+.pest-img {
+    width: 100%;
+    height: 525px;
+    object-fit: cover;
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.pest-img:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 30px 60px rgba(0,0,0,0.15);
+}
+
+.pest-img-bottom {
+    width: 100%;
+    height: 350px;
+    object-fit: cover;
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    grid-column: 1 / 3;
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.pest-img-bottom:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 30px 60px rgba(0,0,0,0.15);
+}
+
+
+
+        .product-badge {
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            background: linear-gradient(135deg, var(--golden-yellow), #e89b10);
+            color: white;
+            padding: 1.2rem 1.5rem;
+            border-radius: 50%;
+            font-weight: 700;
+            text-align: center;
+            box-shadow: 0 15px 40px rgba(244,164,22,0.5);
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-12px) rotate(5deg); }
+        }
+
+        .product-text h2 {
+            font-size: 3.95rem;
+            color: var(--primary-green);
+            margin-bottom: 1.5rem;
+            line-height: 1.15;
+        }
+
+        .product-text .price {
+            font-size: 2.2rem;
+            color: var(--golden-yellow);
+            font-weight: 800;
+            margin-bottom: 1rem;
+            display: inline-block;
+            padding: 0.5rem 1.7rem;
+            background: rgba(244,164,22,0.1);
+            border-radius: 15px;
+            border: 2px solid rgba(244,164,22,0.3);
+        }
+
+        .product-features {
+            list-style: none;
+            margin: 1.7rem 0;
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+        }
+
+        .product-features li {
+            padding: 1rem 0;
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            font-size: 1.1rem;
+            color: var(--text-dark);
+            border-bottom: 1px solid rgba(45,80,22,0.08);
+            transition: all 0.3s ease;
+        }
+
+        .product-features li:last-child {
+            border-bottom: none;
+        }
+
+        .product-features li:hover {
+            background: rgba(74,124,44,0.04);
+            padding-left: 0.8rem;
+            border-radius: 10px;
+        }
+
+        .product-features li::before {
+            content: '✓';
+            color: var(--accent-green);
+            font-weight: bold;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(74,124,44,0.1);
+            border-radius: 50%;
+        }
+
+
+        /* Testimonial */
+        .testimonial {
+            padding: 7rem 5%;
+            background: white;
+        }
+
+        .testimonial-card {
+            max-width: 900px;
+            margin: 0 auto;
+            background: linear-gradient(135deg, var(--primary-green), var(--accent-green));
+            padding: 4rem;
+            border-radius: 30px;
+            color: white;
+            text-align: center;
+            box-shadow: 0 30px 70px rgba(45,80,22,0.3);
+        }
+
+        .testimonial-quote {
+            font-size: 1.8rem;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+            font-style: italic;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.5rem;
+        }
+
+        .author-avatar {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: var(--primary-green);
+            font-weight: bold;
+        }
+
+        .author-info h4 {
+            font-size: 1.3rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .author-info p {
+            opacity: 0.9;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 7rem 5%;
+            background: linear-gradient(135deg, var(--primary-green) 0%, var(--accent-green) 100%);
+            text-align: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="rgba(255,255,255,0.03)"/></svg>') repeat;
+            animation: float 30s linear infinite;
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-section h2 {
+            font-size: 3.5rem;
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-section p {
+            font-size: 1.4rem;
+            margin-bottom: 3rem;
+            opacity: 0.95;
+        }
+
+        .cta-section .btn {
+            background: white;
+            color: var(--primary-green);
+            font-size: 1.3rem;
+            padding: 1.3rem 3rem;
+        }
+
+        .cta-section .btn:hover {
+            transform: scale(1.08);
+            box-shadow: 0 15px 50px rgba(255,255,255,0.4);
+        }
+
+        /* Mobile Menu */
+        .mobile-menu {
+            display: none;
+            flex-direction: column;
+            gap: 6px;
+            cursor: pointer;
+        }
+
+        .mobile-menu span {
+            width: 28px;
+            height: 3px;
+            background: var(--primary-green);
+            transition: 0.3s;
+            border-radius: 2px;
+        }
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu {
+                display: flex;
+            }
+
+            .hero-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 3rem;
+            }
+
+            .hero-text h1 {
+                font-size: 3rem;
+            }
+
+            .hero-buttons {
+                justify-content: center;
+            }
+
+            .hero-image {
+                order: -1;
+            }
+
+            .section-header h2 {
+                font-size: 2.5rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .product-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .product-image {
+                order: -1;
+            }
+
+            .stats-container {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 2rem;
+            }
+
+            .floating-badge {
+                display: none;
+            }
+
+            .btn {
+                padding: 1rem 2rem;
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .hero-text h1 {
+                font-size: 2.2rem;
+            }
+
+            .section-header h2 {
+                font-size: 2rem;
+            }
+
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">
+            <div class="logo-icon">🌾</div>
+            <span>KisanSeva</span>
+        </div>
+
+        <ul class="nav-links">
+            <div id="personal-greeting" style="font-size:1.4em; color:#276e2a; font-weight:700;"></div>
+
+            <li><a href="#features" data-i18n="nav.features">Features</a></li>
+            <li><a href="#product" data-i18n="nav.solution">Our Solution</a></li>
+            <li><a href="#impact" data-i18n="nav.impact">Impact</a></li>
+            <li><a href="#testimonialTrack" data-i18n="nav.stories">Success Stories</a></li>
+            <li>
+                <div class="language-switcher">
+                    <button class="lang-btn active" data-lang="en">EN</button>
+                    <button class="lang-btn" data-lang="hi">हिं</button>
+                    <button class="lang-btn" data-lang="pa">ਪੰ</button>
+                </div>
+            </li>
+
+
+{% if session.get('user') %}
+    <li class="nav-user" style="position: relative;">
+        <div class="user-profile" onclick="toggleMenu()"
+             style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+            <div class="user-icon"
+                 style="background: linear-gradient(135deg, #4A7C2C, #2D5016);
+                        color: white; border-radius: 50%; width: 40px; height: 40px;
+                        display: flex; align-items: center; justify-content: center;
+                        font-weight: bold;">
+                {{ session['user'][0]|upper }}
+            </div>
+            <span style="font-weight: 600; color: #2D5016;">{{ session['user'] }}</span>
+        </div>
+        <div id="userMenu"
+             style="display:none; position:absolute; top:45px; right:0;
+                    background:white; border-radius:8px;
+                    box-shadow:0 4px 20px rgba(0,0,0,0.1);">
+            <a href="/logout"
+               style="display:block; padding:10px 15px; text-decoration:none; color:#2D5016;">
+               Logout
+            </a>
+        </div>
+    </li>
+
+{% else %}
+    <li><a href="/login_register" class="nav-cta" data-i18n="nav.cta">Get Started →</a></li>
+{% endif %}
+        </ul>
+        <div class="mobile-menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-text">
+                <div class="tagline" data-i18n="hero.tagline">Bridging Generations • Protecting Crops</div>
+                <h1>
+                    <span data-i18n="hero.title1">Empowering</span> <span class="highlight" data-i18n="hero.title2">Modern Agriculture</span> <span data-i18n="hero.title3">with Innovation</span>
+                </h1>
+                <p data-i18n="hero.subtitle">Connecting traditional farming wisdom with cutting-edge solar technology. Help farmers reduce pesticide use, increase yields, and embrace sustainable practices for a greener future.</p>
+                <div class="hero-buttons">
+                    <a href="#product" class="btn btn-primary" data-i18n="hero.btn1">Explore Our Insect Trap</a>
+                    <div class="btn btn-secondary item" data-i18n="product.btn2" onclick="window.location.href='/product_details'" style="cursor:pointer;">Learn More</div>
+                </div>
+            </div>
+            <div class="hero-image">
+                <img src="https://images.unsplash.com/photo-1711900177029-93798ef45bb7?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1170" alt="Modern Farming">
+                <div class="floating-badge badge-1">
+                    <div class="badge-icon">🌞</div>
+                    <div>
+                        <strong data-i18n="badge.solar">100% Solar</strong><br>
+                        <small data-i18n="badge.eco">Eco-Friendly</small>
+                    </div>
+                </div>
+                <div class="floating-badge badge-2">
+                    <div class="badge-icon">🌱</div>
+                    <div>
+                        <strong data-i18n="badge.chemical">Chemical-Free</strong><br>
+                        <small data-i18n="badge.safe">Safe Farming</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Impact Stats -->
+    <section class="impact-stats" id="impact">
+        <div class="stats-container">
+            <div class="stat-item">
+                <span class="stat-number">10,000+</span>
+                <span class="stat-label" data-i18n="stats.farmers">Farmers Could Benefit</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">₹5Cr</span>
+                <span class="stat-label" data-i18n="stats.savings">Possible Pesticide Savings</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">85%</span>
+                <span class="stat-label" data-i18n="stats.reduction">Potential Crop Loss Reduction</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">3+</span>
+                <span class="stat-label" data-i18n="stats.generations">Generations Connected</span>
+            </div>
+        </div>
+        <div style="text-align:center; margin-top: 1.5rem;">
+            <span style="font-size: 2.8rem; color: var(--golden-yellow); font-weight: 800;">#HUGE</span>
+            <br>
+            <span style="font-size: 1.1rem; color: var(--golden-yellow); font-weight: 400; margin-top: 0rem;" data-i18n="stats.iftrue">*if true</span>
+            <div style="color: #fff; font-size: 1.05rem; margin-top: 0.5rem;">
+                <em data-i18n="stats.message">
+                If piloted at scale, this idea could empower thousands of farmers,<br>
+                save crores for Indian agriculture, and connect future generations!
+                </em>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="section-header">
+            <div class="section-tag" data-i18n="features.tag">OUR FEATURES</div>
+            <h2 data-i18n="features.heading">Why Choose KisanSeva?</h2>
+            <p data-i18n="features.subtitle">Innovative solutions combining traditional wisdom with modern technology for sustainable farming</p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card" onclick="window.location.href='/ai-pest-diagnosis'">
+                <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-microscope-icon lucide-microscope"><path d="M6 18h8"/><path d="M3 22h18"/><path d="M14 22a7 7 0 1 0 0-14h-1"/><path d="M9 14h2"/><path d="M9 12a2 2 0 0 1-2-2V6h6v4a2 2 0 0 1-2 2Z"/><path d="M12 6V3a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v3"/></svg></div>
+                <h3 data-i18n="features.ai.title">AI Pest Diagnosis</h3>
+                <p data-i18n="features.ai.desc">Upload crop photos and get instant pest identification with treatment recommendations powered by AI.</p>
+            </div>
+
+            <div class="feature-card" onclick="window.location.href='/crop-calendar'">
+                <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calendar-range-icon lucide-calendar-range"><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M16 2v4"/><path d="M3 10h18"/><path d="M8 2v4"/><path d="M17 14h-6"/><path d="M13 18H7"/><path d="M7 14h.01"/><path d="M17 18h.01"/></svg></div>
+                <h3 data-i18n="features.calendar.title">Smart Crop Calendar</h3>
+                <p data-i18n="features.calendar.desc">Personalized planting schedules based on your location, climate, and traditional farming practices.</p>
+            </div>
+
+            <div class="feature-card" onclick="window.location.href='/roi-calculator'">
+                <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calculator-icon lucide-calculator"><rect width="16" height="20" x="4" y="2" rx="2"/><line x1="8" x2="16" y1="6" y2="6"/><line x1="16" x2="16" y1="14" y2="18"/><path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M8 10h.01"/><path d="M12 14h.01"/><path d="M8 14h.01"/><path d="M12 18h.01"/><path d="M8 18h.01"/></svg></div>
+                <h3 data-i18n="features.roi.title">ROI Calculator</h3>
+                <p data-i18n="features.roi.desc">Calculate savings from switching to eco-friendly pest control and optimize your farm budget.</p>
+            </div>
+
+            <div class="feature-card" onclick="window.location.href='/knowledge-exchange'">
+                <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-wheat-icon lucide-wheat"><path d="M2 22 16 8"/><path d="M3.47 12.53 5 11l1.53 1.53a3.5 3.5 0 0 1 0 4.94L5 19l-1.53-1.53a3.5 3.5 0 0 1 0-4.94Z"/><path d="M7.47 8.53 9 7l1.53 1.53a3.5 3.5 0 0 1 0 4.94L9 15l-1.53-1.53a3.5 3.5 0 0 1 0-4.94Z"/><path d="M11.47 4.53 13 3l1.53 1.53a3.5 3.5 0 0 1 0 4.94L13 11l-1.53-1.53a3.5 3.5 0 0 1 0-4.94Z"/><path d="M20 2h2v2a4 4 0 0 1-4 4h-2V6a4 4 0 0 1 4-4Z"/><path d="M11.47 17.47 13 19l-1.53 1.53a3.5 3.5 0 0 1-4.94 0L5 19l1.53-1.53a3.5 3.5 0 0 1 4.94 0Z"/><path d="M15.47 13.47 17 15l-1.53 1.53a3.5 3.5 0 0 1-4.94 0L9 15l1.53-1.53a3.5 3.5 0 0 1 4.94 0Z"/><path d="M19.47 9.47 21 11l-1.53 1.53a3.5 3.5 0 0 1-4.94 0L13 11l1.53-1.53a3.5 3.5 0 0 1 4.94 0Z"/></svg></div>
+                <h3 data-i18n="features.knowledge.title">Knowledge Exchange</h3>
+                <p data-i18n="features.knowledge.desc">Connect elder farmers' wisdom with youth innovation through interactive learning platforms.</p>
+            </div>
+
+            <div class="feature-card" onclick="window.location.href='/marketplace'">
+                <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shopping-cart-icon lucide-shopping-cart"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg></div>
+                <h3 data-i18n="features.marketplace.title">Agro Marketplace</h3>
+                <p data-i18n="features.marketplace.desc">Buy solar traps, seeds, and equipment. Sell your produce directly to buyers with fair pricing.</p>
+            </div>
+
+            <div class="feature-card" onclick="window.location.href='/language_support'">
+                <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-globe-icon lucide-globe"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg></div>
+                <h3 data-i18n="features.language.title">Multi-Language Support</h3>
+                <p data-i18n="features.language.desc">Available in Hindi, Punjabi, English, and more. Voice navigation for easy accessibility.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Product Highlight -->
+    <section class="product-highlight" id="product">
+        <div class="product-content">
+        <!-- LEFT SIDE: Images -->
+        <div class="product-image">
+            <div class="pest-showcase">
+                <img src="https://images.unsplash.com/photo-1680540233013-f28090187247?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDM4fHx8ZW58MHx8fHx8&fm=jpg&q=60&w=3000" alt="Brown Moth Pest" class="pest-img">
+                <img src="https://images.unsplash.com/photo-1599417864836-c79529f198ea?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1974" alt="Locust Pest" class="pest-img">
+                <img src="https://images.unsplash.com/photo-1680341055606-a72baedaa698?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1170" alt="insect3" class="pest-img-bottom">
+            </div>
+        </div>
+
+
+            <div class="product-text">
+                <div class="section-tag" data-i18n="product.tag">Our Innovation</div>
+                <h2 data-i18n="product.title">Solar-Powered Insect Trap</h2>
+                <p class="price">₹2,800 - ₹3,700</p>
+                <p style="color: var(--text-light); font-size: 1.15rem; margin-bottom: 1.5rem;" data-i18n="product.desc">
+                    Eco-friendly pest control solution designed for small to medium farms. Covers 0.5 - 1 acre per unit with zero electricity costs.
+                </p>
+                <ul class="product-features">
+                    <li data-i18n="product.feature1">10W Solar Panel + 12V Rechargeable Battery</li>
+                    <li data-i18n="product.feature2">UV LED Lights (410-420nm) + Fragrance Dispenser</li>
+                    <li data-i18n="product.feature3">Brushless Suction Fan + Sticky Trap Chamber</li>
+                    <li data-i18n="product.feature4">Chemical-Free • Protects Beneficial Insects</li>
+                    <li data-i18n="product.feature5">Low Maintenance • 5-Year Lifespan</li>
+                    <li data-i18n="product.feature6">Affordable Solution for Small Farmers</li>
+                </ul>
+                <div class="hero-buttons">
+                    <a href="/marketplace" class="btn btn-primary" data-i18n="product.btn1">Pre-Order Now</a>
+                    <div class="btn btn-secondary item" data-i18n="product.btn2" onclick="window.location.href='/product_details'" style="cursor:pointer;">Learn More</div>
+                    </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonial -->
+    <section class="testimonial-carousel" style="overflow:hidden; margin: 3em auto; max-width:10000px;">
+        <div class="testimonial-track" id="testimonialTrack" style="display: flex; transition: transform 0.9s cubic-bezier(.55,.18,.46,.81);">
+            <!-- Testimonial cards will be injected by JavaScript -->
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section" id="contact">
+        <div class="cta-content">
+            <h2 data-i18n="cta.heading">Ready to Transform Your Farm?</h2>
+            <p data-i18n="cta.subtitle">Join 10,000+ farmers who are saving crops and costs with KisanSeva</p>
+            <a href="login_register" class="btn" data-i18n="cta.btn">Get Started Today →</a>
+        </div>
+    </section>
+
+    <script>
+        // Complete translation data with all sections
+        const translations = {
+            en: {
+                "nav.features": "Features",
+                "nav.solution": "Our Solution",
+                "nav.impact": "Impact",
+                "nav.stories": "Success Stories",
+                "nav.cta": "Get Started →",
+                "hero.tagline": "Bridging Generations • Protecting Crops",
+                "hero.title1": "Empowering",
+                "hero.title2": "Modern Agriculture",
+                "hero.title3": "with Innovation",
+                "hero.subtitle": "Connecting traditional farming wisdom with cutting-edge solar technology. Help farmers reduce pesticide use, increase yields, and embrace sustainable practices for a greener future.",
+                "hero.btn1": "Explore Our Insect Trap",
+                "hero.btn2": "Learn More",
+                "badge.solar": "100% Solar",
+                "badge.eco": "Eco-Friendly",
+                "badge.chemical": "Chemical-Free",
+                "badge.safe": "Safe Farming",
+                "stats.farmers": "Farmers Could Benefit",
+                "stats.savings": "Possible Pesticide Savings",
+                "stats.reduction": "Potential Crop Loss Reduction",
+                "stats.generations": "Generations Connected",
+                "stats.iftrue": "*if true",
+                "stats.message": "If piloted at scale, this idea could empower thousands of farmers, save crores for Indian agriculture, and connect future generations!",
+                "features.tag": "OUR FEATURES",
+                "features.heading": "Why Choose KisanSeva?",
+                "features.subtitle": "Innovative solutions combining traditional wisdom with modern technology for sustainable farming",
+                "features.ai.title": "AI Pest Diagnosis",
+                "features.ai.desc": "Upload crop photos and get instant pest identification with treatment recommendations powered by AI.",
+                "features.calendar.title": "Smart Crop Calendar",
+                "features.calendar.desc": "Personalized planting schedules based on your location, climate, and traditional farming practices.",
+                "features.roi.title": "ROI Calculator",
+                "features.roi.desc": "Calculate savings from switching to eco-friendly pest control and optimize your farm budget.",
+                "features.knowledge.title": "Knowledge Exchange",
+                "features.knowledge.desc": "Connect elder farmers' wisdom with youth innovation through interactive learning platforms.",
+                "features.marketplace.title": "Agro Marketplace",
+                "features.marketplace.desc": "Buy solar traps, seeds, and equipment. Sell your produce directly to buyers with fair pricing.",
+                "features.language.title": "Multi-Language Support",
+                "features.language.desc": "Available in Hindi, Punjabi, English, and more. Voice navigation for easy accessibility.",
+                "product.tag": "Our Innovation",
+                "product.title": "Solar-Powered Insect Trap",
+                "product.desc": "Eco-friendly pest control solution designed for small to medium farms. Covers 0.5 - 1 acre per unit with zero electricity costs.",
+                "product.feature1": "10W Solar Panel + 12V Rechargeable Battery",
+                "product.feature2": "UV LED Lights (410-420nm) + Fragrance Dispenser",
+                "product.feature3": "Brushless Suction Fan + Sticky Trap Chamber",
+                "product.feature4": "Chemical-Free • Protects Beneficial Insects",
+                "product.feature5": "Low Maintenance • 5-Year Lifespan",
+                "product.feature6": "Affordable Solution for Small Farmers",
+                "product.btn1": "Pre-Order Now",
+                "product.btn2": "Learn More",
+                "testimonial.quote": "\"KisanSeva's solar trap saved 40% of my crop and thousands of rupees. Now even my son is interested in farming. A wonderful blend of tradition and technology!\"",
+                "testimonial.name": "Baldev Singh",
+                "testimonial.bio": "Wheat Farmer, Punjab • 45 years experience",
+                "cta.heading": "Ready to Transform Your Farm?",
+                "cta.subtitle": "Join 10,000+ farmers who are saving crops and costs with KisanSeva",
+                "cta.btn": "Get Started Today →"
+            },
+            hi: {
+                "nav.features": "विशेषताएँ",
+                "nav.solution": "हमारा समाधान",
+                "nav.impact": "प्रभाव",
+                "nav.stories": "सफलता की कहानियाँ",
+                "nav.cta": "शुरू करें →",
+                "hero.tagline": "पीढ़ियों को जोड़ना • फसलों की रक्षा",
+                "hero.title1": "सशक्त बनाना",
+                "hero.title2": "आधुनिक कृषि",
+                "hero.title3": "नवाचार के साथ",
+                "hero.subtitle": "पारंपरिक खेती के ज्ञान को अत्याधुनिक सौर प्रौद्योगिकी से जोड़ना। किसानों को कीटनाशकों का उपयोग कम करने, उपज बढ़ाने और हरित भविष्य के लिए टिकाऊ प्रथाओं को अपनाने में मदद करें।",
+                "hero.btn1": "हमारा कीट ट्रैप देखें",
+                "hero.btn2": "और जानें",
+                "badge.solar": "100% सौर ऊर्जा",
+                "badge.eco": "पर्यावरण अनुकूल",
+                "badge.chemical": "रसायन मुक्त",
+                "badge.safe": "सुरक्षित खेती",
+                "stats.farmers": "किसान लाभान्वित हो सकते हैं",
+                "stats.savings": "संभावित कीटनाशक बचत",
+                "stats.reduction": "संभावित फसल नुकसान में कमी",
+                "stats.generations": "पीढ़ियाँ जुड़ीं",
+                "stats.iftrue": "*यदि सच है",
+                "stats.message": "यदि बड़े पैमाने पर पायलट किया जाए, तो यह विचार हजारों किसानों को सशक्त बना सकता है, भारतीय कृषि के लिए करोड़ों बचा सकता है, और भविष्य की पीढ़ियों को जोड़ सकता है!",
+                "features.tag": "हमारी विशेषताएं",
+                "features.heading": "KisanSeva क्यों चुनें?",
+                "features.subtitle": "टिकाऊ खेती के लिए पारंपरिक ज्ञान और आधुनिक प्रौद्योगिकी को मिलाते हुए नवीन समाधान",
+                "features.ai.title": "AI कीट निदान",
+                "features.ai.desc": "फसल की तस्वीरें अपलोड करें और AI द्वारा संचालित उपचार सिफारिशों के साथ तुरंत कीट पहचान प्राप्त करें।",
+                "features.calendar.title": "स्मार्ट फसल कैलेंडर",
+                "features.calendar.desc": "आपके स्थान, जलवायु और पारंपरिक खेती प्रथाओं के आधार पर व्यक्तिगत रोपण कार्यक्रम।",
+                "features.roi.title": "ROI कैलकुलेटर",
+                "features.roi.desc": "पर्यावरण अनुकूल कीट नियंत्रण पर स्विच करने से बचत की गणना करें और अपने खेत के बजट को अनुकूलित करें।",
+                "features.knowledge.title": "ज्ञान आदान-प्रदान",
+                "features.knowledge.desc": "इंटरैक्टिव लर्निंग प्लेटफॉर्म के माध्यम से बुजुर्ग किसानों के ज्ञान को युवा नवाचार से जोड़ें।",
+                "features.marketplace.title": "कृषि बाज़ार",
+                "features.marketplace.desc": "सोलर ट्रैप, बीज और उपकरण खरीदें। अपनी उपज सीधे खरीदारों को उचित मूल्य पर बेचें।",
+                "features.language.title": "बहु-भाषा समर्थन",
+                "features.language.desc": "हिंदी, पंजाबी, अंग्रेजी और अधिक में उपलब्ध। आसान पहुंच के लिए वॉयस नेविगेशन।",
+                "product.tag": "हमारा नवाचार",
+                "product.title": "सौर-संचालित कीट ट्रैप",
+                "product.desc": "छोटे से मध्यम खेतों के लिए डिज़ाइन किया गया पर्यावरण अनुकूल कीट नियंत्रण समाधान। शून्य बिजली लागत के साथ 0.5 - 1 एकड़ प्रति यूनिट को कवर करता है।",
+                "product.feature1": "10W सोलर पैनल + 12V रिचार्जेबल बैटरी",
+                "product.feature2": "UV LED लाइट्स (410-420nm) + सुगंध डिस्पेंसर",
+                "product.feature3": "ब्रशलेस सक्शन फैन + स्टिकी ट्रैप चैम्बर",
+                "product.feature4": "रसायन मुक्त • लाभकारी कीड़ों की रक्षा करता है",
+                "product.feature5": "कम रखरखाव • 5 साल की जीवनकाल",
+                "product.feature6": "छोटे किसानों के लिए किफायती समाधान",
+                "product.btn1": "अभी प्री-ऑर्डर करें",
+                "product.btn2": "और जानें",
+                "testimonial.quote": "\"KisanSeva के सोलर ट्रैप से मेरी 40% फसल बची और हजारों रुपये बचे। अब मेरा बेटा भी खेती में रुचि ले रहा है। परंपरा और तकनीक का शानदार संगम!\"",
+                "testimonial.name": "बलदेव सिंह",
+                "testimonial.bio": "गेहूं किसान, पंजाब • 45 वर्ष का अनुभव",
+                "cta.heading": "अपने खेत को बदलने के लिए तैयार हैं?",
+                "cta.subtitle": "10,000+ किसानों में शामिल हों जो KisanSeva के साथ फसल और लागत बचा रहे हैं",
+                "cta.btn": "आज ही शुरू करें →"
+            },
+            pa: {
+                "nav.features": "ਵਿਸ਼ੇਸ਼ਤਾਵਾਂ",
+                "nav.solution": "ਸਾਡਾ ਹੱਲ",
+                "nav.impact": "ਪ੍ਰਭਾਵ",
+                "nav.stories": "ਸਫਲਤਾ ਦੀਆਂ ਕਹਾਣੀਆਂ",
+                "nav.cta": "ਸ਼ੁਰੂ ਕਰੋ →",
+                "hero.tagline": "ਪੀੜ੍ਹੀਆਂ ਨੂੰ ਜੋੜਨਾ • ਫਸਲਾਂ ਦੀ ਰੱਖਿਆ",
+                "hero.title1": "ਸ਼ਕਤੀਕਰਨ",
+                "hero.title2": "ਆਧੁਨਿਕ ਖੇਤੀਬਾੜੀ",
+                "hero.title3": "ਨਵੀਨਤਾ ਨਾਲ",
+                "hero.subtitle": "ਰਵਾਇਤੀ ਖੇਤੀ ਦੇ ਗਿਆਨ ਨੂੰ ਆਧੁਨਿਕ ਸੋਲਰ ਤਕਨਾਲੋਜੀ ਨਾਲ ਜੋੜਨਾ। ਕਿਸਾਨਾਂ ਨੂੰ ਕੀਟਨਾਸ਼ਕਾਂ ਦੀ ਵਰਤੋਂ ਘਟਾਉਣ, ਉਪਜ ਵਧਾਉਣ ਅਤੇ ਹਰੇ ਭਵਿੱਖ ਲਈ ਟਿਕਾਊ ਅਭਿਆਸਾਂ ਨੂੰ ਅਪਣਾਉਣ ਵਿੱਚ ਮਦਦ ਕਰੋ।",
+                "hero.btn1": "ਸਾਡਾ ਕੀਟ ਟਰੈਪ ਦੇਖੋ",
+                "hero.btn2": "ਹੋਰ ਜਾਣੋ",
+                "badge.solar": "100% ਸੋਲਰ",
+                "badge.eco": "ਵਾਤਾਵਰਣ ਅਨੁਕੂਲ",
+                "badge.chemical": "ਰਸਾਇਣ ਮੁਕਤ",
+                "badge.safe": "ਸੁਰੱਖਿਅਤ ਖੇਤੀ",
+                "stats.farmers": "ਕਿਸਾਨ ਲਾਭ ਲੈ ਸਕਦੇ ਹਨ",
+                "stats.savings": "ਸੰਭਾਵਿਤ ਕੀਟਨਾਸ਼ਕ ਬਚਤ",
+                "stats.reduction": "ਸੰਭਾਵਿਤ ਫਸਲ ਨੁਕਸਾਨ ਵਿੱਚ ਕਮੀ",
+                "stats.generations": "ਪੀੜ੍ਹੀਆਂ ਜੁੜੀਆਂ",
+                "stats.iftrue": "*ਜੇ ਸੱਚ ਹੈ",
+                "stats.message": "ਜੇਕਰ ਵੱਡੇ ਪੱਧਰ 'ਤੇ ਪਾਇਲਟ ਕੀਤਾ ਜਾਵੇ, ਤਾਂ ਇਹ ਵਿਚਾਰ ਹਜ਼ਾਰਾਂ ਕਿਸਾਨਾਂ ਨੂੰ ਸ਼ਕਤੀ ਦੇ ਸਕਦਾ ਹੈ, ਭਾਰਤੀ ਖੇਤੀਬਾੜੀ ਲਈ ਕਰੋੜਾਂ ਬਚਾ ਸਕਦਾ ਹੈ, ਅਤੇ ਭਵਿੱਖ ਦੀਆਂ ਪੀੜ੍ਹੀਆਂ ਨੂੰ ਜੋੜ ਸਕਦਾ ਹੈ!",
+                "features.tag": "ਸਾਡੀਆਂ ਵਿਸ਼ੇਸ਼ਤਾਵਾਂ",
+                "features.heading": "KisanSeva ਕਿਉਂ ਚੁਣੋ?",
+                "features.subtitle": "ਟਿਕਾਊ ਖੇਤੀ ਲਈ ਰਵਾਇਤੀ ਗਿਆਨ ਅਤੇ ਆਧੁਨਿਕ ਤਕਨਾਲੋਜੀ ਨੂੰ ਜੋੜਦੇ ਹੋਏ ਨਵੀਨਤਾਕਾਰੀ ਹੱਲ",
+                "features.ai.title": "AI ਕੀਟ ਨਿਦਾਨ",
+                "features.ai.desc": "ਫਸਲ ਦੀਆਂ ਫੋਟੋਆਂ ਅੱਪਲੋਡ ਕਰੋ ਅਤੇ AI ਦੁਆਰਾ ਸੰਚਾਲਿਤ ਇਲਾਜ ਸਿਫਾਰਸ਼ਾਂ ਨਾਲ ਤੁਰੰਤ ਕੀਟ ਪਛਾਣ ਪ੍ਰਾਪਤ ਕਰੋ।",
+                "features.calendar.title": "ਸਮਾਰਟ ਫਸਲ ਕੈਲੰਡਰ",
+                "features.calendar.desc": "ਤੁਹਾਡੇ ਸਥਾਨ, ਜਲਵਾਯੂ ਅਤੇ ਰਵਾਇਤੀ ਖੇਤੀ ਅਭਿਆਸਾਂ ਦੇ ਆਧਾਰ 'ਤੇ ਵਿਅਕਤੀਗਤ ਬੀਜਣ ਦੀ ਸਮਾਂ-ਸਾਰਣੀ।",
+                "features.roi.title": "ROI ਕੈਲਕੁਲੇਟਰ",
+                "features.roi.desc": "ਵਾਤਾਵਰਣ ਅਨੁਕੂਲ ਕੀਟ ਨਿਯੰਤਰਣ 'ਤੇ ਸਵਿੱਚ ਕਰਨ ਤੋਂ ਬਚਤ ਦੀ ਗਣਨਾ ਕਰੋ ਅਤੇ ਆਪਣੇ ਖੇਤ ਦੇ ਬਜਟ ਨੂੰ ਅਨੁਕੂਲ ਬਣਾਓ।",
+                "features.knowledge.title": "ਗਿਆਨ ਵਟਾਂਦਰਾ",
+                "features.knowledge.desc": "ਇੰਟਰਐਕਟਿਵ ਸਿੱਖਣ ਪਲੇਟਫਾਰਮਾਂ ਦੁਆਰਾ ਬਜ਼ੁਰਗ ਕਿਸਾਨਾਂ ਦੇ ਗਿਆਨ ਨੂੰ ਨੌਜਵਾਨਾਂ ਦੀ ਨਵੀਨਤਾ ਨਾਲ ਜੋੜੋ।",
+                "features.marketplace.title": "ਖੇਤੀਬਾੜੀ ਬਾਜ਼ਾਰ",
+                "features.marketplace.desc": "ਸੋਲਰ ਟਰੈਪ, ਬੀਜ ਅਤੇ ਉਪਕਰਣ ਖਰੀਦੋ। ਆਪਣੀ ਉਪਜ ਸਿੱਧੇ ਖਰੀਦਦਾਰਾਂ ਨੂੰ ਉਚਿਤ ਕੀਮਤ 'ਤੇ ਵੇਚੋ।",
+                "features.language.title": "ਬਹੁ-ਭਾਸ਼ਾ ਸਹਾਇਤਾ",
+                "features.language.desc": "ਹਿੰਦੀ, ਪੰਜਾਬੀ, ਅੰਗਰੇਜ਼ੀ ਅਤੇ ਹੋਰ ਵਿੱਚ ਉਪਲਬਧ। ਆਸਾਨ ਪਹੁੰਚ ਲਈ ਵੌਇਸ ਨੈਵੀਗੇਸ਼ਨ।",
+                "product.tag": "ਸਾਡੀ ਨਵੀਨਤਾ",
+                "product.title": "ਸੋਲਰ-ਸੰਚਾਲਿਤ ਕੀਟ ਟਰੈਪ",
+                "product.desc": "ਛੋਟੇ ਤੋਂ ਮੱਧਮ ਖੇਤਾਂ ਲਈ ਡਿਜ਼ਾਈਨ ਕੀਤਾ ਗਿਆ ਵਾਤਾਵਰਣ ਅਨੁਕੂਲ ਕੀਟ ਨਿਯੰਤਰਣ ਹੱਲ। ਜ਼ੀਰੋ ਬਿਜਲੀ ਲਾਗਤ ਨਾਲ 0.5 - 1 ਏਕੜ ਪ੍ਰਤੀ ਯੂਨਿਟ ਨੂੰ ਕਵਰ ਕਰਦਾ ਹੈ।",
+                "product.feature1": "10W ਸੋਲਰ ਪੈਨਲ + 12V ਰੀਚਾਰਜਯੋਗ ਬੈਟਰੀ",
+                "product.feature2": "UV LED ਲਾਈਟਾਂ (410-420nm) + ਸੁਗੰਧ ਡਿਸਪੈਂਸਰ",
+                "product.feature3": "ਬ੍ਰਸ਼ਲੈੱਸ ਸਕਸ਼ਨ ਫੈਨ + ਸਟਿੱਕੀ ਟਰੈਪ ਚੈਂਬਰ",
+                "product.feature4": "ਰਸਾਇਣ ਮੁਕਤ • ਲਾਭਦਾਇਕ ਕੀੜਿਆਂ ਦੀ ਰੱਖਿਆ ਕਰਦਾ ਹੈ",
+                "product.feature5": "ਘੱਟ ਰੱਖ-ਰਖਾਅ • 5 ਸਾਲ ਦੀ ਜੀਵਨ ਕਾਲ",
+                "product.feature6": "ਛੋਟੇ ਕਿਸਾਨਾਂ ਲਈ ਕਿਫਾਇਤੀ ਹੱਲ",
+                "product.btn1": "ਹੁਣੇ ਪ੍ਰੀ-ਆਰਡਰ ਕਰੋ",
+                "product.btn2": "ਜਿਆਦਾ ਜਾਣੋ",
+                "testimonial.quote": "\"KisanSeva ਦੇ ਸੋਲਰ ਟਰੈਪ ਨੇ ਮੇਰੀ 40% ਫਸਲ ਬਚਾਈ ਅਤੇ ਹਜ਼ਾਰਾਂ ਰੁਪਏ ਬਚਾਏ। ਹੁਣ ਮੇਰਾ ਪੁੱਤਰ ਵੀ ਖੇਤੀ ਵਿੱਚ ਦਿਲਚਸਪੀ ਲੈ ਰਿਹਾ ਹੈ। ਪਰੰਪਰਾ ਅਤੇ ਤਕਨਾਲੋਜੀ ਦਾ ਸ਼ਾਨਦਾਰ ਸੰਗਮ!\"",
+                "testimonial.name": "ਬਲਦੇਵ ਸਿੰਘ",
+                "testimonial.bio": "ਕਣਕ ਕਿਸਾਨ, ਪੰਜਾਬ • 45 ਸਾਲਾਂ ਦਾ ਤਜਰਬਾ",
+                "cta.heading": "ਆਪਣੇ ਖੇਤ ਨੂੰ ਬਦਲਣ ਲਈ ਤਿਆਰ ਹੋ?",
+                "cta.subtitle": "10,000+ ਕਿਸਾਨਾਂ ਵਿੱਚ ਸ਼ਾਮਲ ਹੋਵੋ ਜੋ KisanSeva ਨਾਲ ਫਸਲਾਂ ਅਤੇ ਲਾਗਤਾਂ ਬਚਾ ਰਹੇ ਹਨ",
+                "cta.btn": "ਅੱਜ ਹੀ ਸ਼ੁਰੂ ਕਰੋ →"
+            }
+        };
+
+        // Language switcher functionality
+        let currentLang = 'en';
+
+        function setLanguage(lang) {
+            currentLang = lang;
+
+            // Update active button
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.lang === lang);
+            });
+
+            // Update all translatable elements
+            document.querySelectorAll('[data-i18n]').forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                if (translations[lang] && translations[lang][key]) {
+                    element.textContent = translations[lang][key];
+                }
+            });
+
+            // Save preference
+            localStorage.setItem('preferredLanguage', lang);
+        }
+
+        // Initialize language switcher
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                setLanguage(btn.dataset.lang);
+            });
+        });
+
+        // Load saved language preference
+        const savedLang = localStorage.getItem('preferredLanguage');
+        if (savedLang && translations[savedLang]) {
+            setLanguage(savedLang);
+        }
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Mobile menu
+        const mobileMenu = document.querySelector('.mobile-menu');
+        const navLinks = document.querySelector('.nav-links');
+        mobileMenu.addEventListener('click', () => {
+            navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+        });
+
+        // Scroll animations
+        const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -80px 0px' };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animation = 'fadeInUp 0.8s ease-out forwards';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.feature-card, .stat-item').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Counter animation
+        const animateCounter = (element, target) => {
+            let current = 0;
+            const increment = target / 80;
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    const text = element.textContent;
+                    element.textContent = text.includes('₹') ? `₹${target}Cr` :
+                                         text.includes('%') ? `${target}%` :
+                                         `${target.toLocaleString()}+`;
+                    clearInterval(timer);
+                } else {
+                    const text = element.textContent;
+                    const formatted = text.includes('₹') ? `₹${Math.ceil(current)}Cr` :
+                                     text.includes('%') ? `${Math.ceil(current)}%` :
+                                     `${Math.ceil(current).toLocaleString()}+`;
+                    element.textContent = formatted;
+                }
+            }, 25);
+        };
+
+        const statsObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const number = entry.target.querySelector('.stat-number');
+                    const text = number.textContent;
+                    const target = text.includes('₹') ? 5 :
+                                  text.includes('%') ? 85 :
+                                  text === '3+' ? 3 : 10000;
+                    animateCounter(number, target);
+                    statsObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        document.querySelectorAll('.stat-item').forEach(item => {
+            statsObserver.observe(item);
+        });
+
+
+const cardsPerView = 3;
+const cardWidth = 350 + 38; // width + margin
+let carouselIndex = 0;
+
+const testimonialsArr = [
+  {
+    quote: "KisanSeva ਦੇ ਸੋਲਰ ਟਰੈਪ ਨੇ ਮੇਰੀ 40% ਫਸਲ ਬਚਾਈ ਅਤੇ ਹਜ਼ਾਰਾਂ ਰੁਪਏ ਬਚਾਏ। ਹੁਣ ਮੇਰਾ ਪੁੱਤਰ ਵੀ ਖੇਤੀ ਵਿੱਚ ਦਿਲਚਸਪੀ ਲੈ ਰਿਹਾ ਹੈ। ਪਰੰਪਰਾ ਅਤੇ ਤਕਨਾਲੋਜੀ ਦਾ ਸ਼ਾਨਦਾਰ ਸੰਗਮ!",
+    initials: "BS",
+    name: "Baldev Singh",
+    bio: "Wheat Farmer, Panjab • 45 yrs",
+    avatar: null
+  },
+  {
+    quote: "After installing the trap, bug problems dropped. No chemicals, safe for my family! ਸੱਚ ਪੁੱਛੋ ਤਾਂ, ਇਹ ਜ਼ਰੂਰੀ ਸਾਥੀ ਹੈ ਹਰ ਕਿਸਾਨ ਲਈ।",
+    initials: null,
+    name: "Maninder Singh",
+    bio: "Organic Farmer, Punjab • 19 yrs",
+    avatar: "static/maninder.jpg"
+  },
+  {
+    quote:"इंस्टालेशन आसान था और सफाई से चल रहा है। रात होते ही स्वचालित रूप से चालू हो जाता है। कीटों की समस्या लगभग नहीं रही। Very effective—safe for my crops and family too!",
+    initials: "RP",
+    name: "Rajiv Pawar",
+    bio: "Vegetable Farmer, Gujarat • 31 yrs",
+    avatar: null
+  },
+  {
+    quote: "Best investment for my farm! My yields have improved every season, and my costs have gone down significantly since switching to this technology.",
+    initials: null,
+    name: "Mathew Patel",
+    bio: "Fruit Farmer, Maharashtra • 43 yrs",
+    avatar: "https://plus.unsplash.com/premium_photo-1686269460470-a44c06f16e0a?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=687"
+  },
+  {
+    quote: "ਕਿਟਣੀਆਂ ਦੀ ਸਮੱਸਿਆ ਘੱਟ ਹੋ ਗਈ ਅਤੇ ਕਿਸਾਨ ਭਰੋਸੇਮੰਦ ਬਣ ਗਿਆ ਹੈ। Bug problems have reduced significantly. No chemicals used, safe for my family!",
+    initials: "RS",
+    name: "Rajbir Singh",
+    bio: "Rice Farmer, Haryana • 24 yrs",
+    avatar: null
+  },
+  {
+  quote:"ਮੀਂਹ ਦੇ ਮੌਸਮ ਦੌਰਾਨ ਵੀ ਇਹ ਸਾਧਨ ਬਹੁਤ ਭਰੋਸੇਮੰਦ ਹੈ। ਮੇਰੀ ਫਸਲ ਹਰ ਸਾਲ ਹੋਰ ਵੀ ਵਧ ਰਹੀ ਹੈ। ਸਾਡੀ ਪਰੰਪਰਾਵਾਦੀ ਖੇਤੀ ਨੂੰ ਇਹ ਤਕਨੀਕ ਮਿਲੀ, ਜਿਸ ਨਾਲ ਸਾਡੀ ਫਸਲ ਦੂਣੀ ਹੋ ਗਈ ਹੈ।",
+  initials: "DK",
+  name: "Najar Singh",
+  bio: "Maize Farmer, Panjab • 65 yrs",
+  avatar: "static/najar.jpg"
+},
+{
+  quote: "Saw results within two weeks, less pest damage and more peace of mind. The damage caused by pests significantly decreased, leading to healthier crops and higher yields.",
+  initials: null,
+  name: "Sunita Sharma",
+  bio: "Vegetable Farmer, Rajasthan • 29 yrs",
+  avatar: "https://images.unsplash.com/photo-1593011951342-8426e949371f?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=676"
+},
+{
+  quote: "ਇਹ ਪੈਸਟ ਕੰਟਰੋਲ ਸਿਸਟਮ ਸੱਚਮੁੱਚ ਮੇਰੇ ਖੇਤ ਲਈ ਵਰਦਾਨ ਸਾਬਤ ਹੋਇਆ ਹੈ। ਮੇਰੀ ਫਸਲਾਂ ਨੂੰ ਕੀਟਾਂ ਤੋਂ ਰਾਹਤ ਮਿਲੀ ਹੈ ਅਤੇ ਜ਼ਮੀਨ ਹੋਈ ਵਧੀਆ। ਮੇਰੇ ਪਰਿਵਾਰ ਨੂੰ ਵੀ ਸੁਰੱਖਿਆ ਦੇਣ ਵਾਲਾ ਇਹ ਯੰਤ੍ਰ ਬਹੁਤ ਭਰੋਸੇਮੰਦ ਹੈ।",
+  initials: "PG",
+  name: "Gurdial Singh",
+  bio: "Cotton Farmer, Panjab • 71 yrs",
+  avatar: "https://images.unsplash.com/photo-1710170909047-135c7a010e41?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=687"
+}
+
+];
+
+
+// Build infinite carousel array
+
+let testimonialsExtended;
+function buildInfiniteCarouselArray() {
+  testimonialsExtended = testimonialsArr.concat(testimonialsArr.slice(0, cardsPerView));
+}
+
+// Rendering cards (use .testimonial-card for your CSS!)
+function renderCarousel() {
+  let html = '';
+  testimonialsExtended.forEach(t => {
+    html += `
+      <div class="testimonial-card" style="
+        min-width: 340px; max-width: 350px; margin: 0 19px;
+        background: linear-gradient(135deg,#37762c 70%, #5a883a 100%);
+        border-radius: 30px; color: #fff; padding: 2em 1.3em 2em 1.3em;
+        box-shadow: 0 8px 32px rgba(76,152,72,0.11);
+        display:flex; flex-direction:column;align-items:center;
+        font-size:1.10rem; line-height:1.67;
+      ">
+        <div style="font-style:italic; margin-bottom:1.12em; text-align: center;">
+          “${t.quote}”
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;">
+          ${
+            t.avatar
+            ? `<img src="${t.avatar}" alt="${t.name}" style="width:54px;height:54px;border-radius:50%;object-fit:cover;box-shadow:0 1.5px 9px #305e19;margin-bottom:0.45em;">`
+            : `<div style="background:#fff; color:#2D5016; font-size:1.25rem; font-weight:700; width:54px; height:54px; border-radius:50%;display:flex;align-items:center;justify-content:center; margin-bottom:0.45em;">${t.initials}</div>`
+          }
+          <div>
+            <div style="font-weight:700;font-size:1.04rem;text-align:center">${t.name}</div>
+            <div style="font-size:0.94rem;text-align:center">${t.bio}</div>
+          </div>
+        </div>
+      </div>
+    `;
+  });
+  document.getElementById('testimonialTrack').innerHTML = html;
+  updateCarousel(0, true);
+}
+
+// Move the carousel, transition instantly if instant=true
+
+function updateCarousel(idx = carouselIndex, instant = false) {
+  const track = document.getElementById('testimonialTrack');
+  if (instant) {
+    track.style.transition = "none";
+  } else {
+    track.style.transition = "transform 0.7s cubic-bezier(.55,.18,.46,.81)";
+  }
+  track.style.transform = `translateX(-${idx * cardWidth}px)`;
+}
+
+// Main rotation logic
+function nextCarousel() {
+  carouselIndex += 1;
+  updateCarousel(carouselIndex);
+
+  // If we've reached the fake end, jump back instantly to real start
+  if (carouselIndex === testimonialsArr.length-1) {
+    setTimeout(() => {
+      carouselIndex = 0;
+      updateCarousel(0, true);
+    }, 700); // match transition ms
+  }
+}
+
+// INIT!
+buildInfiniteCarouselArray();
+renderCarousel();
+setInterval(nextCarousel, 4000);
+
+</script>
+
+<script>
+function toggleMenu() {
+  const menu = document.getElementById("userMenu");
+  menu.style.display = (menu.style.display === "block") ? "none" : "block";
+}
+</script>
+
+<script>
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const username = localStorage.getItem('kisan_username');
+    const greeting = document.getElementById('personal-greeting');
+    if (username) {
+      greeting.textContent = 'Welcome, ' + username + '! 🙏🏻';
+    } else {
+      greeting.textContent = '';  // clear if no user logged in
+    }
+  });
+</script>
+
+</body>
+</html>

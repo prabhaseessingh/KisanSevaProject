@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solar-Powered Insect Trap - Full Details | KisanSeva</title>
+    <style>
+        :root {
+            --primary-green: #2D5016;
+            --accent-green: #4A7C2C;
+            --light-green: #7FA650;
+            --golden-yellow: #F4A416;
+            --earth-brown: #6B4423;
+            --cream: #FAF9F6;
+            --text-dark: #1a1a1a;
+            --text-light: #666;
+        }
+        html, body {
+            height: 100%;
+        }
+        body {
+            min-height: 100%;
+            margin: 0;
+            padding: 0;
+            background: var(--cream);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', 'Roboto', sans-serif;
+            color: var(--text-dark);
+        }
+        .container {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 0 2vw 2vw 2vw;
+        }
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--accent-green);
+            text-decoration: none;
+            margin: 2.8rem 0 2rem 0;
+            font-weight: 600;
+            transition: transform 0.3s ease;
+            font-size: 1.03rem;
+        }
+        .back-button:hover { transform: translateX(-6px); }
+        /* Product Hero Area */
+        .product-hero {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 3.5rem;
+            align-items: stretch;
+        }
+        .gallery {
+            flex: 1 1 690px;
+            min-width: 320px;
+            max-width: 550px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: linear-gradient(120deg, #f0f7ee 50%, #e7f3e0 100%);
+            border-radius: 38px;
+            box-shadow: 0 18px 48px 0 rgba(76, 152, 72, 0.13);
+            padding: 2.2rem 2rem 1.3rem 2rem;
+        }
+        .main-image {
+            width: 105%;
+            max-width: 5000px;
+            aspect-ratio: 4/3;
+            min-height: 750px;
+            border-radius: 26px;
+            object-fit: cover;
+            box-shadow: 0 12px 36px rgba(44,120,56,0.13);
+            background: #e8f0e3;
+            border: 2.7px solid #eaf8de;
+            margin-bottom: 1.5rem;
+        }
+        .thumb-list {
+            display: flex;
+            gap: 0.8rem;
+            justify-content: center;
+        }
+        .thumb-list img {
+            width: 90px;
+            height: 67px;
+            object-fit: cover;
+            border-radius: 11px;
+            border: 2.8px solid #e2eedc;
+            cursor: pointer;
+            transition: border 0.18s;
+            background: #f3f7f4;
+        }
+        .thumb-list img.selected,
+        .thumb-list img:hover {
+            border: 2.8px solid var(--accent-green);
+        }
+        .details-text {
+            flex: 1 1 470px;
+            min-width: 336px;
+            padding: 2rem 0 2rem 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+        .header h1 {
+            font-size: 2.7rem;
+            font-weight: 800;
+            color: var(--primary-green);
+            margin-bottom: 0.7rem;
+            letter-spacing: -0.02em;
+        }
+        .subtitle {
+            font-size: 1.18rem;
+            color: var(--text-light);
+            margin-bottom: 1.3rem;
+            font-weight: 500;
+        }
+        .feature-bullets {
+            padding-left: 1rem;
+            color: var(--text-dark);
+            line-height: 1.85;
+            font-size: 1.07rem;
+            margin-bottom: 1.2rem;
+        }
+        .price-highlight {
+            font-size: 1.21rem;
+            color: var(--golden-yellow);
+            background: rgba(244,164,22,0.12);
+            font-weight: 700;
+            border-radius: 10px;
+            padding: 0.23em 1.1em;
+            margin-bottom: 1.2em;
+            display: inline-block;
+        }
+        .cta-hero {
+            margin-top: 0.8em;
+        }
+        .cta-btn {
+            background: linear-gradient(135deg, var(--primary-green) 70%, var(--accent-green));
+            color: #fff;
+            font-weight: 700;
+            border: none;
+            border-radius: 17px;
+            padding: 1.1em 2.5em;
+            font-size: 1.13rem;
+            cursor: pointer;
+            box-shadow: 0 5px 22px rgba(44,120,56,0.15);
+            transition: transform 0.13s, box-shadow 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .cta-btn:hover { transform: translateY(-2px) scale(1.03); box-shadow: 0 12px 30px rgba(76,170,72,0.18); }
+
+        /* Section Cards */
+        .section {
+            background: #fff;
+            border-radius: 20px;
+            margin-top: 2.5rem;
+            padding: 2.3rem 2.5rem 1.6rem 2.5rem;
+            box-shadow: 0 10px 32px rgba(44,120,56,0.05);
+        }
+        .section h2 {
+            color: var(--primary-green);
+            font-size: 1.45rem;
+            margin-bottom: 1.2rem;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            font-weight: 800;
+        }
+        .specs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(222px, 1fr));
+            gap: 1.15rem;
+            margin-top: 1.3rem;
+        }
+        .spec-item {
+            background: linear-gradient(125deg, #f7faf4 65%, #e8f0e3 100%);
+            border-radius: 12px;
+            border-left: 4px solid var(--accent-green);
+            padding: 0.97rem 1.1rem 0.81rem 1.1rem;
+            min-height: 60px;
+        }
+        .spec-label {
+            font-weight: 700;
+            font-size: 0.94rem;
+            color: var(--primary-green);
+            margin-bottom: 0.25em;
+        }
+        .spec-value {
+            color: var(--text-dark);
+            font-size: 1.07rem;
+            line-height: 1.5;
+        }
+        /* Shared card list style */
+        .features-list, .maintenance-schedule {
+            list-style: none;
+            padding-left: 0;
+        }
+        .features-list li {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 1em 0 1em 0;
+            background: #f7faf4;
+            border-radius: 10px;
+            margin-bottom: 0.7em;
+            font-size: 1.08rem;
+        }
+        .features-list li:before {
+            content: '✓';
+            color: #fff;
+            background: var(--accent-green);
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+            font-size: 1rem;
+        }
+        .how-it-works {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 2.2rem 1.3rem;
+        }
+        .step {
+            padding: 1.5em 0;
+        }
+        .step-number {
+            width: 52px;
+            height: 52px;
+            background: var(--accent-green);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            font-weight: 750;
+            margin: 0 auto 0.9rem auto;
+        }
+        .step h3 {
+            color: var(--primary-green);
+            font-size: 1.08rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .included-items {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(162px, 1fr));
+            gap: 1.3rem;
+        }
+        .item {
+            padding: 1.12rem 1.05rem;
+            background: linear-gradient(135deg, #e8f0e3, #f7faf4);
+            border-radius: 13px;
+            text-align: center;
+            font-size: 1.02rem;
+        }
+        .item-icon {
+            font-size: 2.2rem;
+            margin-bottom: 0.4rem;
+        }
+        .item-name {
+            font-weight: 700;
+            color: var(--primary-green);
+            margin-bottom: 0.19rem;
+        }
+        .item-detail {
+            font-size: 0.91rem;
+            color: var(--text-light);
+        }
+        .maintenance-item {
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+            padding: 1rem 1rem 1rem 0;
+            background: #f7faf4;
+            border-radius: 10px;
+            font-size: 1.08rem;
+            margin-bottom: 0.82rem;
+        }
+        .frequency {
+            background: var(--accent-green);
+            color: #fff;
+            padding: 0.37em 1.05em;
+            border-radius: 7px;
+            font-weight: 600;
+            font-size: 0.97rem;
+            white-space: nowrap;
+        }
+        .section:last-child, .cta-section {
+            margin-bottom: 0;
+        }
+        .cta-section {
+            background: linear-gradient(135deg, var(--primary-green), var(--accent-green) 77%);
+            text-align: center;
+            padding: 2rem 2rem;
+            border-radius: 22px;
+            color: #fff;
+            box-shadow: 0 8px 30px rgba(44,120,56,.13);
+            margin-top: 2.7rem;
+        }
+        .cta-section h2 {
+            color: #fff;
+            border: none;
+            margin-bottom: 1.07em;
+        }
+        .cta-section .cta-btn {
+            background: var(--golden-yellow);
+            color: #fff;
+        }
+        @media (max-width: 1050px) {
+            .container { padding: 0 1vw 1.5vw 1vw; }
+            .gallery { max-width:420px; padding:1.3rem; }
+            .main-image { max-width:370px; min-height:220px; }
+        }
+        @media (max-width: 800px) {
+            .product-hero { flex-direction:column; gap:1.5rem;}
+            .details-text { padding:0; margin-top:1rem;}
+        }
+        @media (max-width: 600px) {
+            .gallery { padding: 0.4rem; }
+            .main-image { border-radius: 15px; }
+            .section { padding: 1rem 0.4rem }
+        }
+    </style>
+    <script>
+    function selectImg(el) {
+        document.getElementById('mainImage').src = el.src;
+        document.querySelectorAll('.thumb-list img').forEach(i=>i.classList.remove('selected'));
+        el.classList.add('selected');
+    }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <a href="javascript:history.back()" class="back-button">← Back to Home</a>
+        <div class="product-hero">
+            <div class="gallery">
+                <img id="mainImage" src="static/trap_realV2.jpg" alt="Solar Trap" class="main-image"/>
+                <div class="thumb-list">
+                    <img src="static/trap_realV2.jpg" alt="Main" class="selected" onclick="selectImg(this)">
+                    <img src="static/trapV1.jpg" alt="Field Test" onclick="selectImg(this)">
+                    <img src="static/trap.jpg" alt="Angle" onclick="selectImg(this)">
+                    <img src="static/trapV2.jpg" alt="Field Test" onclick="selectImg(this)">
+                </div>
+            </div>
+            <div class="details-text">
+                <div class="header">
+                    <h1>Solar-Powered Insect Trap</h1>
+                    <div class="subtitle">Complete Technical Specifications & Details</div>
+                </div>
+                <ul class="feature-bullets">
+                    <li>100% Solar – ₹0 running cost</li>
+                        <li>Protects up to 0.5 acre/unit</li>
+                    <li>Chemical-Free • Eco-friendly</li>
+                    <li>Proven 70–80% pest reduction</li>
+                    <li>Low maintenance • IP44</li>
+                </ul>
+                <div class="price-highlight">₹2,800 – ₹3,700 per unit</div>
+                <div class="cta-hero">
+                     <a href="/marketplace" class="cta-btn">Pre-Order Now →</a>
+                </div>
+
+
+                <div style="display: flex; gap: 2.2rem; margin: 2em 0 1.4em 0; justify-content: center; align-items: flex-start;">
+    <div style="text-align:center;">
+        <span style="font-size: 2.6rem;">️<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sun-icon lucide-sun"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg> </span><br>
+        <span style="font-size: 1.15rem; color: var(--accent-green); font-weight: 700;">100% Solar</span>
+    </div>
+    <div style="text-align:center;">
+        <span style="font-size: 2.6rem;"> <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-cloud-fog-icon lucide-cloud-fog"><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/><path d="M16 17H7"/><path d="M17 21H9"/></svg>️</span><br>
+        <span style="font-size: 1.15rem; color: var(--accent-green); font-weight: 700;">IP44 Weatherproof</span>
+    </div>
+    <div style="text-align:center;">
+        <span style="font-size: 2.6rem;"><svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-flask-conical-off-icon lucide-flask-conical-off"><path d="M10 2v2.343"/><path d="M14 2v6.343"/><path d="m2 2 20 20"/><path d="M20 20a2 2 0 0 1-2 2H6a2 2 0 0 1-1.755-2.96l5.227-9.563"/><path d="M6.453 15H15"/><path d="M8.5 2h7"/></svg></span><br>
+        <span style="font-size: 1.15rem; color: var(--accent-green); font-weight: 700;">Chemical Free</span>
+    </div>
+    <div style="text-align:center;">
+        <span style="font-size: 2.6rem;"><svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-tractor-icon lucide-tractor"><path d="m10 11 11 .9a1 1 0 0 1 .8 1.1l-.665 4.158a1 1 0 0 1-.988.842H20"/><path d="M16 18h-5"/><path d="M18 5a1 1 0 0 0-1 1v5.573"/><path d="M3 4h8.129a1 1 0 0 1 .99.863L13 11.246"/><path d="M4 11V4"/><path d="M7 15h.01"/><path d="M8 10.1V4"/><circle cx="18" cy="18" r="2"/><circle cx="7" cy="15" r="5"/></svg></span><br>
+        <span style="font-size: 1.15rem; color: var(--accent-green); font-weight: 700;">0.5 Acre Cover</span>
+    </div>
+</div>
+
+<div style="background: #f7faf4; border-radius: 15px; padding: 1.3em 1.3em; display: flex; gap: 1.4em; align-items: center; margin-top: 0.4em; font-size: 1.13rem; box-shadow: 0 1.5px 12px rgba(44,120,56,0.08);">
+    <span style="font-size:1.7rem; color:var(--accent-green);"><svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-headset-icon lucide-headset"><path d="M3 11h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-5Zm0 0a9 9 0 1 1 18 0m0 0v5a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3Z"/><path d="M21 16v2a4 4 0 0 1-4 4h-5"/></svg></span>
+    <span style="color:var(--primary-green); font-weight:700;">
+        24/7 Customer Support: <span style="color:var(--accent-green)">Call or WhatsApp Anytime</span>
+    </span>
+</div>
+
+                <div style="margin-top: 1.7em; display: flex; align-items: center; gap: 2em;">
+    <span style="color: var(--text-light); font-size: 1.07rem; font-weight: 600;">&emsp;Backed By:</span>
+    <span style="font-size: 1.25rem; color: #49b12e; font-weight:700; display: flex; align-items:center;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-star-icon lucide-circle-star"><path d="M11.051 7.616a1 1 0 0 1 1.909.024l.737 1.452a1 1 0 0 0 .737.535l1.634.256a1 1 0 0 1 .588 1.806l-1.172 1.168a1 1 0 0 0-.282.866l.259 1.613a1 1 0 0 1-1.541 1.134l-1.465-.75a1 1 0 0 0-.912 0l-1.465.75a1 1 0 0 1-1.539-1.133l.258-1.613a1 1 0 0 0-.282-.867l-1.156-1.152a1 1 0 0 1 .572-1.822l1.633-.256a1 1 0 0 0 .737-.535z"/><circle cx="12" cy="12" r="10"/></svg> <span style="font-size:1.05rem;margin-left: 0.5em;">Govt. Certified</span>
+    </span>
+    <span style="font-size:1.22rem; color:#278be4;font-weight:700;display:flex;align-items:center;">
+        &emsp;<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-leaf-icon lucide-leaf"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg> <span style="font-size:1.05rem;margin-left: 0.5em;">PunjabAgro</span>
+    </span>
+</div>
+
+
+
+
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Technical Specifications</h2>
+            <div class="specs-grid">
+                <div class="spec-item"><div class="spec-label">Dimensions</div><div class="spec-value">45cm × 30cm × 25cm</div></div>
+                <div class="spec-item"><div class="spec-label">Weight</div><div class="spec-value">3.5 kg (Lightweight & Portable)</div></div>
+                <div class="spec-item"><div class="spec-label">Solar Panel</div><div class="spec-value">10W Polycrystalline</div></div>
+                <div class="spec-item"><div class="spec-label">Battery</div><div class="spec-value">12V 7Ah Rechargeable</div></div>
+                <div class="spec-item"><div class="spec-label">Coverage Area</div><div class="spec-value">0.5 - 1 Acre per Unit</div></div>
+                <div class="spec-item"><div class="spec-label">UV Light Wavelength</div><div class="spec-value">410-420nm (Optimal)</div></div>
+                <div class="spec-item"><div class="spec-label">Trap Chamber Capacity</div><div class="spec-value">500ml Sticky Collection</div></div>
+                <div class="spec-item"><div class="spec-label">Weatherproof Rating</div><div class="spec-value">IP44 (Dust & Water Resistant)</div></div>
+            </div>
+        </div>
+        <div class="section">
+            <h2>Performance Metrics</h2>
+            <ul class="features-list">
+                <li>Zero electricity cost — 100% solar powered</li>
+                <li>70-80% pest reduction in target area</li>
+                <li>6-8 hours charging time (full sunlight)</li>
+                <li>8-10 hours operating time per night</li>
+                <li>5+ year lifespan with proper maintenance</li>
+                <li>Works in all weather conditions</li>
+            </ul>
+        </div>
+        <div class="section">
+            <h2>How It Works</h2>
+            <div class="how-it-works">
+                <div class="step"><div class="step-number">1</div><h3>&emsp;&emsp;&emsp;&emsp;Solar Charging</h3><p>Charges during the day with a 10W solar panel, storing energy in a 12V battery.</p></div>
+                <div class="step"><div class="step-number">2</div><h3>&emsp;&emsp;&emsp;&emsp;Attract Pests</h3><p>UV LED lights (410-420nm) + fragrance lure attract insects at night.</p></div>
+                <div class="step"><div class="step-number">3</div><h3>&emsp;&emsp;&emsp;&emsp;Capture & Trap</h3><p>Brushless suction fan pulls insects into the sticky trap chamber.</p></div>
+                <div class="step"><div class="step-number">4</div><h3>&emsp;&emsp;&emsp;&emsp;Easy Collection</h3><p>Remove and replace sticky pad every 7-10 days — simple maintenance.</p></div>
+            </div>
+        </div>
+        <div class="section">
+            <h2>What's Included</h2>
+            <div class="included-items">
+                <div class="item"><div class="item-icon">🔆</div><div class="item-name">Solar Trap Unit</div><div class="item-detail">Complete assembled unit</div></div>
+                <div class="item"><div class="item-icon">📏</div><div class="item-name">Mounting Pole</div><div class="item-detail">Adjustable height</div></div>
+                <div class="item"><div class="item-icon">🔩</div><div class="item-name">Ground Stakes (4x)</div><div class="item-detail">For stable installation</div></div>
+                <div class="item"><div class="item-icon">🌸</div><div class="item-name">Fragrance Lure</div><div class="item-detail">30-day supply included</div></div>
+                <div class="item"><div class="item-icon">📄</div><div class="item-name">Sticky Pads (5x)</div><div class="item-detail">Replacement supply</div></div>
+                <div class="item"><div class="item-icon">📖</div><div class="item-name">User Manual</div><div class="item-detail">English, Hindi, Marathi</div></div>
+            </div>
+        </div>
+        <div class="section">
+            <h2>Maintenance Schedule</h2>
+            <div class="maintenance-schedule">
+                <div class="maintenance-item"><div class="frequency">Weekly</div> <div><strong>&emsp;Clean trap chamber</strong> — Remove debris and dead insects</div></div>
+                <div class="maintenance-item"><div class="frequency">Every 7-10 Days</div> <div><strong>&emsp;Replace sticky pads</strong> — When full or losing adhesion</div></div>
+                <div class="maintenance-item"><div class="frequency">Monthly</div> <div><strong>&emsp;Replace fragrance lure</strong> — Maintains optimal attraction</div></div>
+                <div class="maintenance-item"><div class="frequency">Quarterly</div> <div><strong>&emsp;Clean solar panel</strong> — Wipe with damp cloth for efficiency</div></div>
+                <div class="maintenance-item"><div class="frequency">Annually</div> <div><strong>&emsp;Battery check</strong> — Inspect connections and performance</div></div>
+            </div>
+        </div>
+        <div class="section">
+            <h2>Warranty & Support</h2>
+            <ul class="features-list">
+                <li>&emsp;1-Year Comprehensive Warranty</li>
+                <li>&emsp;Free replacement for manufacturing defects</li>
+                <li>&emsp;24/7 Customer Support (Phone & WhatsApp)</li>
+                <li>&emsp;Installation video tutorials available</li>
+                <li>&emsp;Spare parts readily available</li>
+                <li>&emsp;30-day money-back guarantee</li>
+            </ul>
+        </div>
+
+
+        <div class="section">
+            <h2>What Farmers Say</h2>
+            <div style="display:grid;gap:1.5rem;">
+                <blockquote style="font-size:1.09rem;color:#333;background:#f7faf4;padding:1.5em;border-radius:12px;border-left:4px solid var(--accent-green);margin:0;">
+                    "Saved 40% of my crop and reduced expenses. Installation was simple and support was excellent. Highly recommended!" <br><br>
+                    <span style="color:var(--accent-green);font-weight:700;">&emsp;– Gurpreet Singh, Punjab</span>
+                </blockquote>
+                <blockquote style="font-size:1.09rem;color:#333;background:#f7faf4;padding:1.5em;border-radius:12px;border-left:4px solid var(--accent-green);margin:0;">
+                    "No chemicals, no worries! It really keeps my field healthy and my yield is up."<br><br>
+                    <span style="color:var(--accent-green);font-weight:700;">&emsp;– Amandeep Kaur, Haryana</span>
+                </blockquote>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>KisanSeva vs. Traditional Pest Control</h2>
+            <table style="width:100%;border-collapse:collapse;font-size:1.08rem;overflow:hidden;border-radius:12px;">
+                <tr style="background:var(--accent-green);color:#fff;">
+                    <th style="padding:1em;text-align:left;">Feature</th>
+                    <th style="padding:1em;text-align:left;">KisanSeva Trap</th>
+                    <th style="padding:1em;text-align:left;">Chemical Sprays</th>
+                </tr>
+                <tr style="background:#f7faf4;">
+                    <td style="padding:0.8em;font-weight:600;">Safety</td>
+                    <td style="padding:0.8em;color:var(--accent-green);font-weight:600;">✓ Chemical-Free</td>
+                    <td style="padding:0.8em;color:#d32f2f;">✗ Risk of residue</td>
+                </tr>
+                <tr>
+                    <td style="padding:0.8em;font-weight:600;">Beneficial Insects</td>
+                    <td style="padding:0.8em;color:var(--accent-green);font-weight:600;">✓ Protected</td>
+                    <td style="padding:0.8em;color:#d32f2f;">✗ Not protected</td>
+                </tr>
+                <tr style="background:#f7faf4;">
+                    <td style="padding:0.8em;font-weight:600;">Running Cost</td>
+                    <td style="padding:0.8em;color:var(--accent-green);font-weight:600;">₹0 (Solar powered)</td>
+                    <td style="padding:0.8em;color:#d32f2f;">Recurring chemical cost</td>
+                </tr>
+                <tr>
+                    <td style="padding:0.8em;font-weight:600;">Lifespan</td>
+                    <td style="padding:0.8em;color:var(--accent-green);font-weight:600;">5+ Years</td>
+                    <td style="padding:0.8em;color:#d32f2f;">Seasonal only</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="section">
+            <h2>Frequently Asked Questions</h2>
+            <div style="display:grid;gap:1.2rem;">
+                <div style="padding:1.2em;background:#f7faf4;border-radius:12px;">
+                    <strong style="color:var(--primary-green);font-size:1.08rem;">Q: Does it need maintenance?</strong><br><br>
+                    <span style="color:var(--text-dark);">Only basic cleaning and sticky pad change every 7-10 days. Very simple!</span>
+                </div>
+                <div style="padding:1.2em;background:#f7faf4;border-radius:12px;">
+                    <strong style="color:var(--primary-green);font-size:1.08rem;">Q: How much area can one unit protect?</strong><br><br>
+                    <span style="color:var(--text-dark);">Each trap covers 0.5 to 1 acre very effectively, depending on pest density.</span>
+                </div>
+                <div style="padding:1.2em;background:#f7faf4;border-radius:12px;">
+                    <strong style="color:var(--primary-green);font-size:1.08rem;">Q: Can I install this myself?</strong><br><br>
+                    <span style="color:var(--text-dark);">Yes! It arrives ready-to-assemble and includes all instructions. Takes about 30 minutes.</span>
+                </div>
+                <div style="padding:1.2em;background:#f7faf4;border-radius:12px;">
+                    <strong style="color:var(--primary-green);font-size:1.08rem;">Q: What if there's no sun for several days?</strong><br><br>
+                    <span style="color:var(--text-dark);">The 12V battery stores enough power for 3-4 nights of operation without sunlight.</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Easy Installation Guide</h2>
+            <ol style="font-size:1.07rem;color:var(--text-dark);padding-left:1.2em;line-height:1.8;">
+                <li style="margin-bottom:0.8em;"><strong>Unpack and assemble</strong> the mounting pole (5 minutes)</li>
+                <li style="margin-bottom:0.8em;"><strong>Attach solar panel</strong> and trap chamber to pole</li>
+                <li style="margin-bottom:0.8em;"><strong>Insert sticky pad</strong> and fragrance cartridge</li>
+                <li style="margin-bottom:0.8em;"><strong>Anchor the unit</strong> and connect battery</li>
+                <li style="margin-bottom:0.8em;"><strong>Test operation</strong> – you're ready to go!</li>
+            </ol>
+            <p style="margin-top:1.5em;padding:1em;background:rgba(244,164,22,0.1);border-radius:10px;border-left:4px solid var(--golden-yellow);">
+                💡 <strong>Pro tip:</strong> Watch our <a href="/knowledge-exchange" style="color:var(--accent-green);font-weight:600;">video tutorial</a> for visual step-by-step guidance!
+            </p>
+        </div>
+
+
+        <div class="cta-section">
+            <h2>Ready to Protect Your Crops?</h2>
+            <p style="font-size: 1.18rem; margin-bottom: 1rem;">Starting at ₹2,800 – Zero electricity costs forever</p>
+            <a href="/marketplace" class="cta-btn">Pre-Order Now →</a>
+        </div>
+    </div>
+</body>
+</html>

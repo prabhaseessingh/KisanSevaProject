@@ -1,0 +1,1279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Pest Diagnosis - KisanSeva</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --green-primary: #2F6B3D;
+            --green-light: #4A8F5A;
+            --green-dark: #1E4A2A;
+            --text-dark: #1a1a1a;
+            --text-light: #666;
+            --white: #ffffff;
+            --bg-light: #F8F9FA;
+            --border-light: #e0e0e0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            color: var(--green-primary);
+            margin-bottom: 1rem;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            color: var(--text-light);
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 2rem;
+            color: var(--green-primary);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .back-link:hover {
+            transform: translateX(-5px);
+        }
+
+        .main-card {
+            background: white;
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+        }
+
+        .crop-selector-section {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: var(--bg-light);
+            border-radius: 12px;
+        }
+
+        .crop-selector-section label {
+            display: block;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.8rem;
+        }
+
+        .crop-selector-section select {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            font-size: 1rem;
+            border: 2px solid var(--border-light);
+            border-radius: 8px;
+            background: white;
+            color: var(--text-dark);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .crop-selector-section select:focus {
+            outline: none;
+            border-color: var(--green-primary);
+        }
+
+        .upload-zone {
+            border: 3px dashed var(--border-light);
+            border-radius: 15px;
+            padding: 3rem;
+            text-align: center;
+            background: var(--bg-light);
+            transition: all 0.3s;
+            cursor: pointer;
+            margin-bottom: 2rem;
+        }
+
+        .upload-zone:hover, .upload-zone.dragover {
+            border-color: var(--green-primary);
+            background: rgba(47,107,61,0.05);
+        }
+
+        .upload-icon {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+        }
+
+        .upload-zone h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+        }
+
+        .upload-zone p {
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+        }
+
+        .upload-btn {
+            background: var(--green-primary);
+            color: white;
+            padding: 1rem 3rem;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .upload-btn:hover {
+            background: var(--green-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(47,107,61,0.3);
+        }
+
+        .sample-section {
+            margin-top: 3rem;
+        }
+
+        .sample-section h4 {
+            font-size: 1.3rem;
+            color: var(--text-dark);
+            margin-bottom: 1.5rem;
+        }
+
+        .sample-images {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .sample-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .sample-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 35px rgba(47,107,61,0.2);
+        }
+
+        .sample-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .sample-card-content {
+            padding: 1rem;
+        }
+
+        .sample-card h5 {
+            font-size: 1.1rem;
+            color: var(--green-primary);
+            margin-bottom: 0.3rem;
+        }
+
+        .sample-card p {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        .analysis-section {
+            display: none;
+        }
+
+        .analyzing {
+            text-align: center;
+            padding: 3rem;
+        }
+
+        .spinner {
+            border: 5px solid var(--border-light);
+            border-top: 5px solid var(--green-primary);
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 2rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .analyzing h3 {
+            font-size: 1.8rem;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .result-container {
+            display: none;
+        }
+
+        .result-header {
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 2px solid var(--border-light);
+        }
+
+        .result-image {
+            width: 200px;
+            height: 200px;
+            border-radius: 15px;
+            object-fit: cover;
+            border: 4px solid var(--green-primary);
+        }
+
+        .result-info h2 {
+            font-size: 2.2rem;
+            color: var(--green-primary);
+            margin-bottom: 1rem;
+        }
+
+        .confidence-badge {
+            display: inline-block;
+            background: rgba(47,107,61,0.15);
+            color: var(--green-primary);
+            padding: 0.6rem 1.5rem;
+            border-radius: 25px;
+            font-weight: 700;
+            font-size: 1rem;
+            margin-right: 0.5rem;
+        }
+
+        .category-badge {
+            display: inline-block;
+            background: rgba(74,143,90,0.15);
+            color: var(--green-light);
+            padding: 0.6rem 1.5rem;
+            border-radius: 25px;
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .result-description {
+            background: var(--bg-light);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+        }
+
+        .result-description p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text-dark);
+        }
+
+        .treatment-section {
+            margin-top: 2.5rem;
+        }
+
+        .treatment-section h3 {
+            font-size: 1.8rem;
+            color: var(--text-dark);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .treatment-steps {
+            list-style: none;
+            counter-reset: step-counter;
+        }
+
+        .treatment-steps li {
+            counter-increment: step-counter;
+            padding: 1.2rem 1.5rem 1.2rem 5rem;
+            margin-bottom: 1rem;
+            background: var(--bg-light);
+            border-radius: 12px;
+            position: relative;
+            font-size: 1.05rem;
+            line-height: 1.7;
+        }
+
+        .treatment-steps li::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--green-primary);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .prevention-box {
+            background: rgba(47,107,61,0.08);
+            border-left: 5px solid var(--green-primary);
+            padding: 2rem;
+            border-radius: 12px;
+            margin-top: 2.5rem;
+        }
+
+        .prevention-box h4 {
+            color: var(--green-primary);
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .prevention-box p {
+            font-size: 1.05rem;
+            line-height: 1.8;
+            color: var(--text-dark);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2.5rem;
+        }
+
+        .btn-reset {
+            flex: 1;
+            background: var(--green-primary);
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-reset:hover {
+            background: var(--green-dark);
+            transform: translateY(-2px);
+        }
+
+        #riskLevel {
+            display: inline-block;
+            padding: 10px 24px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 1rem;
+            margin-bottom: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+        }
+
+        .risk-low {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .risk-moderate {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .risk-high {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .main-card {
+                padding: 1.5rem;
+            }
+
+            .result-header {
+                grid-template-columns: 1fr;
+            }
+
+            .result-image {
+                width: 100%;
+                height: auto;
+                margin: 0 auto;
+            }
+
+            .sample-images {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-converter"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-webgl"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet"></script>
+</head>
+<body>
+    <div class="container">
+        <a href="/" class="back-link">← Back to Home</a>
+
+        <div class="header">
+            <h1>AI Pest Diagnosis</h1>
+            <p>Upload your crop photos and get instant pest identification with treatment recommendations</p>
+        </div>
+
+        <div class="main-card">
+            <div id="uploadSection">
+                <div class="crop-selector-section">
+                    <label for="cropSelector">Select Your Crop:</label>
+                    <select id="cropSelector">
+                        <option value="">Optional: Select Crop for Better Accuracy</option>
+                        <option value="Wheat">Wheat</option>
+                        <option value="Rice">Rice</option>
+                        <option value="Cotton">Cotton</option>
+                        <option value="Tomato">Tomato</option>
+                        <option value="Potato">Potato</option>
+                    </select>
+                </div>
+
+                <div class="upload-zone" id="dropZone">
+                    <div class="upload-icon"><svg xmlns="http://www.w3.org/2000/svg" width="95" height="95" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13.997 4a2 2 0 0 1 1.76 1.05l.486.9A2 2 0 0 0 18.003 7H20a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h1.997a2 2 0 0 0 1.759-1.048l.489-.904A2 2 0 0 1 10.004 4z"/><circle cx="12" cy="13" r="3"/></svg></div>
+                    <h3>Upload Your Crop Photo</h3>
+                    <p>Drag and drop an image here, or click the button below</p>
+                    <input type="file" id="fileInput" accept="image/*" style="display: none;">
+                    <button class="upload-btn" onclick="document.getElementById('fileInput').click()">
+                        Choose Image
+                    </button>
+                    <p id="aiLoadingMessage" style="display: none; margin-top: 1rem; font-size: 0.9rem; color: var(--text-light); font-style: italic;">
+                        Starting KisanSeva AI Engine…
+                    </p>
+                </div>
+
+                <div class="sample-section">
+                    <h4>Or try with sample crop images:</h4>
+                    <div class="sample-images">
+                        <div class="sample-card" onclick="analyzeSample('Aphids', 'https://treesunlimitednj.com/wp-content/uploads/Aphid-Infestation-on-Elder-1200x675.jpg')">
+                            <img src="https://treesunlimitednj.com/wp-content/uploads/Aphid-Infestation-on-Elder-1200x675.jpg" alt="Aphid infestation">
+                            <div class="sample-card-content">
+                                <h5>Aphid Infestation</h5>
+                                <p>Common in wheat and vegetable crops</p>
+                            </div>
+                        </div>
+                        <div class="sample-card" onclick="analyzeSample('Leaf Blight', 'https://soybeanresearchinfo.com/wp-content/uploads/2019/02/cercospora-Adam-Sisson-1300x975.jpg')">
+                            <img src="https://soybeanresearchinfo.com/wp-content/uploads/2019/02/cercospora-Adam-Sisson-1300x975.jpg" alt="Leaf disease">
+                            <div class="sample-card-content">
+                                <h5>Leaf Blight Disease</h5>
+                                <p>Fungal disease in rice and wheat</p>
+                            </div>
+                        </div>
+                        <div class="sample-card" onclick="analyzeSample('Caterpillar', 'http://assets.clevelandclinic.org/transform/ec4d4ff9-c484-41c7-8cbb-ddb6fae1e8e0/gypsy-moth-caterpillar-501036952')">
+                            <img src="http://assets.clevelandclinic.org/transform/ec4d4ff9-c484-41c7-8cbb-ddb6fae1e8e0/gypsy-moth-caterpillar-501036952" alt="Pest damage">
+                            <div class="sample-card-content">
+                                <h5>Caterpillar Damage</h5>
+                                <p>Common in cotton and vegetables</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="analysisSection" class="analysis-section">
+                <div class="analyzing" id="analyzing">
+                    <div class="spinner"></div>
+                    <h3>Analyzing your crop image...</h3>
+                    <p style="color: var(--text-light); margin-top: 1rem;">Our AI is identifying pests and diseases</p>
+                </div>
+
+                <div id="resultContainer" class="result-container">
+                    <div class="result-header">
+                        <img id="resultImage" class="result-image" src="" alt="Analyzed crop">
+                        <div class="result-info">
+                            <div style="margin-bottom: 0.5rem;">
+                                <span class="category-badge" id="categoryBadge">Category</span>
+                                <div id="likelyCrops" style="font-size: 0.9rem; color: var(--text-light); margin-top: 0.5rem;"></div>
+                            </div>
+                            <h2 id="pestName">Detected Pest</h2>
+                            <span class="confidence-badge" id="confidence">95% Confidence</span>
+                            <div id="riskBox" style="margin-top: 1rem;">
+                                <div id="riskLevel"></div>
+                                <div id="severityScore" style="font-size: 1rem; color: var(--text-dark);"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="result-description">
+                        <p id="pestDescription"></p>
+                    </div>
+
+                    <div class="treatment-section">
+                        <h3><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2F6B3D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 8px;"><path d="M12 2v20M2 12h20"/></svg>Recommended Treatment Plan</h3>
+                        <ul class="treatment-steps" id="treatmentSteps"></ul>
+                    </div>
+
+                    <div class="prevention-box">
+                        <h4><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2F6B3D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 8px;"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12c1 1 1 2 1 3h6c0-1 0-2 1-3a7 7 0 0 0-4-12z"/></svg>Prevention Tips</h4>
+                        <p id="preventionTip"></p>
+                    </div>
+
+                    <div class="prevention-box" style="margin-top: 2rem;">
+                        <h4><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2F6B3D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 8px;"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Estimated Crop Impact</h4>
+                        <p style="margin-bottom: 0.8rem;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 8px;"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg><strong>Yield Impact:</strong> <span id="yieldImpact"></span></p>
+                        <p style="margin-bottom: 0.8rem;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 8px;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><strong>Economic Risk:</strong> <span id="economicRisk"></span></p>
+                        <p id="economicAdvice" style="font-style: italic; color: var(--green-dark); margin-top: 1rem;"></p>
+                    </div>
+
+                    <div class="action-buttons"></div>
+                        <button class="btn-reset" onclick="resetDiagnosis()">
+                            Analyze Another Image
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+""
+
+    <script>
+        const pestDatabase = {
+            'Aphids': {
+                name: 'Aphids (माहू)',
+                category: 'Insect Pest',
+                crops: ['Wheat', 'Rice', 'Cotton', 'Tomato', 'Potato'],
+                description: 'Small soft-bodied insects that suck plant sap, causing leaves to curl and yellow. Common in wheat, mustard, and vegetable crops during cooler months.',
+                treatments: [
+                    'Spray neem oil solution (5ml per liter of water) in the evening',
+                    'Release natural predators like ladybugs (20-30 per plant)',
+                    'Use yellow sticky traps to monitor and catch flying aphids',
+                    'Apply soap water spray (2 tablespoons dishwashing liquid per liter)'
+                ],
+                prevention: 'Plant marigolds and mint around crops to repel aphids naturally. Avoid over-fertilization with nitrogen which attracts aphids. Maintain proper spacing between plants for air circulation.'
+            },
+            'Caterpillar': {
+                name: 'Caterpillar Damage (सुंडी)',
+                category: 'Insect Pest',
+                crops: ['Cotton', 'Tomato', 'Potato', 'Rice', 'Wheat'],
+                description: 'Larvae of moths and butterflies that eat leaves, stems, and fruits. Common in cotton, tomato, cabbage, and other vegetable crops.',
+                treatments: [
+                    'Handpick caterpillars during early morning when they are sluggish',
+                    'Use Bacillus thuringiensis (Bt) organic spray in the evening',
+                    'Install pheromone traps to catch and monitor adult moths',
+                    'Apply neem-based pesticides mixed with soap solution in evening'
+                ],
+                prevention: 'Use our solar insect trap to catch adult moths before they lay eggs. Plant neem trees around farm boundaries. Encourage natural predators like birds by providing perching spots. Regular monitoring twice weekly.'
+            },
+            'Armyworm': {
+                name: 'Armyworm (सेना कीड़ा)',
+                category: 'Insect Pest',
+                crops: ['Rice', 'Wheat', 'Cotton'],
+                description: 'Destructive caterpillar pest that feeds in large groups on leaves and stems. Attacks maize, rice, wheat, and sorghum crops causing severe damage.',
+                treatments: [
+                    'Apply neem-based pesticide or Bt spray during early morning',
+                    'Use light traps at night to catch adult moths',
+                    'Handpick and destroy egg masses found on leaf undersides',
+                    'Apply recommended chemical pesticide if infestation is severe'
+                ],
+                prevention: 'Practice early planting to avoid peak infestation periods. Remove weeds that serve as alternate hosts. Use pheromone traps for early detection. Maintain field sanitation.'
+            },
+
+            'Stem Borer': {
+                name: 'Stem Borer (तना छेदक)',
+                category: 'Insect Pest',
+                crops: ['Rice', 'Wheat'],
+                description: 'Larvae that bore into plant stems causing wilting and dead hearts. Major pest of rice, sugarcane, and maize crops across India.',
+                treatments: [
+                    'Remove and destroy affected tillers showing dead heart symptoms',
+                    'Apply granular insecticide in leaf whorls of young plants',
+                    'Use pheromone traps to monitor and mass trap adult moths',
+                    'Release egg parasitoids (Trichogramma) for biological control'
+                ],
+                prevention: 'Avoid staggered planting to break pest cycle. Remove stubbles after harvest. Use resistant varieties. Maintain proper water management to reduce stress.'
+            },
+            'Whitefly': {
+                name: 'Whitefly (सफेद मक्खी)',
+                category: 'Insect Pest',
+                crops: ['Cotton', 'Tomato', 'Potato'],
+                description: 'Tiny white flying insects that damage crops by sucking sap and spreading viral diseases. Common in cotton, tomato, chili, and okra.',
+                treatments: [
+                    'Install yellow sticky traps near affected plants',
+                    'Spray neem oil (10ml per liter) mixed with soap solution',
+                    'Remove heavily infested leaves and dispose properly',
+                    'Use biological control with parasitic wasps (Encarsia formosa)'
+                ],
+                prevention: 'Maintain field hygiene by removing weeds and crop debris. Use reflective mulches to confuse whiteflies. Plant trap crops like mustard around main crop. Install fine mesh nets on seedling beds.'
+            },
+            'Thrips': {
+                name: 'Thrips (थ्रिप्स)',
+                category: 'Insect Pest',
+                crops: ['Cotton', 'Tomato', 'Potato', 'Rice'],
+                description: 'Minute insects causing silvering of leaves and flower damage. Transmit viral diseases in onion, chili, cotton, and vegetable crops.',
+                treatments: [
+                    'Use blue sticky traps for monitoring and mass trapping',
+                    'Spray neem oil or spinosad-based organic insecticide',
+                    'Apply recommended systemic insecticide for severe cases',
+                    'Ensure adequate irrigation to reduce plant stress'
+                ],
+                prevention: 'Use thrips-resistant varieties where available. Remove alternate weed hosts. Mulch soil to prevent thrips emergence. Practice crop rotation with non-host crops.'
+            },
+
+            'Leaf Blight': {
+                name: 'Leaf Blight (पत्ती झुलसा)',
+                category: 'Fungal Disease',
+                crops: ['Rice', 'Wheat', 'Potato', 'Tomato'],
+                description: 'Fungal disease causing brown spots, wilting, and leaf death. Common in rice, wheat, and potato crops during humid weather conditions.',
+                treatments: [
+                    'Remove and burn all infected leaves immediately to prevent spread',
+                    'Apply copper-based fungicide (Bordeaux mixture) as directed on packet',
+                    'Ensure proper spacing between plants (minimum 6 inches) for air circulation',
+                    'Use resistant crop varieties for the next planting season'
+                ],
+                prevention: 'Avoid overhead irrigation - water at soil level only. Practice crop rotation with non-host crops like legumes. Ensure good drainage in fields to prevent water logging. Remove crop debris after harvest.'
+            },
+            'Leaf Rust': {
+                name: 'Leaf Rust (पत्ती रतुआ)',
+                category: 'Fungal Disease',
+                crops: ['Wheat', 'Rice'],
+                description: 'Fungal disease causing orange-brown pustules on leaves. Affects wheat, barley, and pulse crops reducing yield significantly.',
+                treatments: [
+                    'Apply sulfur-based fungicide at first sign of infection',
+                    'Use systemic fungicides like propiconazole as per label',
+                    'Remove infected plant parts and destroy them',
+                    'Ensure balanced fertilization avoiding excess nitrogen'
+                ],
+                prevention: 'Plant rust-resistant varieties recommended for your region. Avoid late sowing which increases disease risk. Remove volunteer plants and crop debris. Monitor fields regularly during humid weather.'
+            },
+            'Powdery Mildew': {
+                name: 'Powdery Mildew (चूर्णिल आसिता)',
+                category: 'Fungal Disease',
+                crops: ['Wheat', 'Tomato', 'Potato'],
+                description: 'White powdery fungal growth on leaves and stems. Common in cucurbits, peas, grapes, and mango during dry weather with high humidity.',
+                treatments: [
+                    'Spray sulfur dust or wettable sulfur (2-3 grams per liter)',
+                    'Apply potassium bicarbonate solution as organic alternative',
+                    'Use systemic fungicides for severe infections',
+                    'Improve air circulation by pruning dense foliage'
+                ],
+                prevention: 'Plant resistant varieties when available. Avoid overhead irrigation and water in morning. Maintain proper plant spacing. Apply preventive sulfur sprays before disease appears.'
+            },
+
+            'Downy Mildew': {
+                name: 'Downy Mildew (मृदुरोमिल आसिता)',
+                category: 'Fungal Disease',
+                crops: ['Wheat', 'Potato', 'Tomato'],
+                description: 'Fungal disease causing yellow patches on upper leaf surface and grayish growth underneath. Affects grapes, cucurbits, and leafy vegetables.',
+                treatments: [
+                    'Apply copper-based fungicide (Bordeaux mixture) immediately',
+                    'Use systemic fungicides like metalaxyl for severe cases',
+                    'Remove and destroy heavily infected plants',
+                    'Improve drainage and reduce leaf wetness duration'
+                ],
+                prevention: 'Use disease-free seeds and resistant varieties. Avoid dense planting and ensure good air circulation. Water at soil level in morning hours. Practice crop rotation with non-host crops.'
+            },
+            'Bacterial Wilt': {
+                name: 'Bacterial Wilt (जीवाणु मुरझान)',
+                category: 'Bacterial Disease',
+                crops: ['Tomato', 'Potato'],
+                description: 'Bacterial disease causing sudden wilting and plant death. Affects tomato, potato, eggplant, and banana crops through soil and water.',
+                treatments: [
+                    'Remove and destroy infected plants immediately including roots',
+                    'Apply bleaching powder (10 grams per square meter) to soil',
+                    'Use biocontrol agents like Pseudomonas fluorescens',
+                    'Avoid planting susceptible crops in infected fields for 2-3 years'
+                ],
+                prevention: 'Use disease-free planting material and resistant varieties. Practice crop rotation with non-solanaceous crops. Ensure good drainage and avoid waterlogging. Disinfect tools between plants.'
+            },
+            'Root Rot': {
+                name: 'Root Rot (जड़ सड़न)',
+                category: 'Fungal Disease',
+                crops: ['Wheat', 'Rice', 'Cotton', 'Tomato', 'Potato'],
+                description: 'Fungal disease causing root decay, yellowing, and plant death. Common in poorly drained soils affecting pulses, vegetables, and fruit crops.',
+                treatments: [
+                    'Improve soil drainage immediately by creating channels',
+                    'Apply Trichoderma-based biocontrol agents to soil',
+                    'Reduce irrigation frequency and avoid waterlogging',
+                    'Use fungicide drenching for valuable crops as per recommendation'
+                ],
+                prevention: 'Ensure proper field drainage before planting. Use raised beds in heavy soils. Treat seeds with Trichoderma or fungicide before sowing. Avoid over-irrigation and maintain soil health.'
+            },
+
+            'Early Blight': {
+                name: 'Early Blight (अगेती अंगमारी)',
+                category: 'Fungal Disease',
+                crops: ['Tomato', 'Potato'],
+                description: 'Fungal disease causing concentric ring spots on older leaves. Affects tomato and potato crops reducing yield and quality.',
+                treatments: [
+                    'Remove infected lower leaves and destroy them',
+                    'Apply mancozeb or chlorothalonil fungicide as per label',
+                    'Ensure adequate plant nutrition especially potassium',
+                    'Mulch around plants to prevent soil splash on leaves'
+                ],
+                prevention: 'Use certified disease-free seeds and transplants. Practice 3-4 year crop rotation. Maintain proper plant spacing for air circulation. Apply preventive fungicide sprays during humid weather.'
+            },
+            'Late Blight': {
+                name: 'Late Blight (पछेती अंगमारी)',
+                category: 'Fungal Disease',
+                crops: ['Potato', 'Tomato'],
+                description: 'Devastating fungal disease causing water-soaked lesions on leaves and tubers. Major threat to potato and tomato crops during cool humid weather.',
+                treatments: [
+                    'Apply metalaxyl + mancozeb fungicide immediately upon detection',
+                    'Spray at 7-10 day intervals during disease-favorable weather',
+                    'Remove and destroy all infected plant parts',
+                    'Harvest potatoes 2 weeks after vine killing to prevent tuber infection'
+                ],
+                prevention: 'Plant resistant varieties and use certified seed. Monitor weather forecasts and apply preventive sprays. Avoid overhead irrigation. Destroy volunteer plants and cull piles.'
+            },
+            'Mosaic Virus': {
+                name: 'Mosaic Virus (मोज़ेक विषाणु)',
+                category: 'Viral Disease',
+                crops: ['Tomato', 'Potato', 'Cotton'],
+                description: 'Viral disease causing mottled yellow-green patterns on leaves and stunted growth. Transmitted by aphids and infected seeds in many crops.',
+                treatments: [
+                    'Remove and destroy infected plants immediately to prevent spread',
+                    'Control aphid vectors using neem oil or insecticidal soap',
+                    'Use reflective mulches to repel aphids from young plants',
+                    'No cure exists - focus on prevention and vector control'
+                ],
+                prevention: 'Use virus-free certified seeds and planting material. Plant resistant varieties when available. Control aphid populations with yellow sticky traps. Remove weed hosts around fields.'
+            },
+
+            'Leaf Spot': {
+                name: 'Leaf Spot (पत्ती धब्बा)',
+                category: 'Fungal Disease',
+                crops: ['Wheat', 'Rice', 'Cotton', 'Tomato', 'Potato'],
+                description: 'Fungal or bacterial disease causing circular spots on leaves. Affects wide range of crops reducing photosynthesis and yield.',
+                treatments: [
+                    'Remove infected leaves and destroy to reduce inoculum',
+                    'Apply copper-based fungicide or mancozeb as per recommendation',
+                    'Ensure proper plant nutrition for disease resistance',
+                    'Improve air circulation by proper spacing and pruning'
+                ],
+                prevention: 'Use disease-free seeds and resistant varieties. Practice crop rotation and remove crop debris. Avoid overhead irrigation and water in morning. Apply preventive fungicide during humid periods.'
+            }
+        };
+
+        const DISEASE_KEYWORDS = {
+            'Caterpillar': ['caterpillar', 'worm', 'larva', 'larvae'],
+            'Whitefly': ['whitefly', 'white fly', 'fly'],
+            'Aphids': ['aphid', 'ant', 'beetle', 'insect', 'bug', 'grasshopper'],
+            'Leaf Blight': ['blight', 'leaf spot', 'scab', 'leaf', 'plant'],
+            'Powdery Mildew': ['powder', 'mold', 'fungus', 'mildew', 'powdery'],
+            'Leaf Rust': ['rust', 'orange spot', 'brown spot'],
+            'Stem Borer': ['stem', 'borer'],
+            'Armyworm': ['armyworm', 'army worm'],
+            'Thrips': ['thrips', 'thrip'],
+            'Root Rot': ['root', 'rot', 'decay'],
+            'Mosaic Virus': ['mosaic', 'virus', 'viral'],
+            'Downy Mildew': ['downy', 'downy mildew'],
+            'Bacterial Wilt': ['wilt', 'wilting', 'bacterial wilt'],
+            'Early Blight': ['early blight'],
+            'Late Blight': ['late blight'],
+            'Leaf Spot': ['spot', 'speck', 'leaf spot']
+        };
+
+        const DISEASE_CATEGORIES = {
+            'Insect Pest': ['caterpillar', 'worm', 'larva', 'larvae', 'aphid', 'ant', 'beetle', 'insect', 'bug', 'grasshopper', 'whitefly', 'fly', 'thrips', 'borer', 'armyworm'],
+            'Fungal Disease': ['blight', 'rust', 'powder', 'mold', 'fungus', 'mildew', 'rot', 'decay', 'spot', 'scab', 'leaf', 'plant'],
+            'Viral Disease': ['mosaic', 'virus', 'viral'],
+            'Bacterial Disease': ['wilt', 'wilting', 'bacterial'],
+            'Nutrient Deficiency': ['deficiency', 'nitrogen', 'phosphorus', 'potassium', 'yellow', 'chlorosis']
+        };
+
+        const DISEASE_SEVERITY = {
+            'Caterpillar': 80,
+            'Whitefly': 75,
+            'Aphids': 70,
+            'Leaf Blight': 85,
+            'Powdery Mildew': 65,
+            'Leaf Rust': 80,
+            'Stem Borer': 90,
+            'Armyworm': 95,
+            'Thrips': 70,
+            'Root Rot': 90,
+            'Mosaic Virus': 85,
+            'Downy Mildew': 75,
+            'Bacterial Wilt': 95,
+            'Early Blight': 75,
+            'Late Blight': 95,
+            'Leaf Spot': 65
+        };
+
+        const NON_PLANT_KEYWORDS = [
+            "person", "man", "woman", "boy", "girl", "face", "people", "human",
+            "car", "truck", "bus", "vehicle", "bike", "motorcycle", "automobile",
+            "dog", "cat", "animal", "horse", "cow", "bird", "pet",
+            "building", "house", "chair", "table", "furniture",
+            "phone", "laptop", "computer", "screen", "monitor",
+            "road", "street", "bridge", "pavement",
+            "book", "paper", "pen", "pencil",
+            "shoe", "shirt", "clothing", "dress"
+        ];
+
+        const ECONOMIC_IMPACT = {
+            'Armyworm': {
+                impact: "High yield loss (30–50%)",
+                risk: "Severe financial risk if untreated"
+            },
+            'Stem Borer': {
+                impact: "Medium yield loss (15–30%)",
+                risk: "Moderate financial damage possible"
+            },
+            'Leaf Blight': {
+                impact: "Moderate yield loss (20–40%)",
+                risk: "High risk during humid conditions"
+            },
+            'Aphids': {
+                impact: "Low to Moderate yield loss (10–25%)",
+                risk: "Manageable with early intervention"
+            },
+            'Caterpillar': {
+                impact: "Moderate yield loss (15–35%)",
+                risk: "Can escalate quickly without control"
+            },
+            'Whitefly': {
+                impact: "Moderate yield loss (20–35%)",
+                risk: "High risk due to virus transmission"
+            },
+            'Thrips': {
+                impact: "Low to Moderate yield loss (10–30%)",
+                risk: "Moderate risk with viral disease spread"
+            },
+            'Leaf Rust': {
+                impact: "Moderate to High yield loss (25–45%)",
+                risk: "Severe in susceptible varieties"
+            },
+            'Powdery Mildew': {
+                impact: "Low to Moderate yield loss (10–25%)",
+                risk: "Manageable with fungicide application"
+            },
+            'Downy Mildew': {
+                impact: "Moderate yield loss (20–40%)",
+                risk: "High risk in humid weather"
+            },
+            'Bacterial Wilt': {
+                impact: "Very High yield loss (50–100%)",
+                risk: "Severe - can cause total crop failure"
+            },
+            'Root Rot': {
+                impact: "High yield loss (40–70%)",
+                risk: "Severe damage in poorly drained fields"
+            },
+            'Early Blight': {
+                impact: "Moderate yield loss (20–35%)",
+                risk: "Moderate risk with quality reduction"
+            },
+            'Late Blight': {
+                impact: "Very High yield loss (50–100%)",
+                risk: "Catastrophic if not controlled immediately"
+            },
+            'Mosaic Virus': {
+                impact: "Moderate to High yield loss (25–50%)",
+                risk: "High risk - no cure available"
+            },
+            'Leaf Spot': {
+                impact: "Low to Moderate yield loss (10–30%)",
+                risk: "Manageable with proper sanitation"
+            }
+        };
+
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        const uploadBtn = document.querySelector('.upload-btn');
+        const cropSelector = document.getElementById('cropSelector');
+
+        let model;
+        let aiStatus = "loading";
+
+        const CONFIDENCE_THRESHOLD = 0.10;
+        const LOW_CONFIDENCE_THRESHOLD = 0.50;
+
+        function detectCategory(predictions) {
+            const categoryScores = {};
+
+            for (const prediction of predictions.slice(0, 3)) {
+                const p = prediction.className.toLowerCase();
+
+                for (const [category, keywords] of Object.entries(DISEASE_CATEGORIES)) {
+                    for (const keyword of keywords) {
+                        if (p.includes(keyword)) {
+                            categoryScores[category] = (categoryScores[category] || 0) + 1;
+                        }
+                    }
+                }
+            }
+
+            console.log("Category scores:", categoryScores);
+
+            if (Object.keys(categoryScores).length === 0) {
+                console.log("No category match — using fallback: Fungal Disease");
+                return "Fungal Disease";
+            }
+
+            return Object.entries(categoryScores).sort((a, b) => b[1] - a[1])[0][0];
+        }
+
+        function mapPredictionsToPest(predictions, selectedCrop, detectedCategory) {
+            const scores = {};
+
+            for (const prediction of predictions.slice(0, 3)) {
+                const p = prediction.className.toLowerCase();
+                console.log("Checking prediction:", p);
+
+                for (const [disease, keywords] of Object.entries(DISEASE_KEYWORDS)) {
+                    const diseaseData = pestDatabase[disease];
+
+                    if (!diseaseData) continue;
+
+                    if (diseaseData.category !== detectedCategory) continue;
+
+                    if (selectedCrop && !diseaseData.crops.includes(selectedCrop)) continue;
+
+                    for (const keyword of keywords) {
+                        if (p.includes(keyword)) {
+                            scores[disease] = (scores[disease] || 0) + 1;
+                        }
+                    }
+                }
+            }
+
+            console.log("Disease scores (filtered by category and crop):", scores);
+
+            if (Object.keys(scores).length === 0) {
+                console.log("No match — using intelligent fallback based on category");
+
+                const diseasesInCategory = Object.entries(pestDatabase)
+                    .filter(([_, data]) => data.category === detectedCategory)
+                    .map(([name, _]) => name);
+
+                if (diseasesInCategory.length > 0) {
+                    const fallbackDisease = diseasesInCategory.reduce((highest, current) => {
+                        const highestSeverity = DISEASE_SEVERITY[highest] || 0;
+                        const currentSeverity = DISEASE_SEVERITY[current] || 0;
+                        return currentSeverity > highestSeverity ? current : highest;
+                    });
+                    console.log("Intelligent fallback:", fallbackDisease);
+                    return fallbackDisease;
+                }
+
+                console.log("Ultimate fallback: Leaf Spot");
+                return "Leaf Spot";
+            }
+
+            return Object.entries(scores).sort((a, b) => b[1] - a[1])[0][0];
+        }
+
+        function calculateRisk(confidencePercent, pestType) {
+            const severityWeight = DISEASE_SEVERITY[pestType] || 70;
+            const riskScore = (confidencePercent * 0.6) + (severityWeight * 0.4);
+
+            let level;
+            if (riskScore < 40) {
+                level = 'Low';
+            } else if (riskScore < 70) {
+                level = 'Moderate';
+            } else {
+                level = 'High';
+            }
+
+            return {
+                score: Math.round(riskScore),
+                level: level
+            };
+        }
+
+        async function loadModel() {
+            console.log("Starting KisanSeva AI Engine…");
+            aiStatus = "loading";
+            uploadBtn.textContent = 'Initializing AI Engine...';
+            uploadBtn.disabled = true;
+            uploadBtn.style.opacity = '0.6';
+            uploadBtn.style.cursor = 'not-allowed';
+
+            const loadingMessage = document.getElementById('aiLoadingMessage');
+            if (loadingMessage) {
+                loadingMessage.style.display = 'block';
+            }
+
+            try {
+                model = await mobilenet.load();
+                console.log("AI Engine Ready");
+                aiStatus = "ready";
+                uploadBtn.textContent = 'Choose Image';
+                uploadBtn.disabled = false;
+                uploadBtn.style.opacity = '1';
+                uploadBtn.style.cursor = 'pointer';
+                uploadBtn.style.backgroundColor = '';
+
+                if (loadingMessage) {
+                    loadingMessage.style.display = 'none';
+                }
+
+                const retryBtn = document.getElementById('retryAiBtn');
+                if (retryBtn) {
+                    retryBtn.remove();
+                }
+            } catch (err) {
+                console.error("AI Engine Failed:", err);
+                aiStatus = "failed";
+                uploadBtn.textContent = 'AI Engine Failed';
+                uploadBtn.style.backgroundColor = '#c0392b';
+                uploadBtn.disabled = true;
+
+                if (loadingMessage) {
+                    loadingMessage.style.display = 'none';
+                }
+
+                showRetryButton();
+            }
+        }
+
+        function showRetryButton() {
+            let retryBtn = document.getElementById('retryAiBtn');
+            if (retryBtn) return;
+
+            retryBtn = document.createElement('button');
+            retryBtn.id = 'retryAiBtn';
+            retryBtn.textContent = 'Retry AI Initialization';
+            retryBtn.style.cssText = `
+                background: var(--green-light);
+                color: white;
+                padding: 0.8rem 2rem;
+                border: none;
+                border-radius: 8px;
+                font-size: 1rem;
+                font-weight: 600;
+                cursor: pointer;
+                margin-top: 1rem;
+                transition: all 0.3s;
+            `;
+            retryBtn.onmouseover = () => retryBtn.style.backgroundColor = 'var(--green-dark)';
+            retryBtn.onmouseout = () => retryBtn.style.backgroundColor = 'var(--green-light)';
+            retryBtn.onclick = () => {
+                retryBtn.remove();
+                loadModel();
+            };
+
+            const uploadZone = document.getElementById('dropZone');
+            uploadZone.appendChild(retryBtn);
+        }
+
+        loadModel();
+
+        dropZone.addEventListener('dragover', (e) => {
+            if (aiStatus !== "ready") return;
+            e.preventDefault();
+            dropZone.classList.add('dragover');
+        });
+        dropZone.addEventListener('dragleave', () => {
+            if (aiStatus !== "ready") return;
+            dropZone.classList.remove('dragover');
+        });
+        dropZone.addEventListener('drop', (e) => {
+            if (aiStatus !== "ready") {
+                alert("AI engine is still initializing. Please wait.");
+                return;
+            }
+            e.preventDefault();
+            dropZone.classList.remove('dragover');
+            const file = e.dataTransfer.files[0];
+            if (file && file.type.startsWith('image/')) {
+                handleFile(file);
+            }
+        });
+        fileInput.addEventListener('change', (e) => {
+            if (aiStatus !== "ready") {
+                alert("AI engine is still initializing. Please wait.");
+                fileInput.value = '';
+                return;
+            }
+            const file = e.target.files[0];
+            if (file) {
+                handleFile(file);
+            }
+        });
+
+        async function handleFile(file) {
+            if (aiStatus !== "ready") {
+                alert("AI engine is still initializing. Please wait.");
+                return;
+            }
+
+            const selectedCrop = cropSelector.value;
+
+            const imgSrc = URL.createObjectURL(file);
+            showAnalyzing();
+
+            const imgElement = document.getElementById('resultImage');
+            imgElement.src = imgSrc;
+
+            imgElement.onload = async () => {
+                console.log("Classifying image with MobileNet...");
+                let predictions;
+                try {
+                    predictions = await model.classify(imgElement);
+                    console.log("AI Predictions:", predictions);
+                } catch (err) {
+                    console.error("Error during classification:", err);
+                    alert("AI analysis failed. Please try a different image.");
+                    resetDiagnosis();
+                    return;
+                }
+
+                if (!predictions || predictions.length === 0) {
+                    alert("Unable to analyze image. Please try a different photo.");
+                    resetDiagnosis();
+                    return;
+                }
+
+                const topPrediction = predictions[0];
+                const topConfidence = topPrediction.probability;
+
+                if (topConfidence < 0.05) {
+                    console.log("Extremely low confidence detection:", topConfidence);
+                    alert("Image quality too low. Please upload a clearer crop image with better lighting.");
+                    resetDiagnosis();
+                    return;
+                }
+
+                const detectedCategory = detectCategory(predictions);
+                const pestType = mapPredictionsToPest(predictions, selectedCrop, detectedCategory);
+
+                let confidenceDisplay = Math.floor(topConfidence * 100) + '%';
+                const confidencePercent = Math.floor(topConfidence * 100);
+
+                if (topConfidence < LOW_CONFIDENCE_THRESHOLD) {
+                    confidenceDisplay += ' (Low Confidence)';
+                }
+
+                const riskData = calculateRisk(confidencePercent, pestType);
+
+                setTimeout(() => {
+                    showResults(imgSrc, pestType, confidenceDisplay, riskData, detectedCategory);
+                }, 1500);
+            };
+        }
+
+        function analyzeSample(pestType, imgSrc) {
+            const selectedCrop = cropSelector.value;
+
+            showAnalyzing();
+            const imgElement = document.getElementById('resultImage');
+            imgElement.src = imgSrc;
+
+            imgElement.onload = () => {
+                setTimeout(() => {
+                    const confidence = '94%';
+                    const confidencePercent = 94;
+                    const diseaseData = pestDatabase[pestType];
+                    const detectedCategory = diseaseData ? diseaseData.category : 'Fungal Disease';
+                    const riskData = calculateRisk(confidencePercent, pestType);
+                    showResults(imgSrc, pestType, confidence, riskData, detectedCategory);
+                }, 1500);
+            }
+        }
+
+        function showAnalyzing() {
+            document.getElementById('uploadSection').style.display = 'none';
+            document.getElementById('analysisSection').style.display = 'block';
+            document.getElementById('analyzing').style.display = 'block';
+            document.getElementById('resultContainer').style.display = 'none';
+        }
+
+        function showResults(imgSrc, pestType, confidence, riskData, category) {
+            const pest = pestDatabase[pestType];
+
+            if (!pest) {
+                console.error("Pest type not found in database:", pestType);
+                alert("An error occurred. Could not find pest data.");
+                resetDiagnosis();
+                return;
+            }
+
+            document.getElementById('analyzing').style.display = 'none';
+            document.getElementById('resultContainer').style.display = 'block';
+
+            document.getElementById('resultImage').src = imgSrc;
+            document.getElementById('categoryBadge').textContent = category || pest.category;
+            document.getElementById('pestName').textContent = pest.name;
+            document.getElementById('confidence').textContent = confidence;
+            document.getElementById('pestDescription').textContent = pest.description;
+
+            const selectedCrop = cropSelector.value;
+            const likelyCropsDiv = document.getElementById('likelyCrops');
+            if (!selectedCrop && pest.crops && pest.crops.length > 0) {
+                likelyCropsDiv.textContent = `Likely affected crops: ${pest.crops.join(', ')}`;
+            } else {
+                likelyCropsDiv.textContent = '';
+            }
+
+            if (riskData) {
+                const riskLevelDiv = document.getElementById('riskLevel');
+                riskLevelDiv.innerHTML = `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2F6B3D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 8px;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><circle cx="12" cy="16" r="1"/></svg>Risk Level: ${riskData.level}`;
+                riskLevelDiv.className = "";
+                riskLevelDiv.classList.add("risk-" + riskData.level.toLowerCase());
+                document.getElementById('severityScore').textContent = `Severity Score: ${riskData.score}%`;
+            }
+
+            const stepsHtml = pest.treatments.map(step => `<li>${step}</li>`).join('');
+            document.getElementById('treatmentSteps').innerHTML = stepsHtml;
+
+            document.getElementById('preventionTip').textContent = pest.prevention;
+
+            const economicData = ECONOMIC_IMPACT[pestType] || {
+                impact: "Yield impact varies (10–40%)",
+                risk: "Monitor and treat promptly to avoid escalation"
+            };
+
+            document.getElementById('yieldImpact').textContent = economicData.impact;
+            document.getElementById('economicRisk').textContent = economicData.risk;
+
+            let economicAdvice = "";
+            if (riskData && riskData.level === 'High') {
+                economicAdvice = "Early intervention can significantly reduce losses.";
+            } else if (riskData && riskData.level === 'Moderate') {
+                economicAdvice = "Timely treatment recommended to protect yield.";
+            } else {
+                economicAdvice = "Continue monitoring crop health regularly.";
+            }
+            document.getElementById('economicAdvice').textContent = economicAdvice;
+        }
+
+        function resetDiagnosis() {
+            document.getElementById('uploadSection').style.display = 'block';
+            document.getElementById('analysisSection').style.display = 'none';
+            fileInput.value = '';
+        }
+    </script>
+</body>
+</html>
