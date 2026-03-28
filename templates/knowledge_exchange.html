@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Knowledge Exchange - KisanSeva</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-green: #2D5016;
+            --accent-green: #4A7C2C;
+            --light-green: #7FA650;
+            --golden-yellow: #F4A416;
+            --cream: #FAF9F6;
+            --text-dark: #1a1a1a;
+            --text-light: #666;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', 'Roboto', sans-serif;
+            color: var(--text-dark);
+            line-height: 1.6;
+            background: var(--cream);
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--primary-green), var(--accent-green));
+            color: white;
+            padding: 2rem 5%;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .back-btn {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: 2px solid rgba(255,255,255,0.3);
+        }
+
+        .back-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Tab Navigation */
+        .tabs {
+            background: white;
+            padding: 1.5rem 5%;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .tab-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            gap: 1rem;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            padding: 1rem 2rem;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-light);
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .tab-btn:hover {
+            color: var(--accent-green);
+        }
+
+        .tab-btn.active {
+            color: var(--primary-green);
+            border-bottom-color: var(--primary-green);
+        }
+
+        /* Content Container */
+        .content {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 0 5%;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Wisdom Cards */
+        .wisdom-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .wisdom-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            border: 2px solid #e0e0e0;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .wisdom-card:hover {
+            border-color: var(--light-green);
+            box-shadow: 0 8px 30px rgba(74,124,44,0.15);
+            transform: translateY(-5px);
+        }
+
+        .wisdom-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .wisdom-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-green), var(--accent-green));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .wisdom-card h4 {
+            color: var(--primary-green);
+            margin: 1rem 0;
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+        .wisdom-card p {
+            color: var(--text-dark);
+            line-height: 1.8;
+            font-size: 1rem;
+        }
+
+        .wisdom-tags {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .wisdom-tags span {
+            background: rgba(45,80,22,0.1);
+            color: var(--primary-green);
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        /* Forum */
+        .forum-ask-box {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .forum-ask-box h3 {
+            margin-bottom: 1rem;
+            color: var(--primary-green);
+        }
+
+        .forum-ask-box textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-family: inherit;
+            resize: vertical;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .forum-ask-box textarea:focus {
+            outline: none;
+            border-color: var(--accent-green);
+        }
+
+        .btn {
+            background: linear-gradient(135deg, var(--primary-green), var(--accent-green));
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 1rem;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(45,80,22,0.3);
+        }
+
+        .forum-item {
+            background: white;
+            border: 2px solid #e0e0e0;
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin-bottom: 1rem;
+            transition: all 0.3s;
+        }
+
+        .forum-item:hover {
+            border-color: var(--light-green);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        .forum-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.8rem;
+        }
+
+        .forum-header strong {
+            color: var(--text-dark);
+            font-size: 1.05rem;
+        }
+
+        .forum-item h4 {
+            color: var(--text-dark);
+            margin: 0.5rem 0;
+            font-size: 1.2rem;
+        }
+
+        .forum-meta {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e0e0e0;
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        .view-answers-btn {
+            background: var(--primary-green);
+            color: white;
+            border: none;
+            padding: 0.6rem 1.5rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-left: auto;
+        }
+
+        .view-answers-btn:hover {
+            background: var(--accent-green);
+        }
+
+        /* Video Grid */
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .video-card {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .video-card:hover {
+            border-color: var(--primary-green);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+            transform: translateY(-5px);
+        }
+
+        .video-thumbnail {
+            position: relative;
+            width: 100%;
+            height: 220px;
+            overflow: hidden;
+        }
+
+        .video-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .play-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 70px;
+            height: 70px;
+            background: rgba(255,255,255,0.95);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: var(--primary-green);
+            transition: all 0.3s;
+        }
+
+        .video-card:hover .play-button {
+            background: var(--primary-green);
+            color: white;
+            transform: translate(-50%, -50%) scale(1.15);
+        }
+
+        .video-info {
+            padding: 1.5rem;
+        }
+
+        .video-info h4 {
+            margin: 0 0 0.5rem;
+            color: var(--text-dark);
+            font-size: 1.15rem;
+        }
+
+        .video-info p {
+            color: var(--text-light);
+            font-size: 0.95rem;
+            margin: 0;
+        }
+
+        .video-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 0.8rem;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            .wisdom-grid, .video-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .tab-btn {
+                padding: 0.8rem 1rem;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="header-content">
+            <h1>Knowledge Exchange</h1>
+            <a href="javascript:history.back()" class="back-btn">← Back to Home</a>
+        </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs">
+        <div class="tab-container">
+            <button class="tab-btn active" onclick="switchTab('wisdom')">Elder's Wisdom</button>
+            <button class="tab-btn" onclick="switchTab('forum')">Ask Questions</button>
+            <button class="tab-btn" onclick="switchTab('videos')">Video Tutorials</button>
+        </div>
+    </div>
+
+    <!-- Content -->
+    <div class="content">
+        <!-- Elder's Wisdom Tab -->
+        <div id="wisdomTab" class="tab-content active">
+            <h2 style="margin-bottom: 1rem; color: var(--primary-green);">Traditional Farming Tips from Experienced Farmers</h2>
+            <p style="color: var(--text-light); font-size: 1.1rem; margin-bottom: 2rem;">Learn from generations of farming wisdom shared by experienced farmers across India.</p>
+
+            <div class="wisdom-grid">
+                <div class="wisdom-card">
+                    <div class="wisdom-header">
+                        <div class="wisdom-avatar">BS</div>
+                        <div>
+                            <strong>Baldev Singh</strong><br>
+                            <span style="font-size: 0.9rem; color: var(--text-light);">45 years experience • Punjab</span>
+                        </div>
+                    </div>
+                    <h4>🌾 Best Time for Wheat Sowing</h4>
+                    <p>For maximum yield, sow wheat between 1st-15th November in Punjab. Delayed sowing reduces grain quality. Early morning sowing helps seeds retain moisture better.</p>
+                    <div class="wisdom-tags">
+                        <span>#Wheat</span>
+                        <span>#Timing</span>
+                        <span>#Punjab</span>
+                    </div>
+                </div>
+
+                <div class="wisdom-card">
+                    <div class="wisdom-header">
+                        <div class="wisdom-avatar">RK</div>
+                        <div>
+                            <strong>Ram Kumar</strong><br>
+                            <span style="font-size: 0.9rem; color: var(--text-light);">38 years experience • UP</span>
+                        </div>
+                    </div>
+                    <h4>🌱 Natural Fertilizer from Neem</h4>
+                    <p>Soak 1kg crushed neem leaves in 10L water for 48 hours. Spray on crops to prevent pests and add nutrients. This saved me ₹5000 per acre in pesticide costs!</p>
+                    <div class="wisdom-tags">
+                        <span>#Organic</span>
+                        <span>#Neem</span>
+                        <span>#CostSaving</span>
+                    </div>
+                </div>
+
+                <div class="wisdom-card">
+                    <div class="wisdom-header">
+                        <div class="wisdom-avatar">MS</div>
+                        <div>
+                            <strong>Mukesh Sharma</strong><br>
+                            <span style="font-size: 0.9rem; color: var(--text-light);">52 years experience • Haryana</span>
+                        </div>
+                    </div>
+                    <h4>💧 Water Conservation Technique</h4>
+                    <p>Create small ridges (मेड़) between crop rows to retain rainwater. Reduces irrigation need by 30%. Works best for rice and sugarcane fields.</p>
+                    <div class="wisdom-tags">
+                        <span>#Water</span>
+                        <span>#Conservation</span>
+                        <span>#Sustainable</span>
+                    </div>
+                </div>
+
+                <div class="wisdom-card">
+                    <div class="wisdom-header">
+                        <div class="wisdom-avatar">GD</div>
+                        <div>
+                            <strong>Gurpreet Dhillon</strong><br>
+                            <span style="font-size: 0.9rem; color: var(--text-light);">41 years experience • Punjab</span>
+                        </div>
+                    </div>
+                    <h4>🌾 Crop Rotation for Soil Health</h4>
+                    <p>After paddy, grow vegetables or pulses instead of wheat every 3rd year. This restores nitrogen in soil naturally and breaks pest cycles.</p>
+                    <div class="wisdom-tags">
+                        <span>#SoilHealth</span>
+                        <span>#Rotation</span>
+                        <span>#Sustainable</span>
+                    </div>
+                </div>
+
+                <div class="wisdom-card">
+                    <div class="wisdom-header">
+                        <div class="wisdom-avatar">AJ</div>
+                        <div>
+                            <strong>Ajay Joshi</strong><br>
+                            <span style="font-size: 0.9rem; color: var(--text-light);">50 years experience • Maharashtra</span>
+                        </div>
+                    </div>
+                    <h4>🐮 Organic Compost from Cow Dung</h4>
+                    <p>Mix 100kg cow dung with 50kg crop residue, add water and keep covered for 60 days. This black gold compost improves soil structure and reduces chemical fertilizer need by 50%.</p>
+                    <div class="wisdom-tags">
+                        <span>#Organic</span>
+                        <span>#Compost</span>
+                        <span>#Sustainable</span>
+                    </div>
+                </div>
+
+                <div class="wisdom-card">
+                    <div class="wisdom-header">
+                        <div class="wisdom-avatar">SK</div>
+                        <div>
+                            <strong>Suresh Kumar</strong><br>
+                            <span style="font-size: 0.9rem; color: var(--text-light);">42 years experience • Rajasthan</span>
+                        </div>
+                    </div>
+                    <h4>🌡️ Heat Wave Protection</h4>
+                    <p>During summer, spray water mixed with kaolin clay (चूना मिट्टी) on leaves. Creates white protective layer that reflects heat. Saved my tomato crop during 45°C heat wave!</p>
+                    <div class="wisdom-tags">
+                        <span>#HeatProtection</span>
+                        <span>#ClimateAdaptation</span>
+                        <span>#Tomato</span>
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn" onclick="showShareTipForm()" style="margin-top: 2rem;">Share Your Farming Tip</button>
+
+            <!-- Share Tip Form (Hidden by default) -->
+            <div id="shareTipForm" style="display: none; background: white; padding: 2rem; border-radius: 15px; margin-top: 2rem; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+                <h3 style="color: var(--primary-green); margin-bottom: 1.5rem;">Share Your Farming Wisdom</h3>
+
+                <div style="margin-bottom: 1.5rem;">
+                    <label style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: var(--text-dark);">Your Name</label>
+                    <input type="text" id="tipName" placeholder="e.g., Rajesh Kumar" style="width: 100%; padding: 0.8rem; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1rem;">
+                </div>
+
+                <div style="margin-bottom: 1.5rem;">
+                    <label style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: var(--text-dark);">Experience & Location</label>
+                    <input type="text" id="tipExperience" placeholder="e.g., 30 years experience • Karnataka" style="width: 100%; padding: 0.8rem; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1rem;">
+                </div>
+
+                <div style="margin-bottom: 1.5rem;">
+                    <label style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: var(--text-dark);">Tip Title</label>
+                    <input type="text" id="tipTitle" placeholder="e.g., Natural Pest Control Using Garlic" style="width: 100%; padding: 0.8rem; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1rem;">
+                </div>
+
+                <div style="margin-bottom: 1.5rem;">
+                    <label style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: var(--text-dark);">Describe Your Tip</label>
+                    <textarea id="tipDescription" placeholder="Share your farming technique, wisdom, or innovation in detail..." rows="4" style="width: 100%; padding: 0.8rem; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1rem; resize: vertical;"></textarea>
+                </div>
+
+                <div style="margin-bottom: 1.5rem;">
+                    <label style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: var(--text-dark);">Tags (comma-separated)</label>
+                    <input type="text" id="tipTags" placeholder="e.g., Organic, Pest Control, Cost Saving" style="width: 100%; padding: 0.8rem; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1rem;">
+                </div>
+
+                <div style="display: flex; gap: 1rem;">
+                    <button class="btn" onclick="submitTip()">Submit Tip</button>
+                    <button onclick="hideShareTipForm()" style="background: #e0e0e0; color: var(--text-dark); border: none; padding: 1rem 2rem; border-radius: 10px; font-size: 1rem; font-weight: 600; cursor: pointer;">Cancel</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Forum Tab -->
+        <div id="forumTab" class="tab-content">
+            <h2 style="margin-bottom: 1rem; color: var(--primary-green);">Community Q&A Forum</h2>
+            <p style="color: var(--text-light); font-size: 1.1rem; margin-bottom: 2rem;">Ask questions and get answers from experienced farmers in the community.</p>
+
+            <div class="forum-ask-box">
+                <h3>Ask a Question</h3>
+                <textarea id="questionInput" placeholder="Describe your farming question or problem..." rows="4"></textarea>
+                <button class="btn" onclick="postQuestion()">Post Question</button>
+            </div>
+
+            <div class="forum-questions">
+                <div class="forum-item">
+                    <div class="forum-header">
+                        <strong>Ramesh Patel</strong>
+                        <span style="color: var(--text-light); font-size: 0.85rem;">2 hours ago</span>
+                    </div>
+                    <h4>How to control white flies in tomato crop organically?</h4>
+                    <p style="color: var(--text-light); margin: 0.5rem 0;">My tomato plants have white fly infestation. Looking for chemical-free solutions.</p>
+                    <div class="forum-meta">
+                        <span>🌿 Organic Farming</span>
+                        <span>💬 3 Answers</span>
+                        <button class="view-answers-btn" onclick="showAnswers(1)">View Answers</button>
+                    </div>
+                </div>
+
+                <div class="forum-item">
+                    <div class="forum-header">
+                        <strong>Sukhdev Kaur</strong>
+                        <span style="color: var(--text-light); font-size: 0.85rem;">5 hours ago</span>
+                    </div>
+                    <h4>Best variety of wheat for sandy soil in Rajasthan?</h4>
+                    <p style="color: var(--text-light); margin: 0.5rem 0;">Which wheat variety gives good yield in sandy soil with limited water?</p>
+                    <div class="forum-meta">
+                        <span>🌾 Wheat</span>
+                        <span>💬 7 Answers</span>
+                        <button class="view-answers-btn" onclick="showAnswers(2)">View Answers</button>
+                    </div>
+                </div>
+
+                <div class="forum-item">
+                    <div class="forum-header">
+                        <strong>Vijay Kumar</strong>
+                        <span style="color: var(--text-light); font-size: 0.85rem;">1 day ago</span>
+                    </div>
+                    <h4>Solar panels for irrigation pump - worth it?</h4>
+                    <p style="color: var(--text-light); margin: 0.5rem 0;">Thinking of installing solar pump for 2-acre farm. What's your experience?</p>
+                    <div class="forum-meta">
+                        <span>⚡ Solar Energy</span>
+                        <span>💬 12 Answers</span>
+                        <button class="view-answers-btn" onclick="showAnswers(3)">View Answers</button>
+                    </div>
+                </div>
+
+                <div class="forum-item">
+                    <div class="forum-header">
+                        <strong>Priya Devi</strong>
+                        <span style="color: var(--text-light); font-size: 0.85rem;">2 days ago</span>
+                    </div>
+                    <h4>Organic methods to improve soil pH?</h4>
+                    <p style="color: var(--text-light); margin: 0.5rem 0;">My soil test shows pH 5.5 (acidic). Need organic solutions to increase it for vegetable farming.</p>
+                    <div class="forum-meta">
+                        <span>🧪 Soil Health</span>
+                        <span>💬 5 Answers</span>
+                        <button class="view-answers-btn" onclick="showAnswers(4)">View Answers</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Videos Tab -->
+        <div id="videosTab" class="tab-content">
+            <h2 style="margin-bottom: 1rem; color: var(--primary-green);">Farming Video Tutorials</h2>
+            <p style="color: var(--text-light); font-size: 1.1rem; margin-bottom: 2rem;">Watch step-by-step video guides from farming experts.</p>
+
+            <div class="video-grid">
+                <div class="video-card">
+                    <div class="video-thumbnail">
+                        <img src="https://images.unsplash.com/photo-1738598665698-7fd7af4b5e0c?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1170" alt="Drip irrigation setup">
+                        <div class="play-button">▶</div>
+                    </div>
+                    <div class="video-info">
+                        <h4>Drip Irrigation Setup Guide</h4>
+                        <p>Learn how to install cost-effective drip irrigation system for your farm</p>
+                        <div class="video-stats">
+                            <span>👁 2.3K views</span>
+                            <span>⏱ 12:34</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="video-card">
+                    <div class="video-thumbnail">
+                        <img src="https://images.unsplash.com/photo-1737960320564-9e681df95dc6?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=2070" alt="Organic farming">
+                        <div class="play-button">▶</div>
+                    </div>
+                    <div class="video-info">
+                        <h4>Organic Pest Control Methods</h4>
+                        <p>5 natural ways to protect crops without chemicals</p>
+                        <div class="video-stats">
+                            <span>👁 4.1K views</span>
+                            <span>⏱ 8:45</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="video-card">
+                    <div class="video-thumbnail">
+                        <img src="https://images.unsplash.com/photo-1745095367120-3d14b8bf7f44?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=2030" alt="Solar farming">
+                        <div class="play-button">▶</div>
+                    </div>
+                    <div class="video-info">
+                        <h4>Solar Insect Trap Installation</h4>
+                        <p>Step-by-step guide to set up solar pest control</p>
+                        <div class="video-stats">
+                            <span>👁 1.8K views</span>
+                            <span>⏱ 15:20</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="video-card">
+                    <div class="video-thumbnail">
+                        <img src="https://images.unsplash.com/photo-1530836369250-ef72a3f5cda8?w=400" alt="Soil testing">
+                        <div class="play-button">▶</div>
+                    </div>
+                    <div class="video-info">
+                        <h4>Soil Testing at Home</h4>
+                        <p>Simple methods to test soil health without lab</p>
+                        <div class="video-stats">
+                            <span>👁 3.5K views</span>
+                            <span>⏱ 6:12</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="video-card">
+                    <div class="video-thumbnail">
+                        <img src="https://www.farmatma.in/wp-content/uploads/2018/03/vermicompost.jpg" alt="Composting">
+                        <div class="play-button">▶</div>
+                    </div>
+                    <div class="video-info">
+                        <h4>Vermicompost Making Process</h4>
+                        <p>Complete guide to prepare earthworm compost</p>
+                        <div class="video-stats">
+                            <span>👁 5.2K views</span>
+                            <span>⏱ 10:15</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="video-card">
+                    <div class="video-thumbnail">
+                        <img src="https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?w=400" alt="Mulching">
+                        <div class="play-button">▶</div>
+                    </div>
+                    <div class="video-info">
+                        <h4>Mulching Techniques for Water Conservation</h4>
+                        <p>How to save water and improve soil using mulch</p>
+                        <div class="video-stats">
+                            <span>👁 2.7K views</span>
+                            <span>⏱ 7:50</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function switchTab(tabName) {
+            // Remove active from all tabs and content
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+            // Add active to selected
+            event.target.classList.add('active');
+            document.getElementById(tabName + 'Tab').classList.add('active');
+
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function postQuestion() {
+            const question = document.getElementById('questionInput').value.trim();
+            if (question) {
+                alert('Question Posted!\n\n"' + question + '"\n\nYour question will be answered by experienced farmers within 24 hours.');
+                document.getElementById('questionInput').value = '';
+            } else {
+                alert('Please write your question first.');
+            }
+        }
+
+        function showAnswers(questionId) {
+            const answers = {
+                1: 'Top Answer by Baldev Singh:\n\nMix 2 tablespoons of dish soap with 1 liter of water. Spray on affected plants early morning. Repeat every 3 days for 2 weeks. Also plant marigolds nearby - they repel whiteflies naturally.',
+                2: 'Top Answer by Ram Kumar:\n\nTry HD2967 variety - works best in sandy soil with limited water. Sow deeper (5-6cm) to reach moisture. This variety I use in Rajasthan gives 35-40 quintals per hectare even with low rainfall.',
+                3: 'Top Answer by Gurpreet Dhillon:\n\nAbsolutely worth it! I installed 5HP solar pump last year. Initial cost ₹2.5 lakhs with subsidy. Saves ₹25,000 per year on electricity. Pays for itself in 10 years. Plus no load-shedding issues!',
+                4: 'Top Answer by Mukesh Sharma:\n\nAdd lime (चूना) 200-300 kg per acre before monsoon. Also use wood ash from cooking stove - spread 50kg per acre. Mix well with soil. After 3 months pH will increase to 6.5-7. Organic and cheap solution!'
+            };
+
+            alert(answers[questionId] || 'No answers yet. Be the first to answer!');
+        }
+
+        function showShareTipForm() {
+            document.getElementById('shareTipForm').style.display = 'block';
+            document.getElementById('shareTipForm').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function hideShareTipForm() {
+            document.getElementById('shareTipForm').style.display = 'none';
+            // Clear form
+            document.getElementById('tipName').value = '';
+            document.getElementById('tipExperience').value = '';
+            document.getElementById('tipTitle').value = '';
+            document.getElementById('tipDescription').value = '';
+            document.getElementById('tipTags').value = '';
+        }
+
+        function submitTip() {
+            const name = document.getElementById('tipName').value.trim();
+            const experience = document.getElementById('tipExperience').value.trim();
+            const title = document.getElementById('tipTitle').value.trim();
+            const description = document.getElementById('tipDescription').value.trim();
+            const tags = document.getElementById('tipTags').value.trim();
+
+            if (!name || !experience || !title || !description) {
+                alert('Please fill in all required fields (Name, Experience, Title, and Description)');
+                return;
+            }
+
+            // Success message
+            alert('✅ Farming Tip Submitted Successfully!\n\n' +
+                  'Thank you ' + name + ' for sharing your wisdom!\n\n' +
+                  'Your tip "' + title + '" will be reviewed and published within 24 hours. ' +
+                  'This will help thousands of farmers across India. 🌾\n\n' +
+                  'Keep contributing to our farming community!');
+
+            // Hide form and clear
+            hideShareTipForm();
+
+            // Scroll back to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
