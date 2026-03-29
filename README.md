@@ -10,7 +10,7 @@ KisanSeva is a full-stack web platform built for Indian farmers that combines AI
 
 ---
 
-## 🚀 Live Demo  
+## 🔗 Live Demo  
 
 👉 https://kisan-seva-project.vercel.app
 
@@ -158,9 +158,3 @@ export SECRET_KEY=your-secret-key
 ## 👥 Team
 
 Built with ❤️ for farmers across India.
-
----
-
-## 📄 License
-
-MIT License — free to use, modify, and distribute.
